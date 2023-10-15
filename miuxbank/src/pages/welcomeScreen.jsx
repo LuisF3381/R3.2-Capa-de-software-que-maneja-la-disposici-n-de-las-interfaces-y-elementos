@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-function welcomeScreen() {
+function WelcomeScreen() {
   return (
-    <div>welcomeScreen</div>
-  )
+    <div>WelcomeScreen</div>
+  );
 }
 
-export default welcomeScreen
+export default WelcomeScreen;
