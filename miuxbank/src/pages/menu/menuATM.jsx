@@ -43,7 +43,7 @@ function MenuATM() {
     const handleCardClick1 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
         // Puedes realizar las acciones necesarias aquí
-        alert('La tarjeta ha sido clickeada');
+        navigate('/retiro/seleccion-cuenta/2');
       };
 
     // Para la segunda opcion mas usada

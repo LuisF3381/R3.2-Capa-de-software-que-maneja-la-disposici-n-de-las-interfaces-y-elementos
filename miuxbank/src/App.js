@@ -3,6 +3,7 @@ import WelcomeScreen from './pages/welcomeScreen';
 import PerfilPage from './pages/introduction/perfilPage';
 import LoginPage from './pages/sesionLogin.jsx';
 import MenuATM from './pages/menu/menuATM.jsx'
+import SeleccionCuenta from './pages/retiro_op/selectionCuenta.jsx'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -22,6 +23,10 @@ function App() {
 
         {/*Menu principal del ATM*/}
         <Route path="/principal/:idUserModel" element={<MenuATM/>}/>
+
+        {/*Retiro de efectivo*/}
+        <Route path="/retiro/seleccion-cuenta/:idUserModel" element={<SeleccionCuenta/>}/>
+
 
       </Routes>
     </BrowserRouter>
