@@ -5,6 +5,7 @@ import LoginPage from './pages/sesionLogin.jsx';
 import MenuATM from './pages/menu/menuATM.jsx'
 import SeleccionCuenta from './pages/retiro_op/selectionCuenta.jsx'
 import SeleccionMoneda from './pages/retiro_op/selectionMoneda';
+import DepositoEfectivo from './pages/deposito_op/depositoEfectivo';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/retiro/seleccion-moneda/:idUserModel" element={<SeleccionMoneda/>}/>
 
         {/*Deposito de efectivo*/}
+        <Route path="/deposito/ingreso-billetes/:idUserModel" element={<DepositoEfectivo/>}/>
 
       </Routes>
     </BrowserRouter>
