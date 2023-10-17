@@ -125,8 +125,7 @@ function WelcomeScreen() {
                     <Form.Label>Selecciona una opción:</Form.Label>
                     <Form.Control as="select" onChange={handleOptionChange} value={selectedOption}>
                     <option value="">Selecciona la cuenta</option>
-                    <option value="Cancelar">Cuenta 456</option>
-                    <option value="Continuar">Cuenta 567</option>
+                    <option value="Cancelar">Cuenta 456 Adriana Rosas</option>
                     </Form.Control>
                 </Form.Group>
                 </Modal.Body>

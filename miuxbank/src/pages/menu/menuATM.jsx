@@ -15,21 +15,21 @@ import last_operation from '../../images/imagenes_perfil/frecuente/ultima_operac
 import fast_retiro from '../../images/operaciones/fast/fast_retiro.png'
 import fast_deposito from '../../images/operaciones/fast/fast_deposito.png'
 
-
-
-
+import { useParams } from 'react-router-dom';
 
 // Para traducir el texto
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 function MenuATM() {
-
+    const { idUserModel } = useParams();
     const navigate = useNavigate();
       // Para el traductor de texto
     const { t, i18n } = useTranslation();
 
     const [selectedOption, setSelectedOption] = useState('');
+
+    var idCuenta = 2;
 
     const handleOptionChange = (event) => {
         const selectedLang = event.target.value;
@@ -43,27 +43,35 @@ function MenuATM() {
     const handleCardClick1 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
         // Puedes realizar las acciones necesarias aquí
-        navigate('/retiro/seleccion-cuenta/2');
+        navigate(`/retiro/seleccion-cuenta/${idUserModel}`);
       };
 
     // Para la segunda opcion mas usada
     const handleCardClick2 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
         // Puedes realizar las acciones necesarias aquí
-        alert('La tarjeta2  ha sido clickeada');
+        navigate(`/consulta/seleccion-cuenta/${idUserModel}`);
       };
 
     // Para la tercera opcion mas usada
     const handleCardClick3 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
         // Puedes realizar las acciones necesarias aquí
-        alert('La tarjeta3  ha sido clickeada');
+        navigate(`/deposito/seleccion-cuenta/${idUserModel}`);
       };
     
+    const handleCardOP2 = () =>{
+
+        navigate(`/deposito/ingreso-billetes/${idUserModel}/${idCuenta}`);
+    };
+
+
+
 
     // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
     const handleCancel = () => {
         // Lógica para el botón de cancelar
+        navigate(`/inicio`);
     };
 
     const handleContinue = () => {
@@ -165,7 +173,7 @@ function MenuATM() {
                     {/*AQUI VA LA SEGUNDA*/}
                     <Row>
                         <Card
-                            onClick={handleCardClick3}
+                            onClick={handleCardOP2}
                             className="d-flex align-items-center"
                             style={{ width: '320px', height: '60px', cursor: 'pointer' }}
                         >                        
@@ -176,7 +184,7 @@ function MenuATM() {
                                     </Col>
                                     <Col xs="auto">
                                         <Row>
-                                            <h7 className="m-0">Deposito rapido        DOLARES</h7>
+                                            <h7 className="m-0">Deposito rapido        Soles</h7>
                                         </Row>
                                         <Row>
                                             <h7 className="m-0">Cuenta de ahorro - 324</h7>
@@ -253,7 +261,7 @@ function MenuATM() {
             <Row className="d-flex justify-content-center mt-4">
                 <Col xs="auto">
                     <Button variant="danger" style={{ width: '150px', marginRight: '500px' }} onClick={handleCancel}>
-                    {t('exit')}
+                    CERRAR SESION
                     </Button>
                 </Col>
             </Row>

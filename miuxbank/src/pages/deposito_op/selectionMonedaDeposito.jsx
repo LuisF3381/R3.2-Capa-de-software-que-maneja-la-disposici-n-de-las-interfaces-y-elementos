@@ -1,37 +1,40 @@
+
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Image, ListGroup, Modal, Button, Form} from 'react-bootstrap';
+
 import BankComponent from '../components/generals/upVar';
 
+
 import advertencia from '../../images/advertencia.png'
-import { useNavigate } from 'react-router-dom';
-
-import { useTranslation } from 'react-i18next';
-
 import sol_icon from '../../images/sol_icon.png'
 import dolar_icon from '../../images/dolar_icon.png'
 import { useParams } from 'react-router-dom';
 
+import { useNavigate } from 'react-router-dom';
 
-function SeleccionMoneda() {
+
+function SeleccionMonedaDeposito() {
     let { idUserModel, idCuenta } = useParams();
+
+
     const navigate = useNavigate();
 
-    // Para el traductor de texto
-    const { t, i18n } = useTranslation();
-
-    // Para la primera opcion mas usada
     const handleCardClick1 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
         // Puedes realizar las acciones necesarias aquí
-        navigate('/retiro/seleccion-cuenta/2');
+        navigate(`/deposito/ingreso-billetes/${idUserModel}/${idCuenta}`);
       };
 
     // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
     const handleCancel = () => {
         // Lógica para el botón de cancelar
-        navigate(`/retiro/seleccion-cuenta/${idUserModel}`);
+        navigate(`/deposito/seleccion-cuenta/${idUserModel}`);
     };
-        
+
+    
+
+
+
     return (
         <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>
         <Card style={{ width: 800, height: 550, background: 'white' }} className="p-1">
@@ -42,8 +45,8 @@ function SeleccionMoneda() {
 
             <Row className="align-items-center justify-content-between no-gutters">
                 <Col md={7}>
-                    <h3>Retiro de efectivo</h3>
-                    <h5>selecciona la moneda a retirar</h5>
+                    <h3>Deposito de efectivo</h3>
+                    <h5>selecciona la moneda que va a depositar</h5>
                 </Col>
 
                 <Col md={5} className="d-flex align-items-center">
@@ -119,4 +122,4 @@ function SeleccionMoneda() {
         );
     }
     
-    export default SeleccionMoneda;
+    export default SeleccionMonedaDeposito;
