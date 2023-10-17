@@ -26,7 +26,7 @@ function SeleccionCuenta() {
     const handleCardClick1 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
         // Puedes realizar las acciones necesarias aquí
-        navigate('/retiro/seleccion-cuenta/2');
+        navigate('/retiro/seleccion-moneda/2');
       };
 
 
