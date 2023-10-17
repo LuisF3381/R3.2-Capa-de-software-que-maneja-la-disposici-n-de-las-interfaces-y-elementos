@@ -34,7 +34,8 @@ function WelcomeScreen() {
 
 
         //En caso sea haya quitado la pantalla de bienvenida se iria al menu principal
-        navigate('/bienvenido/2');
+        //navigate('/bienvenido/2');
+        navigate('/login/2');
 
         // Cierra el modal
         handleCloseModal();

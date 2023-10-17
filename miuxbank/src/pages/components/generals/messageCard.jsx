@@ -1,5 +1,8 @@
-import React from 'react';
+import {React, useEffect }from 'react';
 import { Card, Container } from 'react-bootstrap';
+
+// Para traducir el texto
+import { useTranslation } from 'react-i18next';
 
 const CustomCard = ({
     bgColor = "#33cc33",
@@ -8,8 +11,19 @@ const CustomCard = ({
     height = "auto",
     rounded = true,
     fontSize = "16px", // Cambiado a px
-    marginLeft = "0px"
+    marginLeft = "0px",
+    idioma = 'es',
 }) => {
+
+
+    // Para el traductor de texto
+    const { t, i18n } = useTranslation();
+
+        // Cambiar el idioma una vez al renderizar el componente
+    useEffect(() => {
+            i18n.changeLanguage(idioma); // Cambia al idioma que desees aquí
+    }, []);
+
     return (
         <Container className="d-flex justify-content-center align-items-center" style={{ marginLeft: marginLeft }}>
             <Card style={{
@@ -24,7 +38,7 @@ const CustomCard = ({
             }}>
                 <Card.Body style={{ fontSize: fontSize }}>
                     <Card.Text>
-                        Pero eso no es todo, ¡ajustaremos aún mas tu experiencia en base a tus operaciones!
+                    {t('message_personalizado')}
                     </Card.Text>
                 </Card.Body>
             </Card>

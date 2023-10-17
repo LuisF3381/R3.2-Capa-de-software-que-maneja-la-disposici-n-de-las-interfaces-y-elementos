@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BankComponent from '../components/generals/upVar';
 import CustomCard from '../components/generals/messageCard.jsx';
 import { Container, Row, Col, Card, Image, ListGroup, Modal, Button, Form} from 'react-bootstrap';
@@ -21,10 +21,25 @@ import user_frecuente from '../../images/imagenes_perfil/frecuente/user_frecuent
 import user_ocasional from '../../images/imagenes_perfil/ocasional/user_ocasional.png'
 
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
+// Para traducir el texto
+import { useTranslation } from 'react-i18next';
 
 function PerfilPage() {
     const { idUserModel } = useParams();
+    const navigate = useNavigate();
+    // Para el traductor de texto
+    const { t, i18n } = useTranslation();
+
+    var idioma_aux;
+
+    // Cambiar el idioma una vez al renderizar el componente
+    useEffect(() => {
+        idioma_aux = 'es';
+        i18n.changeLanguage('es'); // Cambia al idioma que desees aquí
+    }, []);
+
     const buttonText = "CONTINUAR";
     const checkboxLabel = "No volver a mostrar";
     const [selectedOption, setSelectedOption] = useState('');
@@ -35,6 +50,7 @@ function PerfilPage() {
     
       const handleButtonClick = () => {
         console.log("Button clicked");
+        navigate('/principal/2');
     };
 
     const handleCheckboxChange = () => {
@@ -42,7 +58,7 @@ function PerfilPage() {
     };
 
     //Aqui guardamos el perfil
-    const perfil_usuario = 'ocasional'; 
+    const perfil_usuario = 'frecuente'; 
 
 
     return (
@@ -52,22 +68,22 @@ function PerfilPage() {
                 <BankComponent/>
                 
                 <Row>
-                    <h4 style={{  margin: 15, fontWeight: 'bold', textAlign: 'left' }}>¡Bienvenido a tu nuevo perfil!</h4>
+                    <h4 style={{  margin: 15, fontWeight: 'bold', textAlign: 'left' }}>{t('welcome')}</h4>
                 </Row>
                 <Row>
                     <Col md={7} >
                     {/*IFS PARA EL TEXTO DE PRESENTACION */}
                     {perfil_usuario === 'senior' ? (
-                        <p style={{ fontWeight: 'bold', textAlign: 'left', marginLeft: '20px',}}>Te hemos clasificado como Cliente Senior, el cajero se adaptará mejor a tus necesidades</p>
+                        <p style={{ fontWeight: 'bold', textAlign: 'left', marginLeft: '20px',}}>{t('senior_descp')}</p>
                         ): perfil_usuario === 'frecuente' ? (
-                            <p style={{ fontWeight: 'bold', textAlign: 'left', marginLeft: '20px',}}>Te hemos clasificado como Cliente Frecuente, el cajero se adaptará mejor a tus necesidades</p>
+                            <p style={{ fontWeight: 'bold', textAlign: 'left', marginLeft: '20px',}}>{t('frecuente_descp')}</p>
                         ): perfil_usuario === 'ocasional' ?(
-                            <p style={{ fontWeight: 'bold', textAlign: 'left', marginLeft: '20px',}}>Te hemos clasificado como Cliente Ocasional, el cajero se adaptará mejor a tus necesidades</p>
+                            <p style={{ fontWeight: 'bold', textAlign: 'left', marginLeft: '20px',}}>{t('ocasional_descp')}</p>
                         ):(
                             <p></p>
                         )}
 
-                    <p style={{ fontWeight: 'bold', textAlign: 'left', marginLeft: '20px',}}>Ahora cuentas con:</p>
+                    <p style={{ fontWeight: 'bold', textAlign: 'left', marginLeft: '20px',}}>{t('pres_func')}</p>
 
                     {/*IFS PARA LOS LIST GROUPS */}
                     {perfil_usuario === 'senior' ? (
@@ -78,7 +94,7 @@ function PerfilPage() {
                                     <Image src={interfaz} rounded style={{ width: '45px', height: 'auto' }} />
                                 </Col>
                                 <Col>
-                                    <h7 style={{ margin: 30, fontSize: '18px' }}>Interfaz simplicada</h7>
+                                    <h7 style={{ margin: 30, fontSize: '18px' }}>{t('interfaz_simple')}</h7>
                                 </Col>
                                 </Row>
                         </ListGroup.Item>
@@ -88,7 +104,7 @@ function PerfilPage() {
                                         <Image src={cambio_texto} rounded style={{ width: '38px', height: 'auto' }} />
                                     </Col>
                                     <Col>
-                                        <h7 style={{ margin: 30, fontSize: '18px' }}>Cambio de tamaño de texto</h7>
+                                        <h7 style={{ margin: 30, fontSize: '18px' }}>{t('cambio_texto')}</h7>
                                     </Col>
                                 </Row>
                             </ListGroup.Item>
@@ -98,7 +114,7 @@ function PerfilPage() {
                                         <Image src={fast_option} rounded style={{ width: '38px', height: 'auto' }} />
                                     </Col>
                                     <Col>
-                                        <h7 style={{ margin: 30, fontSize: '18px' }}>Una opción rapida</h7>
+                                        <h7 style={{ margin: 30, fontSize: '18px' }}>{t('fast_op_1')}</h7>
                                     </Col>
                                 </Row>
                             </ListGroup.Item>
@@ -111,7 +127,7 @@ function PerfilPage() {
                                         <Image src={ultima_operacion} rounded style={{ width: '45px', height: 'auto' }} />
                                     </Col>
                                     <Col>
-                                        <h7 style={{ margin: 30, fontSize: '18px' }}>Ultima operacion</h7>
+                                        <h7 style={{ margin: 30, fontSize: '18px' }}>{t('last_operacion')}</h7>
                                     </Col>
                                     </Row>
                             </ListGroup.Item>
@@ -121,7 +137,7 @@ function PerfilPage() {
                                             <Image src={fast_option} rounded style={{ width: '38px', height: 'auto' }} />
                                         </Col>
                                         <Col>
-                                            <h7 style={{ margin: 30, fontSize: '18px' }}>Dos opciones rapidas</h7>
+                                            <h7 style={{ margin: 30, fontSize: '18px' }}>{t('fast_op_2')}</h7>
                                         </Col>
                                     </Row>
                                 </ListGroup.Item>
@@ -134,7 +150,7 @@ function PerfilPage() {
                                         <Image src={retiro_rapido} rounded style={{ width: '45px', height: 'auto' }} />
                                     </Col>
                                     <Col>
-                                        <h7 style={{ margin: 30, fontSize: '18px' }}>Retiro rapido</h7>
+                                        <h7 style={{ margin: 30, fontSize: '18px' }}>{t('retiro_rapido')}</h7>
                                     </Col>
                                     </Row>
                             </ListGroup.Item>
@@ -144,7 +160,7 @@ function PerfilPage() {
                                             <Image src={fast_option} rounded style={{ width: '38px', height: 'auto' }} />
                                         </Col>
                                         <Col>
-                                            <h7 style={{ margin: 30, fontSize: '18px' }}>Una opción rapida</h7>
+                                            <h7 style={{ margin: 30, fontSize: '18px' }}>{t('fast_op_1')}</h7>
                                         </Col>
                                     </Row>
                                 </ListGroup.Item>
@@ -160,10 +176,11 @@ function PerfilPage() {
                             bgColor="#FDFFA7" 
                             textColor="#000000" 
                             width="380px" 
-                            height="84px" 
+                            height="88px" 
                             rounded={false}
-                            fontSize="18px" 
+                            fontSize="15px" 
                             marginLeft="1px"
+                            idioma = {idioma_aux}
                         />
                     </Row>
                     </Col>
@@ -194,7 +211,7 @@ function PerfilPage() {
                             <Form.Group controlId="formBasicCheckbox">
                                 <Form.Check 
                                     type="checkbox" 
-                                    label={checkboxLabel} 
+                                    label={t('no_mostrar')} 
                                     onChange={handleCheckboxChange}
                                     defaultChecked={true}
                                 />
@@ -203,8 +220,8 @@ function PerfilPage() {
                         <div style={{ height: "20px" }} />
                         <Row className="justify-content-center align-items-center">
                             <Col xs="auto">
-                                <Button variant="primary" size={"lg"} onClick={handleButtonClick}>
-                                {buttonText}
+                                <Button variant="primary" style={{ width: '150px'}} onClick={handleButtonClick}>
+                                {t('continue')}
                                 </Button>
                             </Col>
                         </Row>
