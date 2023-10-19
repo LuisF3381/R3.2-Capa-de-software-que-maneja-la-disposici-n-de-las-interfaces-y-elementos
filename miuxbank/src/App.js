@@ -8,13 +8,19 @@ import MenuATM from './pages/menu/menuATM.jsx'
 import SeleccionCuenta from './pages/retiro_op/selectionCuenta.jsx'
 import SeleccionMoneda from './pages/retiro_op/selectionMoneda';
 import SeleccionMonto from './pages/retiro_op/selectionMonto';
+import FinRetiro from './pages/retiro_op/endRetiro';
 
+// Para deposito
 import DepositoEfectivo from './pages/deposito_op/depositoEfectivo';
 import SeleccionCuentaSaldo from './pages/consulta_op/seleccionCuentaSaldo';
 
 // Para depositos
 import SeleccionCuentaDeposito from './pages/deposito_op/selectionCuentaDeposito';
 import SeleccionMonedaDeposito from './pages/deposito_op/selectionMonedaDeposito';
+
+// Fin de sesion
+import FinSesion from './pages/endSesion';
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -39,16 +45,20 @@ function App() {
         <Route path="/retiro/seleccion-cuenta/:idUserModel" element={<SeleccionCuenta/>}/>
         <Route path="/retiro/seleccion-moneda/:idUserModel/:idCuenta" element={<SeleccionMoneda/>}/>
         <Route path="/retiro/seleccion-monto/:idUserModel/:idCuenta" element={<SeleccionMonto/>}/>
-        <Route path="/retiro/finalizado/:idUserModel/:idTransaccion" element={<SeleccionMonto/>}/>
-
+        <Route path="/retiro/finalizado/:idUserModel/:idTransaccion" element={<FinRetiro/>}/>
 
         {/*Deposito de efectivo*/}
         <Route path="/deposito/seleccion-cuenta/:idUserModel" element={<SeleccionCuentaDeposito/>}/>
         <Route path="/deposito/seleccion-moneda/:idUserModel/:idCuenta" element={<SeleccionMonedaDeposito/>}/>
         <Route path="/deposito/ingreso-billetes/:idUserModel/:idCuenta" element={<DepositoEfectivo/>}/>
 
+
         {/*Consulta de saldo*/}
         <Route path="/consulta/seleccion-cuenta/:idUserModel" element={<SeleccionCuentaSaldo/>}/>
+
+
+        {/*Fin de sesion*/}
+        <Route path="/fin-sesion/" element={<FinSesion/>}/>
 
 
 

@@ -24,7 +24,7 @@ function SeleccionMonto() {
     
     const handleContinue = () => {
         // Lógica para el botón de continuar
-        navigate('/bienvenido/2');
+        navigate(`/retiro/finalizado/2/10`);
     };
 
 
