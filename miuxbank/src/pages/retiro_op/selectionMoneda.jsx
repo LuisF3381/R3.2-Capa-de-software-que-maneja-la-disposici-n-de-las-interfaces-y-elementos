@@ -23,7 +23,7 @@ function SeleccionMoneda() {
     const handleCardClick1 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
         // Puedes realizar las acciones necesarias aquí
-        navigate('/retiro/seleccion-cuenta/2');
+        navigate(`/retiro/seleccion-monto/${idUserModel}/${idCuenta}`);
       };
 
     // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional

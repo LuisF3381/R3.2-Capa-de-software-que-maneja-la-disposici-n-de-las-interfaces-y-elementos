@@ -34,8 +34,8 @@ function LoginPage() {
   };
 
 
-      // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
-      const handleCancel = () => {
+    // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
+    const handleCancel = () => {
         // Lógica para el botón de cancelar
     };
 

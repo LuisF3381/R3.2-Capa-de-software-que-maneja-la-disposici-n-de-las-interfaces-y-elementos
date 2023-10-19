@@ -3,8 +3,12 @@ import WelcomeScreen from './pages/welcomeScreen';
 import PerfilPage from './pages/introduction/perfilPage';
 import LoginPage from './pages/sesionLogin.jsx';
 import MenuATM from './pages/menu/menuATM.jsx'
+
+// Para retiro 
 import SeleccionCuenta from './pages/retiro_op/selectionCuenta.jsx'
 import SeleccionMoneda from './pages/retiro_op/selectionMoneda';
+import SeleccionMonto from './pages/retiro_op/selectionMonto';
+
 import DepositoEfectivo from './pages/deposito_op/depositoEfectivo';
 import SeleccionCuentaSaldo from './pages/consulta_op/seleccionCuentaSaldo';
 
@@ -34,6 +38,9 @@ function App() {
         {/*Retiro de efectivo*/}
         <Route path="/retiro/seleccion-cuenta/:idUserModel" element={<SeleccionCuenta/>}/>
         <Route path="/retiro/seleccion-moneda/:idUserModel/:idCuenta" element={<SeleccionMoneda/>}/>
+        <Route path="/retiro/seleccion-monto/:idUserModel/:idCuenta" element={<SeleccionMonto/>}/>
+        <Route path="/retiro/finalizado/:idUserModel/:idTransaccion" element={<SeleccionMonto/>}/>
+
 
         {/*Deposito de efectivo*/}
         <Route path="/deposito/seleccion-cuenta/:idUserModel" element={<SeleccionCuentaDeposito/>}/>
