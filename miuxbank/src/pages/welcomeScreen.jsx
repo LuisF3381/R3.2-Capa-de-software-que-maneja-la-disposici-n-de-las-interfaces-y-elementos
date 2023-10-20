@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Image, ListGroup, Modal, Button, Form} from 'react-bootstrap';
 import insertar_tarjeta from '../images/imagenes_welcome/insertar_tarjeta.png';
 import retiro from '../images/imagenes_welcome/retiro.png';
@@ -6,7 +6,7 @@ import consulta from '../images/imagenes_welcome/consulta.png';
 import deposito from '../images/imagenes_welcome/deposito.png';
 import logo from '../images/imagenes_welcome/miux_logo.png';
 import { useNavigate } from 'react-router-dom';
-
+import { listar_usuarios } from '../api/axios_api';
 
 function WelcomeScreen() {
     // Navigate para realizar la redireccion
@@ -16,6 +16,7 @@ function WelcomeScreen() {
     //Aqui se hace el manejo del MODAL 
     const [showModal, setShowModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
+    const [users, setUsers] = useState([]);
   
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
@@ -23,23 +24,31 @@ function WelcomeScreen() {
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value);
       };
-    
-      const handleContinue = () => {
+
+    const handleContinue = () => {
         // Aquí puedes realizar acciones con la opción seleccionada
         console.log('Opción seleccionada:', selectedOption);
-
-
-        //Aqui hacemos la redireccion a la pantalla de bienvenida (por ahora deberia verificarse si ya lo quito o no)
-        //En caso sea haya dado no volver a mostrar se haria la redireccion a la pantalla de bienvenida segun su perfil
-
-
-        //En caso sea haya quitado la pantalla de bienvenida se iria al menu principal
-        //navigate('/bienvenido/2');
-        navigate('/login/2');
-
+    
+        // Redirección basada en la opción seleccionada
+        navigate(`/login/${selectedOption}`);
+    
         // Cierra el modal
         handleCloseModal();
       };
+
+
+      useEffect(() => {
+        async function listarUsuarios() {
+          try {
+            const res = await listar_usuarios();
+            console.log("res",res.data);
+            setUsers(res.data);
+          } catch (error) {
+            console.error('Error in listarDockers:', error);
+          }
+        }
+        listarUsuarios();
+      }, []);
 
 
   return (
@@ -116,7 +125,7 @@ function WelcomeScreen() {
                 </Container>
             </Card>
             {/*AQUI VA EL TEMA DEL MODAL*/}
-                    <Modal show={showModal} onHide={handleCloseModal}>
+            <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                 <Modal.Title>Selecciona una opción</Modal.Title>
                 </Modal.Header>
@@ -125,7 +134,11 @@ function WelcomeScreen() {
                     <Form.Label>Selecciona una opción:</Form.Label>
                     <Form.Control as="select" onChange={handleOptionChange} value={selectedOption}>
                     <option value="">Selecciona la cuenta</option>
-                    <option value="1">Cuenta 456 Adriana Rosas</option>
+                    {users.map((user) => (
+                        <option key={user.idUsuario} value={user.idUserModel}>
+                        {user.nombre} {user.apellidoPaterno} {user.apellidoMaterno}
+                        </option>
+                    ))}
                     </Form.Control>
                 </Form.Group>
                 </Modal.Body>

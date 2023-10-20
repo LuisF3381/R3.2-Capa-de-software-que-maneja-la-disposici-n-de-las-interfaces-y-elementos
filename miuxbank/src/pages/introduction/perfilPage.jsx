@@ -50,7 +50,7 @@ function PerfilPage() {
     
       const handleButtonClick = () => {
         console.log("Button clicked");
-        navigate('/principal/2');
+        navigate(`/principal/${idUserModel}`);
     };
 
     const handleCheckboxChange = () => {

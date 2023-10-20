@@ -37,11 +37,12 @@ function LoginPage() {
     // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
     const handleCancel = () => {
         // Lógica para el botón de cancelar
+        navigate('/inicio');
     };
 
     const handleContinue = () => {
         // Lógica para el botón de continuar
-        navigate('/bienvenido/2');
+        navigate(`/bienvenido/${idUserModel}`);
     };
 
   return (
