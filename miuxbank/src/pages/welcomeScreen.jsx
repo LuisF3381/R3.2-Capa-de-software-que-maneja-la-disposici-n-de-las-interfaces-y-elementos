@@ -135,8 +135,8 @@ function WelcomeScreen() {
                     <Form.Control as="select" onChange={handleOptionChange} value={selectedOption}>
                     <option value="">Selecciona la cuenta</option>
                     {users.map((user) => (
-                        <option key={user.idUsuario} value={user.idUserModel}>
-                        {user.nombre} {user.apellidoPaterno} {user.apellidoMaterno}
+                        <option key={user.idUsuario} value={user.idUsuario}>
+                        {user.tarjeta} - {user.nombre} {user.apellidoPaterno} {user.apellidoMaterno}
                         </option>
                     ))}
                     </Form.Control>

@@ -11,6 +11,12 @@ import otras from '../../images/operaciones/otras_operaciones.png'
 import fast_operation from '../../images/imagenes_perfil/senior/fast_option.png'
 import last_operation from '../../images/imagenes_perfil/frecuente/ultima_operacion.png'
 
+
+// Imagenes para el senior
+import fast_operation_icon_ocasional from '../../images/imagenes_perfil/ocasional/retiro_rapido.png'
+import help_icon from '../../images/imagenes_perfil/senior/help_icon.png'
+
+
 // Para las operaciones rapidas
 import fast_retiro from '../../images/operaciones/fast/fast_retiro.png'
 import fast_deposito from '../../images/operaciones/fast/fast_deposito.png'
@@ -20,6 +26,10 @@ import { useParams } from 'react-router-dom';
 // Para traducir el texto
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+
+// APIS
+import { getPerfilByIdUserModel } from '../../api/axios_api';
+
 
 function MenuATM() {
     const { idUserModel } = useParams();
@@ -77,6 +87,33 @@ function MenuATM() {
     const handleContinue = () => {
         // Lógica para el botón de continuar
     };
+
+
+
+    // Aqui hacemos el llamado al api de obtener perfil 
+    // Manejamos un useEffect para llamarlo ni bien se renderice
+    const [perfil_usuario, setPerfil] = useState(null);
+    
+    useEffect(() => {
+        // Llama a la función que realiza la solicitud de la API
+        getPerfilByIdUserModel(idUserModel)
+          .then(response => {
+            // Actualiza el estado con los datos del perfil
+            console.log("response", response);
+                if (response.descripcion.includes('Senior')) {
+                    setPerfil('senior'); 
+                } else if (response.descripcion.includes('Frecuente')) {
+                    setPerfil('frecuente'); 
+                } else if (response.descripcion.includes('Ocasional')) {
+                    setPerfil('ocasional'); 
+                } 
+          })
+          .catch(error => {
+            // Manejo de errores, por ejemplo, imprimir en la consola
+            console.error('Error al obtener el perfil:', error);
+          });
+      }, []);  // El segundo parámetro del useEffect es un array de dependencias, pasamos un array vacío par
+
 
 
     return (
@@ -138,10 +175,12 @@ function MenuATM() {
             {/*Aqui van las descripciones*/}
             <Row className="d-flex justify-content-center">
                 <Col xs="auto">
+                
                     <div className="d-flex align-items-center">
                         <Image src={fast_operation} alt="Descripción" width={32} height={32} rounded style={{ marginRight: '8px' }} />
                         <h6>Operaciones Rápidas</h6>
                     </div>
+
                     {/*AQUI VAN LAS OPCIONES*/}
 
                     <div style={{ height: '6px' }} />
@@ -199,14 +238,61 @@ function MenuATM() {
                 </Col>
                 <Col xs={1}></Col>
                 <Col xs="auto">
+                {/*AQUI VARIA EL ENCABEZADO SEGUN EL USUARIO*/}
+                {perfil_usuario === 'frecuente' ? (
                     <div className="d-flex align-items-center">
                         <Image src={last_operation} alt="Descripción" width={32} height={32} rounded style={{ marginRight: '8px' }} />
                         <h6>Repetir mi ultima operacion</h6>
                     </div>
-                    {/*AQUI VAN LAS OPCIONES*/}
 
+                ): perfil_usuario === 'ocasional' ?(
+                    <div className="d-flex align-items-center">
+                        <Image src={fast_operation_icon_ocasional} alt="Descripción" width={32} height={32} rounded style={{ marginRight: '8px' }} />
+                        <h6>Retiro Personalizado</h6>
+                    </div>
+
+                ): perfil_usuario === 'senior' ?(
+                    <div className="d-flex align-items-center">
+                        <Image src={help_icon} alt="Descripción" width={32} height={32} rounded style={{ marginRight: '8px' }} /> 
+                        <h6>Accesibilidad</h6>
+                    </div>
+                ):(    
+                    <p></p>
+                )}
+                
                     <div style={{ height: '6px' }} />
-                    {/*AQUI VA LA PRIMERA*/}
+
+                {/*AQUI VARIA LA PRIMERA OPCION SEGUN EL USUARIO*/}
+
+                {perfil_usuario === 'senior' ? (
+                    <p></p>
+
+                ): perfil_usuario === 'ocasional' ?(
+                <Row>
+                    <Card
+                        onClick={handleCardClick3}
+                        className="d-flex align-items-center"
+                        style={{ width: '320px', height: '60px', cursor: 'pointer' }}
+                    >                        
+                        <Card.Body className="m-0 p-1">
+                            <Row className="align-items-center">
+                                <Col xs="auto">
+                                    <Image src={retiro} alt="Descripción" width={40} height={40} />
+                                </Col>
+                                <Col xs="auto">
+                                    <Row>
+                                        <h7 className="m-0">OCASIONAL        US$20</h7>
+                                    </Row>
+                                    <Row>
+                                        <h7 className="m-0">Cuenta de ahorro - 324</h7>
+                                    </Row>
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
+                </Row>
+
+                ): perfil_usuario === 'frecuente' ?(
                     <Row>
                         <Card
                             onClick={handleCardClick3}
@@ -230,6 +316,10 @@ function MenuATM() {
                             </Card.Body>
                         </Card>
                     </Row>
+                ):(    
+                    <p></p>
+                )}
+
                     <div style={{ height: '8px' }} />
                     {/*AQUI VA LA SEGUNDA*/}
                     <Row>

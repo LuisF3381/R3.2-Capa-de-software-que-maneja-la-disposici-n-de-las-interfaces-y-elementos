@@ -26,6 +26,12 @@ import { useNavigate } from 'react-router-dom';
 // Para traducir el texto
 import { useTranslation } from 'react-i18next';
 
+
+// API DE MOD PERSONALIZATION
+import { getPerfilByIdUserModel } from '../../api/axios_api';
+
+
+
 function PerfilPage() {
     const { idUserModel } = useParams();
     const navigate = useNavigate();
@@ -34,22 +40,16 @@ function PerfilPage() {
 
     var idioma_aux;
 
-    // Cambiar el idioma una vez al renderizar el componente
-    useEffect(() => {
-        idioma_aux = 'es';
-        i18n.changeLanguage('es'); // Cambia al idioma que desees aquí
-    }, []);
-
     const buttonText = "CONTINUAR";
     const checkboxLabel = "No volver a mostrar";
     const [selectedOption, setSelectedOption] = useState('');
-    console.log("idUserModel",idUserModel);
-    const handleOptionChange = (event) => {
-        setSelectedOption(event.target.value);
-      };
     
-      const handleButtonClick = () => {
+
+    const handleButtonClick = () => {
         console.log("Button clicked");
+
+
+        
         navigate(`/principal/${idUserModel}`);
     };
 
@@ -57,8 +57,33 @@ function PerfilPage() {
         console.log("Checkbox changed");
     };
 
-    //Aqui guardamos el perfil
-    const perfil_usuario = 'frecuente'; 
+
+    // Aqui hacemos el llamado al api de obtener perfil 
+    // Manejamos un useEffect para llamarlo ni bien se renderice
+    const [perfil_usuario, setPerfil] = useState(null);
+    
+    useEffect(() => {
+        // Llama a la función que realiza la solicitud de la API
+        getPerfilByIdUserModel(idUserModel)
+          .then(response => {
+            // Actualiza el estado con los datos del perfil
+            console.log("response", response);
+                if (response.descripcion.includes('Senior')) {
+                    setPerfil('senior'); 
+                } else if (response.descripcion.includes('Frecuente')) {
+                    setPerfil('frecuente'); 
+                } else if (response.descripcion.includes('Ocasional')) {
+                    setPerfil('ocasional'); 
+                } 
+          })
+          .catch(error => {
+            // Manejo de errores, por ejemplo, imprimir en la consola
+            console.error('Error al obtener el perfil:', error);
+          });
+      }, []);  // El segundo parámetro del useEffect es un array de dependencias, pasamos un array vacío par
+
+
+
 
 
     return (

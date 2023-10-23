@@ -44,6 +44,7 @@ function SeleccionMoneda() {
                 <Col md={7}>
                     <h3>Retiro de efectivo</h3>
                     <h5>selecciona la moneda a retirar</h5>
+                    <h7>Cuenta Sueldo 825-2949840</h7>
                 </Col>
 
                 <Col md={5} className="d-flex align-items-center">

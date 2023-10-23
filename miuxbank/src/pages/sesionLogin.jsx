@@ -12,8 +12,13 @@ import { useTranslation } from 'react-i18next';
 //Imagenes
 import candado from '../images/candado.png';
 
+// APIS del Modulo Personalizacion
+import { getUserModelIdByIdUsuario } from '../api/axios_api';
+import { getObtenerRutaPostLogin } from '../api/axios_api';
+
+
 function LoginPage() {
-  const { idUserModel } = useParams();
+  const { idUsuario } = useParams();
   const navigate = useNavigate();
 
 
@@ -34,16 +39,29 @@ function LoginPage() {
   };
 
 
-    // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
-    const handleCancel = () => {
+  // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
+  const handleCancel = () => {
         // Lógica para el botón de cancelar
         navigate('/inicio');
     };
 
-    const handleContinue = () => {
-        // Lógica para el botón de continuar
-        navigate(`/bienvenido/${idUserModel}`);
+  const handleContinue = async () => {
+      
+      try {
+        // AQUÍ OBTENEMOS EL USER MODEL DEL USUARIO
+        const response = await getUserModelIdByIdUsuario(idUsuario);
+        console.log("idUserModel obtenido:", response.idUserModel);
+
+        // AHORA OBTENEMOS LA RUTA QUE SEGUIRA (SI ES EL BIENVENIDO O EL MENU PRINCIPAL)
+        const response_ruta = await getObtenerRutaPostLogin(response.idUserModel);
+        console.log("response_ruta", response_ruta);
+        navigate(response_ruta);
+
+      } catch (error) {
+        console.error('Error al obtener el User Model:', error);
+      }
     };
+
 
   return (
     <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>

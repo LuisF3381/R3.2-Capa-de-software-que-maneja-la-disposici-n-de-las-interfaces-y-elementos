@@ -33,7 +33,7 @@ function App() {
         <Route path="/inicio" element={<WelcomeScreen/>}/>
 
         {/*Pantalla de Login LoginPage*/}
-        <Route path="/login/:idUserModel" element={<LoginPage/>}/>
+        <Route path="/login/:idUsuario" element={<LoginPage/>}/>
 
         {/*Pantallas de bienvenida al cajero*/}
         <Route path="/bienvenido/:idUserModel" element={<PerfilPage/>}/>
