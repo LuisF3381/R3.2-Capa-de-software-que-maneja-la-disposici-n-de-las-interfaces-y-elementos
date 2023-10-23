@@ -17,9 +17,18 @@ import fast_operation_icon_ocasional from '../../images/imagenes_perfil/ocasiona
 import help_icon from '../../images/imagenes_perfil/senior/help_icon.png'
 
 
+// Imagenes para el ocasional
+import retiro_personal from '../../images/imagenes_perfil/ocasional/retiro_personalizado.png'
+
+
 // Para las operaciones rapidas
 import fast_retiro from '../../images/operaciones/fast/fast_retiro.png'
 import fast_deposito from '../../images/operaciones/fast/fast_deposito.png'
+
+// Importamos card
+import CustomCardMenu from '../components/generals/messageCarMenu';
+
+
 
 import { useParams } from 'react-router-dom';
 
@@ -29,6 +38,8 @@ import { useNavigate } from 'react-router-dom';
 
 // APIS
 import { getPerfilByIdUserModel } from '../../api/axios_api';
+import { get_user_model } from '../../api/axios_api';
+import { getUsuarioById } from '../../api/axios_api';
 
 
 function MenuATM() {
@@ -37,16 +48,32 @@ function MenuATM() {
       // Para el traductor de texto
     const { t, i18n } = useTranslation();
 
-    const [selectedOption, setSelectedOption] = useState('');
-
     var idCuenta = 2;
 
+
+    // Para el cambio de idioma
+    const [selectedOption, setSelectedOption] = useState('');
     const handleOptionChange = (event) => {
         const selectedLang = event.target.value;
         setSelectedOption(selectedLang);
         console.log("selectedOption",selectedOption);
         // Aquí puedes agregar cualquier otra lógica que desees ejecutar cuando el idioma cambie
     };
+
+    // Para el cambio del tamaño del texto
+    const [selectedOption2, setSelectedOption2] = useState('');
+
+    const handleOptionChange2 = (event) => {
+        const newValue = event.target.value;
+        setSelectedOption2(newValue);
+
+        // Puedes agregar lógica adicional aquí según la opción seleccionada
+        // Por ahora, solo imprimo el valor seleccionado en la consola
+        console.log('Opción seleccionada:', newValue);
+    };
+
+
+
 
 
     // Para la primera opcion mas usada
@@ -93,7 +120,9 @@ function MenuATM() {
     // Aqui hacemos el llamado al api de obtener perfil 
     // Manejamos un useEffect para llamarlo ni bien se renderice
     const [perfil_usuario, setPerfil] = useState(null);
-    
+    const [nombre, setNombre] = useState('');
+
+
     useEffect(() => {
         // Llama a la función que realiza la solicitud de la API
         getPerfilByIdUserModel(idUserModel)
@@ -112,6 +141,33 @@ function MenuATM() {
             // Manejo de errores, por ejemplo, imprimir en la consola
             console.error('Error al obtener el perfil:', error);
           });
+
+
+
+        //Ahora obtenemos el userModel y luego los nombres del usuario
+        get_user_model(idUserModel)
+        .then(response_user_model => {
+            // Actualiza el estado con los datos del perfil
+            console.log("response usermodel", response_user_model.idUsuario);
+
+            // obtenemos ahora finalmente el nombre y apellido del usuario
+            getUsuarioById(response_user_model.idUsuario)
+            .then(response_usuario_data => {
+                // Actualiza el estado con los datos del perfil
+                console.log("response_usuario_data", response_usuario_data);
+                setNombre(response_usuario_data.nombreCompleto);
+              })
+              .catch(error => {
+                // Manejo de errores, por ejemplo, imprimir en la consola
+                console.error('Error al obtener los nombres y apellidos del usuario:', error);
+              });
+
+          })
+          .catch(error => {
+            // Manejo de errores, por ejemplo, imprimir en la consola
+            console.error('Error al obtener el userModel:', error);
+          });
+
       }, []);  // El segundo parámetro del useEffect es un array de dependencias, pasamos un array vacío par
 
 
@@ -124,10 +180,12 @@ function MenuATM() {
                 {/*AQUI VA EL NOMBRE Y SI CAMBIA EL IDIOMA O NO AQUI*/}
                 <Row className="justify-content-center align-items-center my-2">
                 <Col xs={9} >
-                    <h4>¡Hola, Adriana Rosas!</h4>
+                    <h4>¡Hola, {nombre}!</h4>
                     <h5>¿Qué quieres hacer hoy?</h5>
                 </Col>
                 <Col xs={3} className="text-center">
+
+                {perfil_usuario === 'frecuente' ||  perfil_usuario === 'ocasional' ? (
                     <Form.Group>
                         <Form.Control
                             as="select"
@@ -141,6 +199,10 @@ function MenuATM() {
                             {/* Agrega más opciones de idioma según sea necesario */}
                         </Form.Control>
                     </Form.Group>
+                ):(    
+                    <p></p>
+                )}
+
                 </Col>
             </Row>
 
@@ -210,6 +272,29 @@ function MenuATM() {
                     </Row>
                     <div style={{ height: '8px' }} />
                     {/*AQUI VA LA SEGUNDA*/}
+
+                    {perfil_usuario === 'ocasional' || perfil_usuario === 'senior' ? (
+                        <Row>
+                            <Card
+                                onClick={handleCardClick3}
+                                className="d-flex align-items-center"
+                                style={{ width: '320px', height: '60px', cursor: 'pointer' }}
+                            >                        
+                            <Card.Body className="m-0 p-1">
+                                    <Row className="align-items-center">
+                                        <Col xs="auto">
+                                            <Image src={otras} alt="Descripción" width={40} height={40} />
+                                        </Col>
+                                        <Col xs="auto">
+                                            <Row>
+                                                <h7 className="m-0">Otras operaciones</h7>
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                </Card.Body>
+                            </Card>
+                        </Row>
+                    ):(        
                     <Row>
                         <Card
                             onClick={handleCardOP2}
@@ -233,11 +318,20 @@ function MenuATM() {
                             </Card.Body>
                         </Card>
                     </Row>
+                    )}
 
 
+                    {/*Aqui va el boton*/}
+                    <Row className="d-flex justify-content-center mt-4">
+                            <Button variant="danger" style={{ width: '150px', marginRight: '80px'}} onClick={handleCancel}>
+                            CERRAR SESION
+                            </Button>
+                    </Row>
                 </Col>
+
                 <Col xs={1}></Col>
                 <Col xs="auto">
+
                 {/*AQUI VARIA EL ENCABEZADO SEGUN EL USUARIO*/}
                 {perfil_usuario === 'frecuente' ? (
                     <div className="d-flex align-items-center">
@@ -260,12 +354,25 @@ function MenuATM() {
                     <p></p>
                 )}
                 
-                    <div style={{ height: '6px' }} />
+                <div style={{ height: '6px' }} />
 
                 {/*AQUI VARIA LA PRIMERA OPCION SEGUN EL USUARIO*/}
-
                 {perfil_usuario === 'senior' ? (
-                    <p></p>
+                    <>
+                        <Row>
+                            <CustomCardMenu
+                                bgColor="#FDFFA7"
+                                textColor="#000000"
+                                width="300px"
+                                height="70px"
+                                rounded={false}
+                                fontSize="14px"
+                                marginLeft="0px"
+                                idioma="es"
+                                customText="¡ Gracias por usar el cajero, disfruta la experiencia personalizable ! "
+                            />
+                        </Row>
+                    </>
 
                 ): perfil_usuario === 'ocasional' ?(
                 <Row>
@@ -277,11 +384,11 @@ function MenuATM() {
                         <Card.Body className="m-0 p-1">
                             <Row className="align-items-center">
                                 <Col xs="auto">
-                                    <Image src={retiro} alt="Descripción" width={40} height={40} />
+                                    <Image src={retiro_personal} alt="Descripción" width={40} height={40} />
                                 </Col>
                                 <Col xs="auto">
                                     <Row>
-                                        <h7 className="m-0">OCASIONAL        US$20</h7>
+                                        <h7 className="m-0">Retiro        US$20</h7>
                                     </Row>
                                     <Row>
                                         <h7 className="m-0">Cuenta de ahorro - 324</h7>
@@ -320,43 +427,89 @@ function MenuATM() {
                     <p></p>
                 )}
 
-                    <div style={{ height: '8px' }} />
-                    {/*AQUI VA LA SEGUNDA*/}
-                    <Row>
-                        <Card
-                            onClick={handleCardClick3}
-                            className="d-flex align-items-center"
-                            style={{ width: '320px', height: '60px', cursor: 'pointer' }}
-                        >                        
-                            <Card.Body className="m-0 p-1">
-                                <Row className="align-items-center">
-                                    <Col xs="auto">
-                                        <Image src={otras} alt="Descripción" width={40} height={40} />
-                                    </Col>
-                                    <Col xs="auto">
-                                        <Row>
-                                            <h7 className="m-0">Otras operaciones</h7>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                            </Card.Body>
-                        </Card>
-                    </Row>
+            <div style={{ height: '8px' }} />        
+            {/*AQUI VA LA SEGUNDA OPCION QUE VARIA POR PERFIL*/}
+                    {perfil_usuario === 'senior' ? (
+                     <>  
+                        <div style={{ height: '8px' }} />   
+                        <Row>
+                            <Form.Group>
+                                <Form.Control
+                                    as="select"
+                                    onChange={handleOptionChange}
+                                    value={selectedOption}
+                                    className="text-right form-control-sm"
+                                >
+                                    <option value="">Cambiar idioma</option>
+                                    <option value="es">Español</option>
+                                    <option value="qu">Quechua</option>
+                                    {/* Agrega más opciones de idioma según sea necesario */}
+                                </Form.Control>
+                            </Form.Group>
+                        </Row>
+
+                        <div style={{ height: '10px' }} />   
+                        <Row>
+                            <Form.Group>
+                                <Form.Control
+                                    as="select"
+                                    onChange={handleOptionChange2}
+                                    value={selectedOption2}
+                                    className="text-right form-control-sm"
+                                >
+                                    <option value="">Cambiar de tamaño de letra</option>
+                                    <option value="md">Mediano</option>
+                                    <option value="gr">Grande</option>
+                                    {/* Agrega más opciones de idioma según sea necesario */}
+                                </Form.Control>
+                            </Form.Group>
+                        </Row>
+
+                    </> 
+                    ): perfil_usuario === 'ocasional' ?(
+                        <CustomCardMenu
+                            bgColor="#FDFFA7"
+                            textColor="#000000"
+                            width="300px"
+                            height="70px"
+                            rounded={false}
+                            fontSize="14px"
+                            marginLeft="0px"
+                            idioma="es"
+                            customText="¡ Gracias por usar el cajero, disfruta la experiencia personalizable ! "
+                        />
+
+                    ): perfil_usuario === 'frecuente' ?(
+                        <Row>
+                            <Card
+                                onClick={handleCardClick3}
+                                className="d-flex align-items-center"
+                                style={{ width: '320px', height: '60px', cursor: 'pointer' }}
+                            >                        
+                                <Card.Body className="m-0 p-1">
+                                    <Row className="align-items-center">
+                                        <Col xs="auto">
+                                            <Image src={otras} alt="Descripción" width={40} height={40} />
+                                        </Col>
+                                        <Col xs="auto">
+                                            <Row>
+                                                <h7 className="m-0">Otras operaciones</h7>
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                </Card.Body>
+                            </Card>
+                        </Row>
+                    ):(    
+                            <p></p>
+                    )}
+
+
+
+
 
                 </Col>
             </Row>
-
-
-            {/*Aqui va el boton*/}
-            <Row className="d-flex justify-content-center mt-4">
-                <Col xs="auto">
-                    <Button variant="danger" style={{ width: '150px', marginRight: '500px' }} onClick={handleCancel}>
-                    CERRAR SESION
-                    </Button>
-                </Col>
-            </Row>
-
-
 
                 </Container>
             </Card>
