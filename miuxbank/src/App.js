@@ -13,6 +13,7 @@ import FinRetiro from './pages/retiro_op/endRetiro';
 // Para deposito
 import DepositoEfectivo from './pages/deposito_op/depositoEfectivo';
 import SeleccionCuentaSaldo from './pages/consulta_op/seleccionCuentaSaldo';
+import FinConsulta from './pages/consulta_op/endConsulta';
 
 // Para depositos
 import SeleccionCuentaDeposito from './pages/deposito_op/selectionCuentaDeposito';
@@ -55,6 +56,8 @@ function App() {
 
         {/*Consulta de saldo*/}
         <Route path="/consulta/seleccion-cuenta/:idUserModel" element={<SeleccionCuentaSaldo/>}/>
+        <Route path="/consulta/finalizado/:idTransaccion" element={<FinConsulta/>}/>
+
 
 
         {/*Fin de sesion*/}

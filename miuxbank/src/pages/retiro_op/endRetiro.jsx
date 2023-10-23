@@ -18,7 +18,7 @@ function FinRetiro() {
     
     const handleContinue = () => {
             // Lógica para el botón de continuar
-            navigate('/bienvenido/2');
+            navigate('/fin-sesion/');
     };
 
     const handleCheckboxChange = () => {

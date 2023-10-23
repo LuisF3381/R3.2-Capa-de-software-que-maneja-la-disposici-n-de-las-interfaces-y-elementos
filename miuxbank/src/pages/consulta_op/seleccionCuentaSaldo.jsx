@@ -71,8 +71,9 @@ function SeleccionCuentaSaldo() {
     };
     
     const handleContinue = () => {
-
-    };
+        //Nos dirigimos a la pantalla de resumen
+        navigate(`/consulta/finalizado/${idUserModel}`);
+    };  
 
 
     return (
@@ -94,6 +95,7 @@ function SeleccionCuentaSaldo() {
 
             {/*AQUI SE PUEDEN SELECCIONAR LOS TIPOS DE MONEDA RETIRAR */}
             <Row>
+                <Col xs={1}></Col>
                 <Col xs={5} >
                     {/*PRIMERA OPCION*/}
                     <Row className="justify-content-center">
@@ -108,7 +110,7 @@ function SeleccionCuentaSaldo() {
                                 <Row className="align-items-center">
                                     <Col xs="auto">
                                     <Row>
-                                        <h7 className="m-0">Cuenta Ahorros - 324</h7>
+                                        <h6 className="m-0">Cuenta Ahorros - 324</h6>
                                     </Row>
                                     <Row>
                                         <h7 className="m-0">825-5942840</h7>
@@ -139,7 +141,7 @@ function SeleccionCuentaSaldo() {
                                 <Row className="align-items-center">
                                     <Col xs="auto">
                                     <Row>
-                                        <h7 className="m-0">Cuenta de ahorro - 456</h7>
+                                        <h6 className="m-0">Cuenta de ahorro - 456</h6>
                                     </Row>
                                     <Row>
                                         <h7 className="m-0">325-7949240</h7>
@@ -156,12 +158,14 @@ function SeleccionCuentaSaldo() {
                 </Col>
             </Row>
 
+            {/*AQUI PUEDE SELECIONARSE LA CONSTANCIA DEL SALDO*/}
             <Row>
                 <h5>Deseo consultar mi saldo:</h5>
             </Row>
             <div style={{ height: '15px' }} />
             <Row>
-                <Col xs={8}>
+                <Col xs={1}></Col>
+                <Col xs={7}>
                 <Row>
                     <Col xs={5} >
                         {/*PRIMERA OPCION*/}

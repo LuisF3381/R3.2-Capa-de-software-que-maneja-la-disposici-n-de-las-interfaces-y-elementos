@@ -8,9 +8,23 @@ import tarjeta from '../images/tarjeta.png'
 import billetes from '../images/dinero.png'
 import voucher from '../images/voucher.png'
 
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
+
 function FinSesion() {
 
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        const temporizador = setTimeout(() => {
+            // Navegar a la ruta deseada después de 15 segundos
+            navigate('/');
+        }, 15000); // 15000 milisegundos = 15 segundos
+
+        // Limpia el temporizador al desmontar el componente
+        return () => clearTimeout(temporizador);
+    }, [navigate]);
 
 
     return (
