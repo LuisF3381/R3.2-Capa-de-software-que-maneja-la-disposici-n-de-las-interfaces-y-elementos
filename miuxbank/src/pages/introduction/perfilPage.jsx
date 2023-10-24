@@ -29,11 +29,14 @@ import { useTranslation } from 'react-i18next';
 
 // API DE MOD PERSONALIZATION
 import { getPerfilByIdUserModel } from '../../api/axios_api';
-
+import { actualizarPerfilInformado } from '../../api/axios_api';
 
 
 function PerfilPage() {
-    const { idUserModel } = useParams();
+    const { idUsuario, idUserModel } = useParams();
+    console.log("idUsuario",idUsuario);
+    console.log("idUserModel",idUserModel);
+
     const navigate = useNavigate();
     // Para el traductor de texto
     const { t, i18n } = useTranslation();
@@ -45,16 +48,23 @@ function PerfilPage() {
     const [selectedOption, setSelectedOption] = useState('');
     
 
-    const handleButtonClick = () => {
-        console.log("Button clicked");
+    const handleButtonClick = async () => {
 
+        // Actualizamos el valor segun el valor del selected option
+        try {
+            const response = await actualizarPerfilInformado(idUserModel,{ "perfil_informado": selectedOption });
+            console.log("perfil informado", response);
 
-        
-        navigate(`/principal/${idUserModel}`);
+        } catch (error) {
+            console.error('Error al obtener el perfil actualizado:', error);
+          }
+
+        navigate(`/principal/${idUsuario}/${idUserModel}`);
     };
 
     const handleCheckboxChange = () => {
         console.log("Checkbox changed");
+        setSelectedOption(!selectedOption);
     };
 
 
@@ -62,7 +72,9 @@ function PerfilPage() {
     // Manejamos un useEffect para llamarlo ni bien se renderice
     const [perfil_usuario, setPerfil] = useState(null);
     
+
     useEffect(() => {
+        setSelectedOption(true);
         // Llama a la función que realiza la solicitud de la API
         getPerfilByIdUserModel(idUserModel)
           .then(response => {

@@ -54,7 +54,7 @@ function LoginPage() {
 
         // AHORA OBTENEMOS LA RUTA QUE SEGUIRA (SI ES EL BIENVENIDO O EL MENU PRINCIPAL)
         const response_ruta = await getObtenerRutaPostLogin(response.idUserModel);
-        console.log("response_ruta", response_ruta);
+        //console.log("response_ruta", response_ruta);
         navigate(response_ruta);
 
       } catch (error) {

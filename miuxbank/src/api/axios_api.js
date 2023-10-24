@@ -17,6 +17,17 @@ export const getUsuarioById = (idUsuario) => {
     });
 };
 
+export const listarCuentas = (idUsuario) => {
+  return axios.get(`${apiUrlUsr}/listar_cuentas/${idUsuario}`)
+    .then(response => response.data)
+    .catch(error => {
+      // Manejo de errores, por ejemplo, imprimir en la consola
+      console.error('Error al listar cuentas:', error);
+      throw error; // Puedes manejar el error de otras formas según tus necesidades
+    });
+};
+
+
 
 
 
@@ -55,11 +66,21 @@ export const getPerfilByIdUserModel = (idUserModel) => {
       });
   };
 
+export const actualizarPerfilInformado = (userModelId, updatedData) => {
+    return axios.put(`${apiUrlPers}/user-model/${userModelId}/update-perfil-informado`, updatedData)
+      .then(response => response.data)
+      .catch(error => {
+        // Manejo de errores, por ejemplo, imprimir en la consola
+        console.error('Error al actualizar perfil informado:', error);
+        throw error; // Puedes manejar el error de otras formas según tus necesidades
+      });
+  };
+
+
 
 
 
 // APIS PARA OBTENER RUTAS
-
 export const getObtenerRutaPostLogin = (userModelId) => {
     return axios.get(`${apiUrlPers}/obtener-ruta/login/${userModelId}`)
       .then(response => response.data)

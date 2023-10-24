@@ -12,12 +12,15 @@ import FinRetiro from './pages/retiro_op/endRetiro';
 
 // Para deposito
 import DepositoEfectivo from './pages/deposito_op/depositoEfectivo';
+import SeleccionCuentaDeposito from './pages/deposito_op/selectionCuentaDeposito';
+import SeleccionMonedaDeposito from './pages/deposito_op/selectionMonedaDeposito';
+import ResumenDeposito from './pages/deposito_op/depositoResumen';
+import FinDeposito from './pages/deposito_op/endDeposito';
+
+// Para consulta
 import SeleccionCuentaSaldo from './pages/consulta_op/seleccionCuentaSaldo';
 import FinConsulta from './pages/consulta_op/endConsulta';
 
-// Para depositos
-import SeleccionCuentaDeposito from './pages/deposito_op/selectionCuentaDeposito';
-import SeleccionMonedaDeposito from './pages/deposito_op/selectionMonedaDeposito';
 
 // Fin de sesion
 import FinSesion from './pages/endSesion';
@@ -37,14 +40,14 @@ function App() {
         <Route path="/login/:idUsuario" element={<LoginPage/>}/>
 
         {/*Pantallas de bienvenida al cajero*/}
-        <Route path="/bienvenido/:idUserModel" element={<PerfilPage/>}/>
+        <Route path="/bienvenido/:idUsuario/:idUserModel" element={<PerfilPage/>}/>
 
         {/*Menu principal del ATM*/}
-        <Route path="/principal/:idUserModel" element={<MenuATM/>}/>
+        <Route path="/principal/:idUsuario/:idUserModel" element={<MenuATM/>}/>
 
         {/*Retiro de efectivo*/}
-        <Route path="/retiro/seleccion-cuenta/:idUserModel" element={<SeleccionCuenta/>}/>
-        <Route path="/retiro/seleccion-moneda/:idUserModel/:idCuenta" element={<SeleccionMoneda/>}/>
+        <Route path="/retiro/seleccion-cuenta/:idUsuario/:idUserModel" element={<SeleccionCuenta/>}/>
+        <Route path="/retiro/seleccion-moneda/:idUsuario/:idUserModel/:CCI" element={<SeleccionMoneda/>}/>
         <Route path="/retiro/seleccion-monto/:idUserModel/:idCuenta" element={<SeleccionMonto/>}/>
         <Route path="/retiro/finalizado/:idUserModel/:idTransaccion" element={<FinRetiro/>}/>
 
@@ -52,6 +55,8 @@ function App() {
         <Route path="/deposito/seleccion-cuenta/:idUserModel" element={<SeleccionCuentaDeposito/>}/>
         <Route path="/deposito/seleccion-moneda/:idUserModel/:idCuenta" element={<SeleccionMonedaDeposito/>}/>
         <Route path="/deposito/ingreso-billetes/:idUserModel/:idCuenta" element={<DepositoEfectivo/>}/>
+        <Route path="/deposito/resumen-deposito/:idUserModel/:idCuenta" element={<ResumenDeposito/>}/>
+        <Route path="/deposito/finalizado/:idUserModel/:idTransaccion" element={<FinDeposito/>}/>
 
 
         {/*Consulta de saldo*/}

@@ -40,10 +40,10 @@ import { useNavigate } from 'react-router-dom';
 import { getPerfilByIdUserModel } from '../../api/axios_api';
 import { get_user_model } from '../../api/axios_api';
 import { getUsuarioById } from '../../api/axios_api';
-
+import { listarCuentas } from '../../api/axios_api';
 
 function MenuATM() {
-    const { idUserModel } = useParams();
+    const { idUsuario, idUserModel } = useParams();
     const navigate = useNavigate();
       // Para el traductor de texto
     const { t, i18n } = useTranslation();
@@ -75,28 +75,60 @@ function MenuATM() {
 
 
 
-
+    // OPCIONES PRINCIPALES
     // Para la primera opcion mas usada
-    const handleCardClick1 = () => {
-        // Esta función se llamará cuando se haga clic en la tarjeta
-        // Puedes realizar las acciones necesarias aquí
-        navigate(`/retiro/seleccion-cuenta/${idUserModel}`);
+    const handleCardClickP1 = async () => {        
+        // Le damos a obtener ruta, para ello necesitamos saber cuantas cuentas tiene
+        try {
+            const response = await listarCuentas(idUsuario);
+            console.log("cuentas listadas", response);
+
+            if (response.CCI1 !== "0" && response.CCI2 !== "0") {
+                // Hacer algo si ambas CCI1 y CCI2 son distintas de "0"
+                console.log("Ambas CCI son distintas de '0'");
+                navigate(`/retiro/seleccion-cuenta/${idUsuario}/${idUserModel}`);
+            } else {
+                // Hacer otra cosa si al menos una de ellas es "0"
+                console.log("Al menos una de las CCI es '0'");
+
+                if(response.CCI1 !== "0"){
+                    var CCI_AUX = response.CCI1;
+                    navigate(`/retiro/seleccion-moneda/${idUsuario}/${idUserModel}/${CCI_AUX}`);
+                }
+
+                if(response.CCI2 !== "0"){
+                    var CCI_AUX = response.CCI2;
+                    navigate(`/retiro/seleccion-moneda/${idUsuario}/${idUserModel}/${CCI_AUX}`);
+                }
+            }
+        
+        } catch (error) {
+                    console.error('Error al obtener las cuentas del usuario:', error);
+        }
+
+        //navigate(`/retiro/seleccion-cuenta/${idUserModel}`);
       };
 
     // Para la segunda opcion mas usada
-    const handleCardClick2 = () => {
+    const handleCardClickP2 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
         // Puedes realizar las acciones necesarias aquí
         navigate(`/consulta/seleccion-cuenta/${idUserModel}`);
       };
 
     // Para la tercera opcion mas usada
-    const handleCardClick3 = () => {
+    const handleCardClickP3 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
         // Puedes realizar las acciones necesarias aquí
         navigate(`/deposito/seleccion-cuenta/${idUserModel}`);
       };
     
+      const handleCardClick3 = () => {
+        // Esta función se llamará cuando se haga clic en la tarjeta
+        // Puedes realizar las acciones necesarias aquí
+        navigate(`/deposito/seleccion-cuenta/${idUserModel}`);
+      };
+
     const handleCardOP2 = () =>{
 
         navigate(`/deposito/ingreso-billetes/${idUserModel}/${idCuenta}`);
@@ -210,7 +242,7 @@ function MenuATM() {
             {/*AQUI VAN LOS 3 CARDS PRINCIPALES */}
             <Row className="justify-content-center">
                 <Col xs={12} md={4} className="mb-3">
-                    <Card onClick={handleCardClick1} className="text-center p-2" style={{ width: '230px', height: '100px', cursor: 'pointer' }}>
+                    <Card onClick={handleCardClickP1} className="text-center p-2" style={{ width: '230px', height: '100px', cursor: 'pointer' }}>
                         <Card.Img variant="top" src={retiro} style={{ maxWidth: '22%', margin: '0 auto', marginBottom: '-10px' }} />
                         <Card.Body>
                             <p style={{ fontWeight: 'bold' }}>Retiro de efectivo</p>
@@ -218,7 +250,7 @@ function MenuATM() {
                     </Card>
                 </Col>
                 <Col xs={12} md={4} className="mb-3">
-                    <Card onClick={handleCardClick2} className="text-center p-2" style={{ width: '230px', height: '100px', cursor: 'pointer' }}>
+                    <Card onClick={handleCardClickP2} className="text-center p-2" style={{ width: '230px', height: '100px', cursor: 'pointer' }}>
                         <Card.Img variant="top" src={consulta} style={{ maxWidth: '22%', margin: '0 auto', marginBottom: '-10px' }} />
                         <Card.Body>
                             <p style={{ fontWeight: 'bold' }}>Consulta de saldo</p>
@@ -226,7 +258,7 @@ function MenuATM() {
                     </Card>
                 </Col>
                 <Col xs={12} md={4} className="mb-3">
-                    <Card onClick={handleCardClick3} className="text-center p-2" style={{ width: '230px', height: '100px', cursor: 'pointer' }}>
+                    <Card onClick={handleCardClickP3} className="text-center p-2" style={{ width: '230px', height: '100px', cursor: 'pointer' }}>
                         <Card.Img variant="top" src={deposito} style={{ maxWidth: '22%', margin: '0 auto', marginBottom: '-10px' }} />
                         <Card.Body>
                             <p style={{ fontWeight: 'bold' }}>Deposito de efectivo</p>
@@ -364,12 +396,12 @@ function MenuATM() {
                                 bgColor="#FDFFA7"
                                 textColor="#000000"
                                 width="300px"
-                                height="70px"
+                                height="90px"
                                 rounded={false}
                                 fontSize="14px"
                                 marginLeft="0px"
                                 idioma="es"
-                                customText="¡ Gracias por usar el cajero, disfruta la experiencia personalizable ! "
+                                customText="¡ Recuerda que puedes cambiar el idioma y aumentar el tamaño de letra !"
                             />
                         </Row>
                     </>

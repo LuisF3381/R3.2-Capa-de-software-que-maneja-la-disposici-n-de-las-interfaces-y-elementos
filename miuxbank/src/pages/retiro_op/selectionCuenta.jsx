@@ -11,10 +11,17 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
+// APIS
+import { listarCuentas } from '../../api/axios_api';
+
 
 function SeleccionCuenta() {
-    const { idUserModel } = useParams();
+    const { idUsuario, idUserModel } = useParams();
     const navigate = useNavigate();
+
+    console.log("idUsuario",idUsuario);
+    console.log("idUserModel",idUserModel);
+
       // Para el traductor de texto
     const { t, i18n } = useTranslation();
 
@@ -33,6 +40,55 @@ function SeleccionCuenta() {
         // Puedes realizar las acciones necesarias aquí
         navigate(`/retiro/seleccion-moneda/${idUserModel}/${idCuenta}`);
       };
+
+    // VARIABLES PARA CUENTA
+    const [nombreCuenta1, setNombreCuenta1] = useState('');
+    const [CC1, setCC1] = useState('');
+    const [tipoC1, setTipoC1] = useState('');
+    const [tipoC1Name, setTipoC1Name] = useState('');
+
+    const [nombreCuenta2, setNombreCuenta2] = useState('');
+    const [CC2, setCC2] = useState('');
+    const [tipoC2, setTipoC2] = useState('');
+    const [tipoC2Name, setTipoC2Name] = useState('');
+      
+    useEffect(() => {
+        // Llama a la función que realiza la solicitud de la API
+        listarCuentas(idUsuario)
+          .then(response => {
+            // Actualiza el estado con los datos del perfil
+            console.log("response", response);
+
+            // Guardamos la primera cuenta bancaria
+            setNombreCuenta1(response.cuentaBancaria1);
+            setCC1(response.CCI1);
+            setTipoC1(response.tipoC1);
+
+            if(response.tipoC1 === "S"){
+                setTipoC1Name("Soles - Saldo: S/****");
+            }
+            if(response.tipoC1 === "D"){
+                setTipoC1Name("Dolares - Saldo: US$ ****");
+            }
+        
+            // Guardamos la segunda cuenta bancaria
+            setNombreCuenta2(response.cuentaBancaria2);
+            setCC2(response.CCI2);
+            setTipoC2(response.tipoC2);
+
+            if(response.tipoC2 === "S"){
+                setTipoC2Name("Soles - Saldo: S/****");
+            }
+            if(response.tipoC2 === "D"){
+                setTipoC2Name("Dolares - Saldo: US$ ****");
+            }
+        
+          })
+          .catch(error => {
+            // Manejo de errores, por ejemplo, imprimir en la consola
+            console.error('Error al obtener lista de cuentas:', error);
+          });
+      }, []);  //
 
 
     
@@ -91,23 +147,31 @@ function SeleccionCuenta() {
                             <Card.Body className="m-0 p-1">
                             <Row className="align-items-center">
                                 <Col xs="auto">
-                                <Image src={sol_icon} alt="Descripción" width={40} height={40} />
+                                    {tipoC1 === "S" ? (
+                                        <Image src={sol_icon} alt="Descripción" width={40} height={40} />
+                                    ): tipoC1 === "D" ?(
+                                        <Image src={dolar_icon} alt="Descripción" width={40} height={40} />
+                                    ):(    
+                                            <p></p>
+                                    )}
                                 </Col>
                                 <Col xs="auto">
                                 <Row>
-                                    <h7 className="m-0">Cuenta Sueldo - 324</h7>
+                                    <h7 className="m-0">{nombreCuenta1}</h7>
                                 </Row>
                                 <Row>
-                                    <h7 className="m-0">825-2949840</h7>
+                                    <h7 className="m-0">{CC1}</h7>
                                 </Row>
                                 <Row>
-                                    <h7 className="m-0">Moneda: Soles - Saldo: S/****</h7>
+                                    <h7 className="m-0">Moneda: {tipoC1Name}</h7>
                                 </Row>
                                 </Col>
                             </Row>
                             </Card.Body>
                         </Card>
                     </Row>
+
+                    
                     <div style={{ height: '30px' }} />
                     {/*SEGUNDA CUENTA*/}
                     <Row className="justify-content-center">
@@ -118,17 +182,23 @@ function SeleccionCuenta() {
                             <Card.Body className="m-0 p-1">
                             <Row className="align-items-center">
                                 <Col xs="auto">
-                                <Image src={dolar_icon} alt="Descripción" width={40} height={40} />
+                                    {tipoC2 === "S" ? (
+                                        <Image src={sol_icon} alt="Descripción" width={40} height={40} />
+                                    ): tipoC2 === "D" ?(
+                                        <Image src={dolar_icon} alt="Descripción" width={40} height={40} />
+                                    ):(    
+                                            <p></p>
+                                    )}
                                 </Col>
                                 <Col xs="auto">
                                 <Row>
-                                    <h7 className="m-0">Cuenta Ahorros - 324</h7>
+                                    <h7 className="m-0">{nombreCuenta2}</h7>
                                 </Row>
                                 <Row>
-                                    <h7 className="m-0">825-5942840</h7>
+                                    <h7 className="m-0">{CC2}</h7>
                                 </Row>
                                 <Row>
-                                    <h7 className="m-0">Moneda: Dolares - Saldo: US$****</h7>
+                                    <h7 className="m-0">Moneda: {tipoC2Name}</h7>
                                 </Row>
                                 </Col>
                             </Row>
