@@ -8,9 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import consulta from '../../images/operaciones/consulta_saldo.png'
 import { useParams } from 'react-router-dom';
 
+// Apis
+import { listarCuentas } from '../../api/axios_api';
+import { insertarOperacion } from '../../api/axios_api';
 
 function SeleccionCuentaSaldo() {
-    const { idUserModel } = useParams();
+    const { idUsuario, idUserModel } = useParams();
     const navigate = useNavigate();
 
     const [isPressed, setIsPressed] = useState(false);
@@ -19,6 +22,11 @@ function SeleccionCuentaSaldo() {
     const [isPressedB1, setIsPressedB1] = useState(false);
     const [isPressedA1, setIsPressedA1] = useState(false);
 
+    // Variables de la cuenta destino
+    const [cuenta_destino, setCuenta_destino] = useState(false);
+    const [constancia_cons, setConstancia_cons] = useState(false);
+
+
         // Para la primera opcion mas usada
     const handleCardClick1 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
@@ -26,11 +34,13 @@ function SeleccionCuentaSaldo() {
         navigate('/retiro/seleccion-cuenta/2');
     };
 
-    const handleCardClick = () => {
+    const handleCardClickB = () => {
         if (isPressed === false && isPressedA === false ) {
+            setCuenta_destino(String(CC2));
             setIsPressed(!isPressed);
         }
         else{
+            setCuenta_destino(String(CC2));
             setIsPressed(!isPressed); // Cambia el estado de presionado al hacer clic
             setIsPressedA(!isPressedA);
         }
@@ -39,8 +49,10 @@ function SeleccionCuentaSaldo() {
 
     const handleCardClickA = () => {
         if (isPressedA===false && isPressed===false){
+            setCuenta_destino(String(CC1));
             setIsPressedA(!isPressedA);
         }else{
+            setCuenta_destino(String(CC1));
             setIsPressedA(!isPressedA); // Cambia el estado de presionado al hacer clic
             setIsPressed(!isPressed);
         }
@@ -48,8 +60,10 @@ function SeleccionCuentaSaldo() {
 
     const handleCardClickA1 = () => {
         if (isPressedA1===false && isPressedB1===false){
+            setConstancia_cons("voucher");
             setIsPressedA1(!isPressedA1);
         }else{
+            setConstancia_cons("voucher");
             setIsPressedA1(!isPressedA1); // Cambia el estado de presionado al hacer clic
             setIsPressedB1(!isPressedB1);
         }
@@ -57,8 +71,10 @@ function SeleccionCuentaSaldo() {
 
     const handleCardClickB1 = () => {
         if (isPressedB1===false && isPressedA1===false){
+            setConstancia_cons("pantalla");
             setIsPressedB1(!isPressedB1);
         }else{
+            setConstancia_cons("pantalla");
             setIsPressedB1(!isPressedB1); // Cambia el estado de presionado al hacer clic
             setIsPressedA1(!isPressedA1);
         }
@@ -70,10 +86,85 @@ function SeleccionCuentaSaldo() {
         navigate(`/principal/${idUserModel}`);
     };
     
-    const handleContinue = () => {
+
+    const handleContinue = async() => {
         //Nos dirigimos a la pantalla de resumen
-        navigate(`/consulta/finalizado/${idUserModel}`);
+        try {
+            let idOperacion;
+
+            const fechaActual = new Date().toISOString();
+            const operacionData = {
+                tipoOperacion: 'Consulta',
+                fechaOperacion: fechaActual,  // Ajusta el formato según tu necesidad
+                constOperacion: constancia_cons,
+                cuentaDestino: cuenta_destino, // Aqui ponemos las cuentas a consultar
+                user_model_id: idUserModel,
+              };
+            
+            const response = await insertarOperacion(operacionData);
+            console.log("Response de insercion", response);
+            idOperacion = response.idOperacion;
+            
+            if(constancia_cons === "voucher"){
+                navigate(`/fin-sesion/${idOperacion}`);
+            }else{
+                navigate(`/consulta/finalizado/${idUserModel}/${idOperacion}`);
+            }
+
+            //navigate(`/retiro/finalizado/${idUserModel}/${idOperacion}`);
+        } catch (error) {
+            console.error('Error al insertar:', error);
+        }
     };  
+
+
+    // Variables cuentas
+    const [nombreCuenta1, setNombreCuenta1] = useState('');
+    const [CC1, setCC1] = useState('');
+    const [tipoC1, setTipoC1] = useState('');
+    const [tipoC1Name, setTipoC1Name] = useState('');
+
+    const [nombreCuenta2, setNombreCuenta2] = useState('');
+    const [CC2, setCC2] = useState('');
+    const [tipoC2, setTipoC2] = useState('');
+    const [tipoC2Name, setTipoC2Name] = useState('');
+
+    useEffect(() => {
+        // Llama a la función que realiza la solicitud de la API
+        listarCuentas(idUsuario)
+          .then(response => {
+            // Actualiza el estado con los datos del perfil
+            console.log("response", response);
+
+            // Guardamos la primera cuenta bancaria
+            setNombreCuenta1(response.cuentaBancaria1);
+            setCC1(response.CCI1);
+            setTipoC1(response.tipoC1);
+
+            if(response.tipoC1 === "S"){
+                setTipoC1Name("Soles");
+            }
+            if(response.tipoC1 === "D"){
+                setTipoC1Name("Dolares");
+            }
+
+            setNombreCuenta2(response.cuentaBancaria2);
+            setCC2(response.CCI2);
+            setTipoC2(response.tipoC2);
+
+            if(response.tipoC2 === "S"){
+                setTipoC2Name("Soles");
+            }
+            if(response.tipoC2 === "D"){
+                setTipoC2Name("Dolares");
+            }
+
+          })
+          .catch(error => {
+            // Manejo de errores, por ejemplo, imprimir en la consola
+            console.error('Error al obtener lista de cuentas:', error);
+          });
+      }, []); 
 
 
     return (
@@ -110,13 +201,13 @@ function SeleccionCuentaSaldo() {
                                 <Row className="align-items-center">
                                     <Col xs="auto">
                                     <Row>
-                                        <h6 className="m-0">Cuenta Ahorros - 324</h6>
+                                        <h6 className="m-0">{nombreCuenta1}</h6>
                                     </Row>
                                     <Row>
-                                        <h7 className="m-0">825-5942840</h7>
+                                        <h7 className="m-0">{CC1}</h7>
                                     </Row>
                                     <Row>
-                                        <h7 className="m-0">Moneda: Soles</h7>
+                                        <h7 className="m-0">Moneda: {tipoC1Name}</h7>
                                     </Row>
                                     </Col>
                                 </Row>
@@ -128,10 +219,12 @@ function SeleccionCuentaSaldo() {
                 
                 <Col xs="auto"></Col>
                 <Col xs={5}>
+                {nombreCuenta2 !== "0" ? (
+                    <>
                     {/*SEGUNDA OPCION*/}
                     <Row className="justify-content-center">
                     <Card
-                            onClick={handleCardClick}
+                            onClick={handleCardClickB}
                             style={{ width: '320px', height: '85px', cursor: 'pointer', backgroundColor: isPressed ? '#EBFCFF' : 'white', // Cambia el color de fondo
                             borderColor: isPressed ? '#0056b3' : 'lightgray', // Cambia el color del contorno
                             boxShadow: isPressed ? '0 0 10px rgba(0, 0, 0, 0.5)' : 'none',
@@ -141,19 +234,23 @@ function SeleccionCuentaSaldo() {
                                 <Row className="align-items-center">
                                     <Col xs="auto">
                                     <Row>
-                                        <h6 className="m-0">Cuenta de ahorro - 456</h6>
+                                        <h6 className="m-0">{nombreCuenta2}</h6>
                                     </Row>
                                     <Row>
-                                        <h7 className="m-0">325-7949240</h7>
+                                        <h7 className="m-0">{CC2}</h7>
                                     </Row>
                                     <Row>
-                                        <h7 className="m-0">Moneda: Dolares</h7>
+                                        <h7 className="m-0">Moneda: {tipoC2Name}</h7>
                                     </Row>
                                     </Col>
                                 </Row>
                                 </Card.Body>
                     </Card>
                     </Row>
+                    </>
+                ):(    
+                    <p></p>
+                )}
                     <div style={{ height: '30px' }} />
                 </Col>
             </Row>

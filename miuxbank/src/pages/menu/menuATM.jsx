@@ -120,7 +120,7 @@ function MenuATM() {
     const handleCardClickP2 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
         // Puedes realizar las acciones necesarias aquí
-        navigate(`/consulta/seleccion-cuenta/${idUserModel}`);
+        navigate(`/consulta/seleccion-cuenta/${idUsuario}/${idUserModel}`);
       };
 
     // Para la tercera opcion mas usada

@@ -60,8 +60,8 @@ function App() {
 
 
         {/*Consulta de saldo*/}
-        <Route path="/consulta/seleccion-cuenta/:idUserModel" element={<SeleccionCuentaSaldo/>}/>
-        <Route path="/consulta/finalizado/:idTransaccion" element={<FinConsulta/>}/>
+        <Route path="/consulta/seleccion-cuenta/:idUsuario/:idUserModel" element={<SeleccionCuentaSaldo/>}/>
+        <Route path="/consulta/finalizado/:idUserModel/:idTransaccion" element={<FinConsulta/>}/>
 
 
         {/*Fin de sesion*/}
