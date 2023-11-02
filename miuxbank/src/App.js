@@ -52,10 +52,10 @@ function App() {
         <Route path="/retiro/finalizado/:idUserModel/:idTransaccion" element={<FinRetiro/>}/>
 
         {/*Deposito de efectivo*/}
-        <Route path="/deposito/seleccion-cuenta/:idUserModel" element={<SeleccionCuentaDeposito/>}/>
-        <Route path="/deposito/seleccion-moneda/:idUserModel/:idCuenta" element={<SeleccionMonedaDeposito/>}/>
-        <Route path="/deposito/ingreso-billetes/:idUserModel/:idCuenta" element={<DepositoEfectivo/>}/>
-        <Route path="/deposito/resumen-deposito/:idUserModel/:idCuenta" element={<ResumenDeposito/>}/>
+        <Route path="/deposito/seleccion-cuenta/:idUsuario/:idUserModel" element={<SeleccionCuentaDeposito/>}/>
+        <Route path="/deposito/seleccion-moneda/:idUsuario/:idUserModel/:CCI" element={<SeleccionMonedaDeposito/>}/>
+        <Route path="/deposito/ingreso-billetes/:idUserModel/:CCI/:moneda" element={<DepositoEfectivo/>}/>
+        <Route path="/deposito/resumen-deposito/:idUserModel/:CCI/:moneda" element={<ResumenDeposito/>}/>
         <Route path="/deposito/finalizado/:idUserModel/:idTransaccion" element={<FinDeposito/>}/>
 
 
@@ -66,8 +66,6 @@ function App() {
 
         {/*Fin de sesion*/}
         <Route path="/fin-sesion/:idTransaccion" element={<FinSesion/>}/>
-
-
 
       </Routes>
     </BrowserRouter>

@@ -124,10 +124,37 @@ function MenuATM() {
       };
 
     // Para la tercera opcion mas usada
-    const handleCardClickP3 = () => {
+    const handleCardClickP3 = async() => {
         // Esta función se llamará cuando se haga clic en la tarjeta
         // Puedes realizar las acciones necesarias aquí
-        navigate(`/deposito/seleccion-cuenta/${idUserModel}`);
+                // Le damos a obtener ruta, para ello necesitamos saber cuantas cuentas tiene
+                try {
+                    const response = await listarCuentas(idUsuario);
+                    console.log("cuentas listadas", response);
+        
+                    if (response.CCI1 !== "0" && response.CCI2 !== "0") {
+                        // Hacer algo si ambas CCI1 y CCI2 son distintas de "0"
+                        console.log("Ambas CCI son distintas de '0'");
+                        navigate(`/deposito/seleccion-cuenta/${idUsuario}/${idUserModel}`);
+                    } else {
+                        // Hacer otra cosa si al menos una de ellas es "0"
+                        console.log("Al menos una de las CCI es '0'");
+        
+                        if(response.CCI1 !== "0"){
+                            var CCI_AUX = response.CCI1;
+                            navigate(`/deposito/seleccion-moneda/${idUsuario}/${idUserModel}/${CCI_AUX}`);
+                        }
+        
+                        if(response.CCI2 !== "0"){
+                            var CCI_AUX = response.CCI2;
+                            navigate(`/deposito/seleccion-moneda/${idUsuario}/${idUserModel}/${CCI_AUX}`);
+                        }
+                    }
+                
+                } catch (error) {
+                            console.error('Error al obtener las cuentas del usuario:', error);
+                }
+        
       };
     
       const handleCardClick3 = () => {

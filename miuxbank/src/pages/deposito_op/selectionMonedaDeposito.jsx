@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 function SeleccionMonedaDeposito() {
-    let { idUserModel, idCuenta } = useParams();
+    let { idUsuario, idUserModel, CCI } = useParams();
 
 
     const navigate = useNavigate();
@@ -22,7 +22,13 @@ function SeleccionMonedaDeposito() {
     const handleCardClick1 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
         // Puedes realizar las acciones necesarias aquí
-        navigate(`/deposito/ingreso-billetes/${idUserModel}/${idCuenta}`);
+        navigate(`/deposito/ingreso-billetes/${idUserModel}/${CCI}/S`);
+      };
+
+    const handleCardClick2 = () => {
+        // Esta función se llamará cuando se haga clic en la tarjeta
+        // Puedes realizar las acciones necesarias aquí
+        navigate(`/deposito/ingreso-billetes/${idUserModel}/${CCI}/D`);
       };
 
     // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
@@ -32,9 +38,7 @@ function SeleccionMonedaDeposito() {
     };
 
     
-
-
-
+    
     return (
         <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>
         <Card style={{ width: 800, height: 550, background: 'white' }} className="p-1">
@@ -96,7 +100,7 @@ function SeleccionMonedaDeposito() {
                 <Col xs={4}>
                     {/*PRIMERA CUENTA*/}
                     <Row className="justify-content-center">
-                        <Card onClick={handleCardClick1} className="text-center" style={{ width: '230px', height: '180px', cursor: 'pointer' }}>
+                        <Card onClick={handleCardClick2} className="text-center" style={{ width: '230px', height: '180px', cursor: 'pointer' }}>
                             <Card.Body className="d-flex flex-column justify-content-center align-items-center" style={{ height: '100%' }}>
                             <Card.Img variant="top" src={dolar_icon} style={{ maxWidth: '42%', marginBottom: '10px' }} />
                             <p style={{ fontWeight: 'bold', marginBottom: '10px' }}>Retirar dolares</p>
