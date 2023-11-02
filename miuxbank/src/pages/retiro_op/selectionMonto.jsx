@@ -9,11 +9,15 @@ import { useNavigate } from 'react-router-dom';
 import advertencia from '../../images/advertencia.png'
 import { useParams } from 'react-router-dom';
 
+import { insertarOperacion } from '../../api/axios_api';
+import { infoCuenta } from '../../api/axios_api';
 
 function SeleccionMonto() {
-    let { idUserModel, idCuenta } = useParams();
+    let { idUserModel, idCuenta, CCI, moneda } = useParams();
     const navigate = useNavigate();
     var [monto, setMonto] = useState(''); // Aquí se guarda el valor
+    var [monto2, setMonto2] = useState(''); // Aquí se guarda el valor
+
 
 
     // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
@@ -22,12 +26,44 @@ function SeleccionMonto() {
         navigate(`/retiro/seleccion-moneda/${idUserModel}/${idCuenta}`);
     };
     
-    const handleContinue = () => {
+    const handleContinue = async() => {
         // Lógica para el botón de continuar
-        navigate(`/retiro/finalizado/2/10`);
+        // Aqui deberia hacerse un api para poder 
+
+        // Llamamos al 
+        try {
+            let idOperacion;
+            let monto_request;
+            
+            if(monto === ''){
+                monto_request = monto2;
+            }else{
+                monto_request = monto;
+            }
+
+            const fechaActual = new Date().toISOString();
+            const operacionData = {
+                tipoOperacion: 'Retiro',
+                montOperacion: monto_request,
+                fechaOperacion: fechaActual,  // Ajusta el formato según tu necesidad
+                constOperacion: '',
+                cuentaDestino: CCI,
+                moneda: moneda,
+                nota: '',
+                user_model_id: idUserModel,
+              };
+
+            const response = await insertarOperacion(operacionData);
+            console.log("Response", response);
+            idOperacion = response.idOperacion;
+            navigate(`/retiro/finalizado/${idUserModel}/${idOperacion}`);
+        } catch (error) {
+            console.error('Error al obtener el User Model:', error);
+        }
     };
 
 
+    // Para el manejo de las opciones
     const [isPressedA1, setIsPressedA1] = useState(false);
     const [isPressedA2, setIsPressedA2] = useState(false);
     const [isPressedB1, setIsPressedB1] = useState(false);
@@ -36,10 +72,12 @@ function SeleccionMonto() {
 
     // PARA EL MANEJO DE LOS BOTONES
     const handleCardClickA1 = () => {
-        setMonto('');
+        setMonto2('');
         if (isPressedA1===false && isPressedB1===false && isPressedA2===false && isPressedB2===false){
             setIsPressedA1(!isPressedA1);
+            setMonto('20');
         }else{
+            setMonto('20');
             if(isPressedB1===true)
             setIsPressedB1(!isPressedB1); // Cambia el estado de presionado al hacer clic
             if(isPressedB2===true)
@@ -53,10 +91,12 @@ function SeleccionMonto() {
 
 
     const handleCardClickA2 = () => {
-        setMonto('');
+        setMonto2('');
         if (isPressedA1===false && isPressedB1===false && isPressedA2===false && isPressedB2===false){
             setIsPressedA2(!isPressedA2);
+            setMonto('100');
         }else{
+            setMonto('100');
             if(isPressedB1===true)
             setIsPressedB1(!isPressedB1); // Cambia el estado de presionado al hacer clic
             if(isPressedB2===true)
@@ -70,12 +110,13 @@ function SeleccionMonto() {
 
 
     const handleCardClickB1 = () => {
-        setMonto('');
+        setMonto2('');
         if (isPressedA1===false && isPressedB1===false && isPressedA2===false && isPressedB2===false){
+            setMonto('50');
             setIsPressedB1(!isPressedB1);
         }else{
             setIsPressedB1(!isPressedB1); // Cambia el estado de presionado al hacer clic
-
+            setMonto('50');
             if(isPressedB2===true)
             setIsPressedB2(!isPressedB2);
             if(isPressedA1===true)
@@ -89,10 +130,11 @@ function SeleccionMonto() {
         setMonto('');
         if (isPressedA1===false && isPressedB1===false && isPressedA2===false && isPressedB2===false){
             setIsPressedB2(!isPressedB2);
+            setMonto('150');
         }else{
 
             setIsPressedB2(!isPressedB2);
-
+            setMonto('150');
             if(isPressedB1===true)
             setIsPressedB1(!isPressedB1); // Cambia el estado de presionado al hacer click
             if(isPressedA1===true)
@@ -109,10 +151,55 @@ function SeleccionMonto() {
 
 
     const handleInputChange = (event) => {
-        setMonto(event.target.value);
+        setMonto2(event.target.value);
+        setMonto('');
     };
 
-    console.log("monto",monto);
+    // Para los datos de la cuenta
+    const [nombreCuenta1, setNombreCuenta1] = useState('');
+    const [saldoCuenta, setSaldoCuenta] = useState('');
+    const [terminologia, setTerminologia] = useState('');
+    const [terminologia2, setTerminologia2] = useState('');
+
+
+
+
+    // Use Effect para traer la informacion de la cuenta
+    useEffect(() => {
+        infoCuenta(CCI)
+          .then(response => {
+            // Actualiza el estado con los datos del perfil
+            console.log("response", response);
+            setNombreCuenta1(response.cuentaBancaria);
+            setSaldoCuenta(response.saldoCuenta);
+
+            if(response.tipoCuenta === "S"){
+                setTerminologia("S/");
+            }
+            if(response.tipoCuenta === "D"){
+                setTerminologia("US$");
+            }
+            
+            if(moneda === "S"){
+                setTerminologia2("S/");
+            }
+            if(moneda === "D"){
+                setTerminologia2("US$");
+            }
+            
+          })
+          .catch(error => {
+            // Manejo de errores, por ejemplo, imprimir en la consola
+            console.error('Error al obtener lista de cuentas:', error);
+          });
+
+    }, []);  //
+
+    console.log("monto", monto);
+    console.log("monto2", monto2);
+    console.log("cci", CCI);
+    console.log("moneda", moneda);
+
 
     return (
         <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>
@@ -124,8 +211,8 @@ function SeleccionMonto() {
             <Row className="align-items-center justify-content-between no-gutters">
                 <Col md={7}>
                     <h3>Selecciona el monto a retirar</h3>
-                    <h5>Cuenta de cargo:  Cuenta de ahorro - 324</h5>
-                    <h5>Saldo: S/1200</h5>
+                    <h5>Cuenta de cargo:  {nombreCuenta1}</h5>
+                    <h5>Saldo: {terminologia}{saldoCuenta}</h5>
                 </Col>
 
                 <Col md={5} className="d-flex align-items-center">
@@ -143,7 +230,7 @@ function SeleccionMonto() {
                                             <h9 >Billetes Disponibles</h9>
                                         </Row>
                                         <Row>
-                                            <h11>S/20 S/50 S/100</h11>
+                                            <h11>{terminologia2}20 {terminologia2}50 {terminologia2}100</h11>
                                         </Row>
                                     </Col>
                                 </Row>
@@ -176,7 +263,7 @@ function SeleccionMonto() {
                                         <Row className="align-items-center">
                                             <Col xs="auto">
                                             <Row>
-                                                <h7 className="m-0">S/20</h7>
+                                                <h7 className="m-0">{terminologia2}20</h7>
                                             </Row>
                                             </Col>
                                         </Row>
@@ -201,7 +288,7 @@ function SeleccionMonto() {
                                         <Row className="align-items-center">
                                             <Col xs="auto">
                                             <Row>
-                                                <h7 className="m-0">S/50</h7>
+                                                <h7 className="m-0">{terminologia2}50</h7>
                                             </Row>
                                             </Col>
                                         </Row>
@@ -228,7 +315,7 @@ function SeleccionMonto() {
                                         <Row className="align-items-center">
                                             <Col xs="auto">
                                             <Row>
-                                                <h7 className="m-0">S/100</h7>
+                                                <h7 className="m-0">{terminologia2}100</h7>
                                             </Row>
                                             </Col>
                                         </Row>
@@ -253,7 +340,7 @@ function SeleccionMonto() {
                                         <Row className="align-items-center">
                                             <Col xs="auto">
                                             <Row>
-                                                <h7 className="m-0">S/150</h7>
+                                                <h7 className="m-0">{terminologia2}150</h7>
                                             </Row>
                                             </Col>
                                         </Row>
@@ -273,8 +360,8 @@ function SeleccionMonto() {
                     <Row className="justify-content-center">
                         <Form.Control
                         type="number"
-                        placeholder="Ingrese monto S/"
-                        value={monto} 
+                        placeholder={`Ingrese monto ${terminologia2}`}
+                        value={monto2} 
                         onChange={handleInputChange}  // Actualiza el estado cuando el valor del input cambia
                         style={{
                             fontSize: '20px',        // Establece el tamaño de la fuente

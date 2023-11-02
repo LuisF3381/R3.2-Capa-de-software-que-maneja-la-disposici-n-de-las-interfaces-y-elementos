@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom';
 
 
 function SeleccionMoneda() {
-    let { idUserModel, idCuenta } = useParams();
+    let { idUserModel, CCI, } = useParams();
     const navigate = useNavigate();
 
     // Para el traductor de texto
@@ -23,7 +23,14 @@ function SeleccionMoneda() {
     const handleCardClick1 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
         // Puedes realizar las acciones necesarias aquí
-        navigate(`/retiro/seleccion-monto/${idUserModel}/${idCuenta}`);
+        navigate(`/retiro/seleccion-monto/${idUserModel}/${CCI}/S`);
+      };
+
+
+      const handleCardClick2 = () => {
+        // Esta función se llamará cuando se haga clic en la tarjeta
+        // Puedes realizar las acciones necesarias aquí
+        navigate(`/retiro/seleccion-monto/${idUserModel}/${CCI}/D`);
       };
 
     // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
@@ -94,7 +101,7 @@ function SeleccionMoneda() {
                 <Col xs={4}>
                     {/*PRIMERA CUENTA*/}
                     <Row className="justify-content-center">
-                        <Card onClick={handleCardClick1} className="text-center" style={{ width: '230px', height: '180px', cursor: 'pointer' }}>
+                        <Card onClick={handleCardClick2} className="text-center" style={{ width: '230px', height: '180px', cursor: 'pointer' }}>
                             <Card.Body className="d-flex flex-column justify-content-center align-items-center" style={{ height: '100%' }}>
                             <Card.Img variant="top" src={dolar_icon} style={{ maxWidth: '42%', marginBottom: '10px' }} />
                             <p style={{ fontWeight: 'bold', marginBottom: '10px' }}>Retirar dolares</p>

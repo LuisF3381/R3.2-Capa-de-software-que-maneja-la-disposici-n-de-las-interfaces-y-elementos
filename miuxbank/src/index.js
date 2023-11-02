@@ -29,7 +29,10 @@ i18n.use(initReactI18next).init({
         frecuente_descp: 'Sapa kuti Cliente hina clasificasqayku, ATM aswan allinta necesidadniykiman hina ruwakunqa',
         last_operacion: 'Qhipa ruway',
         fast_op_2: 'Iskay utqaylla akllanakuna',
-
+        //Corresponden al Menu Principal
+        cerrar_sesion: 'LLUQSIY',
+        operaciones_rapidas: 'Utqaylla llamkay',
+        retiro_personalizado: 'Usqhayta qullqi',
       },
     },
     es: {
@@ -51,10 +54,12 @@ i18n.use(initReactI18next).init({
         frecuente_descp: 'Te hemos clasificado como Cliente Frecuente, el cajero se adaptará mejor a tus necesidades',
         last_operacion: 'Ultima operacion',
         fast_op_2: 'Dos opciones rapidas',
-
         //Corresponden al Menu Principal
-        
+        cerrar_sesion: 'CERRAR SESION',
 
+        // Para operaciones del perfil ocasional,
+        operaciones_rapidas: 'Operaciones rapidas',
+        retiro_personalizado: 'Retiro Personalizado',
       },
     },
 

@@ -36,10 +36,16 @@ function SeleccionCuenta() {
     
     // Para la primera opcion mas usada
     const handleCardClick1 = () => {
-        // Esta función se llamará cuando se haga clic en la tarjeta
-        // Puedes realizar las acciones necesarias aquí
-        navigate(`/retiro/seleccion-moneda/${idUserModel}/${idCuenta}`);
-      };
+        // Aqui se pone la primera cuenta
+        var CCI_AUX = CC1;
+        navigate(`/retiro/seleccion-moneda/${idUsuario}/${idUserModel}/${CCI_AUX}`);
+    };
+
+    const handleCardClick2 = () => {
+        // Aqui se pone la segunda cuenta
+        var CCI_AUX = CC2;
+        navigate(`/retiro/seleccion-moneda/${idUsuario}/${idUserModel}/${CCI_AUX}`);
+    };
 
     // VARIABLES PARA CUENTA
     const [nombreCuenta1, setNombreCuenta1] = useState('');
@@ -171,12 +177,12 @@ function SeleccionCuenta() {
                         </Card>
                     </Row>
 
-                    
+
                     <div style={{ height: '30px' }} />
                     {/*SEGUNDA CUENTA*/}
                     <Row className="justify-content-center">
                         <Card
-                            onClick={handleCardClick1}
+                            onClick={handleCardClick2}
                             style={{ width: '520px', height: '80px', cursor: 'pointer' }}
                         >
                             <Card.Body className="m-0 p-1">

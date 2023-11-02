@@ -48,7 +48,7 @@ function App() {
         {/*Retiro de efectivo*/}
         <Route path="/retiro/seleccion-cuenta/:idUsuario/:idUserModel" element={<SeleccionCuenta/>}/>
         <Route path="/retiro/seleccion-moneda/:idUsuario/:idUserModel/:CCI" element={<SeleccionMoneda/>}/>
-        <Route path="/retiro/seleccion-monto/:idUserModel/:idCuenta" element={<SeleccionMonto/>}/>
+        <Route path="/retiro/seleccion-monto/:idUserModel/:CCI/:moneda" element={<SeleccionMonto/>}/>
         <Route path="/retiro/finalizado/:idUserModel/:idTransaccion" element={<FinRetiro/>}/>
 
         {/*Deposito de efectivo*/}
@@ -64,9 +64,8 @@ function App() {
         <Route path="/consulta/finalizado/:idTransaccion" element={<FinConsulta/>}/>
 
 
-
         {/*Fin de sesion*/}
-        <Route path="/fin-sesion/" element={<FinSesion/>}/>
+        <Route path="/fin-sesion/:idTransaccion" element={<FinSesion/>}/>
 
 
 

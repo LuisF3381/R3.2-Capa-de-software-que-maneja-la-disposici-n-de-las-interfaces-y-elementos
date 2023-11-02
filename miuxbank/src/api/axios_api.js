@@ -27,6 +27,28 @@ export const listarCuentas = (idUsuario) => {
     });
 };
 
+// Obtengo la informacion de la cuenta en base al CCI 
+export const infoCuenta = (CCI) => {
+  return axios.get(`${apiUrlUsr}/info-cuenta/?cci=${CCI}`)
+    .then(response => response.data)
+    .catch(error => {
+      // Manejo de errores, por ejemplo, imprimir en la consola
+      console.error('Error al obtener la informacion de la cuenta:', error);
+      throw error; // Puedes manejar el error de otras formas según tus necesidades
+    });
+};
+
+
+// Para obtener la tarjeta del cliente
+export const obtenerTarjeta = (idUsuario) => {
+  return axios.get(`${apiUrlUsr}/obtener_tarjeta/${idUsuario}`)
+    .then(response => response.data)
+    .catch(error => {
+      // Manejo de errores, por ejemplo, imprimir en la consola
+      console.error('Error al obtener la informacion de la tarjeta:', error);
+      throw error; // Puedes manejar el error de otras formas según tus necesidades
+    });
+};
 
 
 
@@ -55,6 +77,17 @@ export const get_user_model = (idUserModel) => {
   });
 };
 
+// Para obtener el id usuario
+export const getIdsuarioByIdUserModel = (idUserModel) => {
+    return axios.get(`${apiUrlPers}/user-model/by-id-user-model/${idUserModel}`)
+    .then(response => response.data)
+    .catch(error => {
+      // Manejo de errores, por ejemplo, imprimir en la consola
+      console.error('Error al obtener el idUsuario:', error);
+      throw error; // Puedes manejar el error de otras formas según tus necesidades
+    });
+};
+
 
 export const getPerfilByIdUserModel = (idUserModel) => {
     return axios.get(`${apiUrlPers}/user-model/${idUserModel}/perfil`)
@@ -76,6 +109,40 @@ export const actualizarPerfilInformado = (userModelId, updatedData) => {
       });
   };
 
+  export const insertarOperacion = (operacionData) =>{
+    return axios.post(`${apiUrlPers}/operacion/insert`, operacionData)
+    .then(response => response.data)
+    .catch(error => {
+      // Manejo de errores, por ejemplo, imprimir en la consola
+      console.error('Error al insertar la operacion:', error);
+      throw error; // Puedes manejar el error de otras formas según tus necesidades
+    });
+  };
+
+
+export const listarOperacion = (idOperacion) =>{
+  return axios.get(`${apiUrlPers}/operacion/${idOperacion}`)
+  .then(response => response.data)
+  .catch(error => {
+    // Manejo de errores, por ejemplo, imprimir en la consola
+    console.error('Error al insertar la operacion:', error);
+    throw error; // Puedes manejar el error de otras formas según tus necesidades
+  });
+};
+
+// Se actualiza la constancia de la operacion
+export const constanciaOperacion = (idOperacion, constOperacionUpdate) => {
+  return axios.put(`${apiUrlPers}/operacion/update/${idOperacion}`, null, {
+    params: {
+      const_operacion_update: constOperacionUpdate
+    }
+  })
+  .then(response => response.data)
+  .catch(error => {
+    console.error('Error al modificar la constancia de operacion:', error);
+    throw error;
+  });
+};
 
 
 

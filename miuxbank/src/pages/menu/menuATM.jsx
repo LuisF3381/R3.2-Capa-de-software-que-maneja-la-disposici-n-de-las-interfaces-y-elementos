@@ -50,13 +50,19 @@ function MenuATM() {
 
     var idCuenta = 2;
 
-
     // Para el cambio de idioma
     const [selectedOption, setSelectedOption] = useState('');
+
+      // Función para cambiar el idioma
+      const CambiarIdioma = (nuevoIdioma) => {
+        i18n.changeLanguage(nuevoIdioma);
+    };
+
+
     const handleOptionChange = (event) => {
         const selectedLang = event.target.value;
         setSelectedOption(selectedLang);
-        console.log("selectedOption",selectedOption);
+        CambiarIdioma(selectedLang);
         // Aquí puedes agregar cualquier otra lógica que desees ejecutar cuando el idioma cambie
     };
 
@@ -77,6 +83,7 @@ function MenuATM() {
 
     // OPCIONES PRINCIPALES
     // Para la primera opcion mas usada
+    // Por ahora asumimos es el retiro de efectivo
     const handleCardClickP1 = async () => {        
         // Le damos a obtener ruta, para ello necesitamos saber cuantas cuentas tiene
         try {
@@ -130,7 +137,6 @@ function MenuATM() {
       };
 
     const handleCardOP2 = () =>{
-
         navigate(`/deposito/ingreso-billetes/${idUserModel}/${idCuenta}`);
     };
 
@@ -180,7 +186,11 @@ function MenuATM() {
         get_user_model(idUserModel)
         .then(response_user_model => {
             // Actualiza el estado con los datos del perfil
-            console.log("response usermodel", response_user_model.idUsuario);
+            console.log("response usermodel", response_user_model);
+
+            //Actualizamos el idioma preferido
+            setSelectedOption(response_user_model.idiomaPreferido);
+            CambiarIdioma(response_user_model.idiomaPreferido);
 
             // obtenemos ahora finalmente el nombre y apellido del usuario
             getUsuarioById(response_user_model.idUsuario)
@@ -199,6 +209,7 @@ function MenuATM() {
             // Manejo de errores, por ejemplo, imprimir en la consola
             console.error('Error al obtener el userModel:', error);
           });
+        
 
       }, []);  // El segundo parámetro del useEffect es un array de dependencias, pasamos un array vacío par
 
@@ -272,7 +283,7 @@ function MenuATM() {
                 
                     <div className="d-flex align-items-center">
                         <Image src={fast_operation} alt="Descripción" width={32} height={32} rounded style={{ marginRight: '8px' }} />
-                        <h6>Operaciones Rápidas</h6>
+                        <h6>{t('operaciones_rapidas')}</h6>
                     </div>
 
                     {/*AQUI VAN LAS OPCIONES*/}
@@ -356,7 +367,7 @@ function MenuATM() {
                     {/*Aqui va el boton*/}
                     <Row className="d-flex justify-content-center mt-4">
                             <Button variant="danger" style={{ width: '150px', marginRight: '80px'}} onClick={handleCancel}>
-                            CERRAR SESION
+                            {t('cerrar_sesion')}
                             </Button>
                     </Row>
                 </Col>
@@ -374,7 +385,7 @@ function MenuATM() {
                 ): perfil_usuario === 'ocasional' ?(
                     <div className="d-flex align-items-center">
                         <Image src={fast_operation_icon_ocasional} alt="Descripción" width={32} height={32} rounded style={{ marginRight: '8px' }} />
-                        <h6>Retiro Personalizado</h6>
+                        <h6>{t('retiro_personalizado')}</h6>
                     </div>
 
                 ): perfil_usuario === 'senior' ?(
