@@ -36,7 +36,7 @@ function FinSesion() {
                 setTimeout(() => {
                   setStep1Visible(false);
                   resolve();
-                }, 3000); // Por ejemplo, 3 segundos después de la primera animación
+                }, 4500); // Por ejemplo, 3 segundos después de la primera animación
               });
         
 
@@ -47,7 +47,7 @@ function FinSesion() {
             setTimeout(() => {
                 setStep2Visible(false);
                 resolve();
-            }, 3000); // Por ejemplo, 3 segundos después de la segunda animación
+            }, 4500); // Por ejemplo, 3 segundos después de la segunda animación
             });
         }
         
@@ -58,7 +58,7 @@ function FinSesion() {
             setTimeout(() => {
                 setStep3Visible(false);
                 resolve();
-            }, 3000); // Por ejemplo, 3 segundos después de la tercera animación
+            }, 4500); // Por ejemplo, 3 segundos después de la tercera animación
             });
         }
         // Todas las animaciones han terminado, ejecuta la navegación

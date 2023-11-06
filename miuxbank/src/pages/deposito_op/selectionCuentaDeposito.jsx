@@ -11,12 +11,14 @@ import dolar_icon from '../../images/dolar_icon.png'
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { listarCuentas } from '../../api/axios_api';
 
 
 function SeleccionCuentaDeposito() {
-    const { idUserModel } = useParams();
+    const { idUserModel, idUsuario } = useParams();
     const navigate = useNavigate();
     var idCuenta = 2;
+
 
 
 
@@ -31,8 +33,70 @@ function SeleccionCuentaDeposito() {
     const handleCardClick1 = () => {
         // Esta función se llamará cuando se haga clic en la tarjeta
          // Puedes realizar las acciones necesarias aquí
-        navigate(`/deposito/seleccion-moneda/${idUserModel}/${idCuenta}`);
+        var CCI_AUX = CC1;
+        navigate(`/deposito/seleccion-moneda/${idUsuario}/${idUserModel}/${CCI_AUX}`);
     };
+
+    const handleCardClick2 = () => {
+        // Esta función se llamará cuando se haga clic en la tarjeta
+         // Puedes realizar las acciones necesarias aquí
+         var CCI_AUX = CC2;
+        navigate(`/deposito/seleccion-moneda/${idUsuario}/${idUserModel}/${CCI_AUX}`);
+    };
+
+    // VARIABLES PARA CUENTA
+    const [nombreCuenta1, setNombreCuenta1] = useState('');
+    const [CC1, setCC1] = useState('');
+    const [tipoC1, setTipoC1] = useState('');
+    const [tipoC1Name, setTipoC1Name] = useState('');
+
+    // Guardamos la segunda cuenta bancaria
+    const [nombreCuenta2, setNombreCuenta2] = useState('');
+    const [CC2, setCC2] = useState('');
+    const [tipoC2, setTipoC2] = useState('');
+    const [tipoC2Name, setTipoC2Name] = useState('');
+    
+
+
+
+    useEffect(() => {
+        // Listamos las cuentas del usuario
+        listarCuentas(idUsuario)
+        .then(response => {
+
+            console.log("response", response);
+        
+            // Guardamos la primera cuenta bancaria
+            setNombreCuenta1(response.cuentaBancaria1);
+            setCC1(response.CCI1);
+            setTipoC1(response.tipoC1);
+
+            if(response.tipoC1 === "S"){
+                setTipoC1Name("Soles");
+            }
+            if(response.tipoC1 === "D"){
+                setTipoC1Name("Dolares");
+            }
+
+            // Guardamos la segunda cuenta bancaria
+            setNombreCuenta2(response.cuentaBancaria2);
+            setCC2(response.CCI2);
+            setTipoC2(response.tipoC2);
+
+            if(response.tipoC2 === "S"){
+                setTipoC2Name("Soles");
+            }
+            if(response.tipoC2 === "D"){
+                setTipoC2Name("Dolares");
+            }
+
+        })
+        .catch(error => {
+          // Manejo de errores, por ejemplo, imprimir en la consola
+          console.error('Error al obtener lista de cuentas:', error);
+        });
+
+    }, []);  //
 
 
 
@@ -68,17 +132,23 @@ function SeleccionCuentaDeposito() {
                             <Card.Body className="m-0 p-1">
                             <Row className="align-items-center">
                                 <Col xs="auto">
-                                <Image src={sol_icon} alt="Descripción" width={40} height={40} />
+                                    {tipoC1 === "S" ? (
+                                        <Image src={sol_icon} alt="Descripción" width={40} height={40} />
+                                    ): tipoC1 === "D" ?(
+                                        <Image src={dolar_icon} alt="Descripción" width={40} height={40} />
+                                    ):(    
+                                            <p></p>
+                                    )}
                                 </Col>
                                 <Col xs="auto">
                                 <Row>
-                                    <h7 className="m-0">Cuenta Sueldo - 324</h7>
+                                    <h7 className="m-0">{nombreCuenta1}</h7>
                                 </Row>
                                 <Row>
-                                    <h7 className="m-0">825-2949840</h7>
+                                    <h7 className="m-0">{CC1}</h7>
                                 </Row>
                                 <Row>
-                                    <h7 className="m-0">Moneda: Soles</h7>
+                                    <h7 className="m-0">Moneda: {tipoC1Name}</h7>
                                 </Row>
                                 </Col>
                             </Row>
@@ -89,23 +159,29 @@ function SeleccionCuentaDeposito() {
                     {/*SEGUNDA CUENTA*/}
                     <Row className="justify-content-center">
                         <Card
-                            onClick={handleCardClick1}
+                            onClick={handleCardClick2}
                             style={{ width: '520px', height: '80px', cursor: 'pointer' }}
                         >
                             <Card.Body className="m-0 p-1">
                             <Row className="align-items-center">
                                 <Col xs="auto">
-                                <Image src={dolar_icon} alt="Descripción" width={40} height={40} />
+                                {tipoC2 === "S" ? (
+                                        <Image src={sol_icon} alt="Descripción" width={40} height={40} />
+                                    ): tipoC2 === "D" ?(
+                                        <Image src={dolar_icon} alt="Descripción" width={40} height={40} />
+                                    ):(    
+                                        <p></p>
+                                    )}                                
                                 </Col>
                                 <Col xs="auto">
                                 <Row>
-                                    <h7 className="m-0">Cuenta Ahorros - 324</h7>
+                                    <h7 className="m-0">{nombreCuenta2}</h7>
                                 </Row>
                                 <Row>
-                                    <h7 className="m-0">825-5942840</h7>
+                                    <h7 className="m-0">{CC2}</h7>
                                 </Row>
                                 <Row>
-                                    <h7 className="m-0">Moneda: Dolares</h7>
+                                    <h7 className="m-0">Moneda: {tipoC2Name}</h7>
                                 </Row>
                                 </Col>
                             </Row>

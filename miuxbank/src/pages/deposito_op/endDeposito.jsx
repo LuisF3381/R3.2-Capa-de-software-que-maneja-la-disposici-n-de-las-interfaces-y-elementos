@@ -3,22 +3,131 @@ import BankComponent from '../components/generals/upVar';
 import CustomAlert from '../components/generals/alertaVerde';
 import CustomCardRecibo from '../components/generals/recibo';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
+import { listarOperacion } from '../../api/axios_api';
+import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+
+import { infoCuenta } from '../../api/axios_api';
+import { getIdsuarioByIdUserModel } from '../../api/axios_api';
+import { obtenerTarjeta } from '../../api/axios_api';
+import { constanciaOperacion } from '../../api/axios_api';
 
 function FinDeposito() {
-    
+    let { idUserModel, idTransaccion, } = useParams();
+
     const navigate = useNavigate();
 
+    // Para el checbox 
+    const [selectedOption, setSelectedOption] = useState(false);
 
 
-    const handleContinue = () => {
-        // Lógica para el botón de continuar
-        navigate('/fin-sesion/');
+    const handleContinue = async() => {
+        // Actualizamos el valor segun el valor del selected option
+        try {
+            let constancia;
+            if( selectedOption === true)
+                constancia = "voucher";
+            else
+                constancia = "pantalla";
+
+            const response = await constanciaOperacion(idTransaccion, constancia);
+            console.log("constancia", response);
+
+            navigate(`/fin-sesion/${idTransaccion}`);
+        } catch (error) {
+            console.error('Error al obtener el perfil actualizado:', error);
+        }
     };
 
     const handleCheckboxChange = () => {
         console.log("Checkbox changed");
+        setSelectedOption(!selectedOption);
     };
+
+    // Variables sobre la operacion realizada
+    const [transaccion, setTransaccion] = useState('');
+    const [terminologia, setTerminologia] = useState('');
+    const [fecha_transaccion, setFecha_transaccion] = useState('');
+    const [monto_operacion, setMonto_operacion] = useState('');
+    const [terminologia2, setTerminologia2] = useState('');
+
+    // Informacion de la cuenta
+    const [nombre_cuenta, setNombre_cuenta] = useState('');
+    const [cci, setcci] = useState('');
+    const [saldo, setSaldo] = useState('');
+    const [n_tarjeta, setN_tarjeta] = useState('');
+
+
+    useEffect(() => {
+        listarOperacion(idTransaccion)
+        .then(response => {
+            console.log("response", response);
+            setTransaccion(response.tipoOperacion);
+
+            if(response.moneda === "S"){
+                setTerminologia("S/")
+              }else{
+                setTerminologia("US$")   
+              }
+
+            // Seteamos la fecha de la transaccion
+            const fecha = new Date(response.fechaOperacion);
+            const formatoDeseado = `${fecha.getDate().toString().padStart(2, '0')}/${(fecha.getMonth() + 1).toString().padStart(2, '0')}/${fecha.getFullYear()} ${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}`;
+            setFecha_transaccion(formatoDeseado);
+
+            // Seteamos el monto de la transaccion
+            setMonto_operacion(response.montOperacion);
+
+            // Ahora obtenemos la informacion de la cuenta
+            infoCuenta(response.cuentaDestino)
+            .then(response2 => {
+                console.log("response2", response2);
+                setNombre_cuenta(response2.cuentaBancaria);
+                setcci(response2.CCI);
+                const numeroFormateado = parseFloat(response2.saldoCuenta).toFixed(2);
+                setSaldo(numeroFormateado);
+
+                
+                if(response2.tipoCuenta === "S"){
+                    setTerminologia2("S/")
+                }else{
+                    setTerminologia2("US$")   
+                }
+                // Ahora obtenemos el id del usuario 
+                getIdsuarioByIdUserModel(response.user_model_id)
+                .then(response3 => {
+
+                    //Finalmente obtenemos la informacion de la tarjeta
+                    obtenerTarjeta(response3.idUsuario)
+                    .then(response4 => {
+                        console.log("response4", response4);
+                        setN_tarjeta(response4.tarjeta);
+                    })
+                    .catch(error => {
+                    // Manejo de errores, por ejemplo, imprimir en la consola
+                    console.error('Error al obtener informacion de la cuenta:', error);
+                    });
+                })
+                .catch(error => {
+                // Manejo de errores, por ejemplo, imprimir en la consola
+                console.error('Error al obtener informacion de la cuenta:', error);
+                });
+
+            })
+            .catch(error => {
+              // Manejo de errores, por ejemplo, imprimir en la consola
+              console.error('Error al obtener informacion de la cuenta:', error);
+            });
+
+        })
+        .catch(error => {
+          // Manejo de errores, por ejemplo, imprimir en la consola
+          console.error('Error al obtener lista de cuentas:', error);
+        });
+
+    }, []);  //
 
 
     return (
@@ -34,7 +143,7 @@ function FinDeposito() {
                         fontSize="20px"
                         centered
                     >
-                        ¡Tu transaccion se ha realizado con exito!
+                        ¡Tu {transaccion} se ha realizado con exito!
                     </CustomAlert>
             </Row>
             <div style={{ height: '20px' }} />
@@ -42,14 +151,14 @@ function FinDeposito() {
             <Row className="align-items-center justify-content-center">
                 <CustomCardRecibo width="500px" height="220px" bordered={false} color="#FFF6A7">
                     <Row className="justify-content-center">
-                        <h5 className="text-center font-weight-bold">Cuenta de ahorro 324</h5>
+                        <h5 className="text-center font-weight-bold">{nombre_cuenta}</h5>
                     </Row>
                     <Row>
                         <Col xs={5}>
                             <h5 className="font-weight-bold">Fecha y hora:</h5>
                         </Col>
                         <Col xs={7}>
-                            <h5 style={{ textAlign: 'right'}}>20/08/2023</h5>
+                            <h5 style={{ textAlign: 'right'}}>{fecha_transaccion}</h5>
                         </Col>
                     </Row>
                     <Row>
@@ -57,7 +166,7 @@ function FinDeposito() {
                             <h5 className="font-weight-bold">Nro de tarjeta:</h5>
                         </Col>
                         <Col xs={7}>
-                            <h5 style={{ textAlign: 'right'}}>5118 4205 0615 1024</h5>
+                            <h5 style={{ textAlign: 'right'}}>{n_tarjeta}</h5>
                         </Col>
                     </Row>
                     <Row>
@@ -65,7 +174,7 @@ function FinDeposito() {
                             <h5 className="font-weight-bold">Nro de cuenta:</h5>
                         </Col>
                         <Col xs={7}>
-                            <h5 style={{ textAlign: 'right'}}>325-7949240</h5>
+                            <h5 style={{ textAlign: 'right'}}>{cci}</h5>
                         </Col>
                     </Row>
                     <Row>
@@ -73,7 +182,7 @@ function FinDeposito() {
                             <h5 className="font-weight-bold">Monto depositado:</h5>
                         </Col>
                         <Col xs={6}>
-                            <h5 style={{ textAlign: 'right'}}>S/50.00</h5>
+                            <h5 style={{ textAlign: 'right'}}>{terminologia}{monto_operacion}</h5>
                         </Col>
                     </Row>
                     <Row>
@@ -81,7 +190,7 @@ function FinDeposito() {
                             <h5 className="font-weight-bold">Saldo disponible:</h5>
                         </Col>
                         <Col xs={7}>
-                            <h5 style={{ textAlign: 'right'}}>S/1149.80</h5>
+                            <h5 style={{ textAlign: 'right'}}>{terminologia2}{saldo}</h5>
                         </Col>
                     </Row>
                 </CustomCardRecibo>
@@ -95,7 +204,7 @@ function FinDeposito() {
                             type="checkbox" 
                             label="IMPRIMIR VOUCHER"
                             onChange={handleCheckboxChange}
-                            defaultChecked={true}
+                            defaultChecked={selectedOption}
                         />
                     </Form.Group>
                 </Col>
