@@ -145,6 +145,16 @@ export const constanciaOperacion = (idOperacion, constOperacionUpdate) => {
 };
 
 
+// API PARA OBTENER IDOPERATION MODEL
+export const getOperationModel = (idOperationModel) => {
+  return axios.get(`${apiUrlPers}/operation_model/${idOperationModel}`)
+  .then(response => response.data)
+  .catch(error => {
+    // Manejo de errores, por ejemplo, imprimir en la consola
+    console.error('Error al obtener el operation model:', error);
+    throw error; // Puedes manejar el error de otras formas según tus necesidades
+  });
+};
 
 
 // APIS PARA OBTENER RUTAS

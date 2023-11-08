@@ -37,7 +37,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 // APIS
-import { getPerfilByIdUserModel } from '../../api/axios_api';
+import { getOperationModel, getPerfilByIdUserModel } from '../../api/axios_api';
 import { get_user_model } from '../../api/axios_api';
 import { getUsuarioById } from '../../api/axios_api';
 import { listarCuentas } from '../../api/axios_api';
@@ -180,6 +180,54 @@ function MenuATM() {
         // Lógica para el botón de continuar
     };
 
+    // Variables para setear las acciones personalizables
+
+    //OP1
+    const [nombreOpRap1, setNombreOpRap1] = useState('');
+    const [montoOpRap1, setMontoOpRap1] = useState('');
+    const [termOpRap1, setTermOpRap1] = useState('');
+    const [cuentaOpRap1, setCuentaOpRap1] = useState('');
+    const [imgOpRap1, setImgOpRap1] = useState(null);
+
+    //RetOP
+    const [nombreRetRap, setNombreRetRap] = useState('');
+    const [montoRetRap, setMontoRetRap] = useState('');
+    const [termRetRap, setTermRetRap] = useState('');
+    const [cuentaRetRap, setCuentaRetRap] = useState('');
+    const [imgRetRap, setImgRetRap] = useState(null);
+
+
+    const actualiza_op_personalizables = async(response_user_model) =>{
+
+        // IF PARA LA PRIMERA OPERACION
+        if(response_user_model.opRapida1 !== null){
+            const response = await getOperationModel(response_user_model.opRapida1);
+            console.log("op1", response);
+            setNombreOpRap1(response.tipoOperacion);
+            if(response.moneda === "S"){
+                setTermOpRap1("S/");
+            }
+            if(response.moneda === "D"){
+                setTermOpRap1("US$");
+            }
+            setMontoOpRap1(response.montOperacion);
+            setCuentaOpRap1(response.cuentaDestino);
+
+            if(response.tipoOperacion === "Deposito")
+                setImgOpRap1(fast_deposito);
+            if(response.tipoOperacion === "Retiro")
+                setImgOpRap1(fast_retiro);
+        }
+
+
+        //IF PARA EL RETIRO RAPIDO
+        if(response_user_model.opRetRapido !== null){
+            const response = await getOperationModel(response_user_model.opRetRapido);
+            setNombreRetRap(response.tipoOperacion);
+
+        }
+
+    };
 
 
     // Aqui hacemos el llamado al api de obtener perfil 
@@ -214,6 +262,10 @@ function MenuATM() {
         .then(response_user_model => {
             // Actualiza el estado con los datos del perfil
             console.log("response usermodel", response_user_model);
+
+
+            // Funcion que trae las opciones personalizables
+            actualiza_op_personalizables(response_user_model);
 
             //Actualizamos el idioma preferido
             setSelectedOption(response_user_model.idiomaPreferido);
@@ -316,7 +368,7 @@ function MenuATM() {
                     {/*AQUI VAN LAS OPCIONES*/}
 
                     <div style={{ height: '6px' }} />
-                    {/*AQUI VA LA PRIMERA*/}
+                    {/*AQUI VA LA PRIMERA QUE ES UNA OPCION RAPIDA*/}
                     <Row>
                         <Card
                             onClick={handleCardClick3}
@@ -326,14 +378,14 @@ function MenuATM() {
                             <Card.Body className="m-0 p-1">
                                 <Row className="align-items-center">
                                     <Col xs="auto">
-                                        <Image src={fast_retiro} alt="Descripción" width={40} height={40} />
+                                        <Image src={imgOpRap1} alt="Descripción" width={40} height={40} />
                                     </Col>
                                     <Col xs="auto">
                                         <Row>
-                                            <h7 className="m-0">Retiro Rapido        S/100</h7>
+                                            <h7 className="m-0">{nombreOpRap1} Rapido        {termOpRap1}{montoOpRap1}</h7>
                                         </Row>
                                         <Row>
-                                            <h7 className="m-0">Cuenta de ahorro - 324</h7>
+                                            <h7 className="m-0">{cuentaOpRap1}</h7>
                                         </Row>
                                     </Col>
                                 </Row>
@@ -458,7 +510,7 @@ function MenuATM() {
                                 </Col>
                                 <Col xs="auto">
                                     <Row>
-                                        <h7 className="m-0">Retiro        US$20</h7>
+                                        <h7 className="m-0">{nombreRetRap}       US$20</h7>
                                     </Row>
                                     <Row>
                                         <h7 className="m-0">Cuenta de ahorro - 324</h7>
