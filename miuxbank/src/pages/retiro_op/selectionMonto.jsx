@@ -56,7 +56,10 @@ function SeleccionMonto() {
             const response = await insertarOperacion(operacionData);
             console.log("Response", response);
             idOperacion = response.idOperacion;
-            navigate(`/retiro/finalizado/${idUserModel}/${idOperacion}`);
+
+            const response_ruta = `/retiro/finalizado/${idUserModel}/${idOperacion}`;
+            navigate(`/retiro_intermedia`, { state: { response_ruta } });
+            //navigate(`/retiro/finalizado/${idUserModel}/${idOperacion}`);
         } catch (error) {
             console.error('Error al obtener el User Model:', error);
         }

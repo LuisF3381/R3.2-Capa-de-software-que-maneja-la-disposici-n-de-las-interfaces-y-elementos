@@ -106,9 +106,11 @@ function SeleccionCuentaSaldo() {
             idOperacion = response.idOperacion;
             
             if(constancia_cons === "voucher"){
-                navigate(`/fin-sesion/${idOperacion}`);
+                const response_ruta = `/fin-sesion/${idOperacion}`;
+                navigate(`/consulta_intermedia`, { state: { response_ruta } });
             }else{
-                navigate(`/consulta/finalizado/${idUserModel}/${idOperacion}`);
+                const response_ruta = `/consulta/finalizado/${idUserModel}/${idOperacion}`;
+                navigate(`/consulta_intermedia`, { state: { response_ruta } });
             }
 
             //navigate(`/retiro/finalizado/${idUserModel}/${idOperacion}`);
