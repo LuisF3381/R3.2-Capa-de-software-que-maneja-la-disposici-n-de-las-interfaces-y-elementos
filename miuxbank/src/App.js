@@ -27,6 +27,8 @@ import FinSesion from './pages/endSesion';
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Login_intermediate from './pages/intermediate/login_intermediate.jsx';
+import PantallaIntermedia from './pages/intermediate/login_intermediate.jsx';
 
 function App() {
   return (
@@ -66,6 +68,10 @@ function App() {
 
         {/*Fin de sesion*/}
         <Route path="/fin-sesion/:idTransaccion" element={<FinSesion/>}/>
+
+        {/*Pantalla intermedia*/}
+        <Route path="/login_intermedia" element={<PantallaIntermedia/>}/> 
+
 
       </Routes>
     </BrowserRouter>

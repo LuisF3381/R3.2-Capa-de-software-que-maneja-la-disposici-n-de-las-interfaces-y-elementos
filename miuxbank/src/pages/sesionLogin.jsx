@@ -17,6 +17,7 @@ import { getUserModelIdByIdUsuario } from '../api/axios_api';
 import { getObtenerRutaPostLogin } from '../api/axios_api';
 
 
+
 function LoginPage() {
   const { idUsuario } = useParams();
   const navigate = useNavigate();
@@ -55,7 +56,9 @@ function LoginPage() {
         // AHORA OBTENEMOS LA RUTA QUE SEGUIRA (SI ES EL BIENVENIDO O EL MENU PRINCIPAL)
         const response_ruta = await getObtenerRutaPostLogin(response.idUserModel);
         //console.log("response_ruta", response_ruta);
-        navigate(response_ruta);
+
+        //navigate(response_ruta);
+        navigate(`/login_intermedia`, { state: { response_ruta } });
 
       } catch (error) {
         console.error('Error al obtener el User Model:', error);
