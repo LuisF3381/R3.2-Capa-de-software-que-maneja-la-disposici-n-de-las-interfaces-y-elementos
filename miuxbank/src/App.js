@@ -31,6 +31,8 @@ import Login_intermediate from './pages/intermediate/login_intermediate.jsx';
 import PantallaIntermedia from './pages/intermediate/login_intermediate.jsx';
 import Retiro_intermediate from './pages/intermediate/retiro_intermediate.jsx';
 import Consulta_intermediate from './pages/intermediate/consulta_intermediate.jsx';
+import Deposito2_intermediate from './pages/intermediate/deposito2_intermediate.jsx';
+import Deposito1_intermediate from './pages/intermediate/deposito1_intermediate.jsx';
 
 function App() {
   return (
@@ -75,6 +77,8 @@ function App() {
         <Route path="/login_intermedia" element={<PantallaIntermedia/>}/> 
         <Route path="/retiro_intermedia" element={<Retiro_intermediate/>}/> 
         <Route path="/consulta_intermedia" element={<Consulta_intermediate/>}/> 
+        <Route path="/deposito1_intermedia" element={<Deposito1_intermediate/>}/> 
+        <Route path="/deposito2_intermedia" element={<Deposito2_intermediate/>}/> 
 
 
       </Routes>

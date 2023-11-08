@@ -93,14 +93,14 @@ function FinSesion() {
             <BankComponent/>
 
             {/*AQUI SE AGRADECE*/}
-            <div style={{ height: '10px' }} />
+            <div style={{ height: '50px' }} />
             <Row className="justify-content-center">
                 <Col xs="auto">
                     <h2>¡Gracias por preferir MiUX BANK!</h2>
                 </Col>
             </Row>
 
-            <div style={{ height: '110px' }} />
+            <div style={{ height: '70px' }} />
 
             {/*AQUI SE PONE EL PRIMER PASO*/}
             {step1Visible && (

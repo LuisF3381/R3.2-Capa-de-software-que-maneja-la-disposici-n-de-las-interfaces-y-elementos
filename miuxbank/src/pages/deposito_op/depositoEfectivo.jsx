@@ -20,7 +20,7 @@ function DepositoEfectivo() {
     const [tipoC1Name, setTipoC1Name] = useState('');
 
     // Para el tema del tiempo
-    const [tiempoRestante, setTiempoRestante] = useState(40);
+    const [tiempoRestante, setTiempoRestante] = useState(30);
 
     useEffect(() => {
         infoCuenta(CCI)
@@ -59,7 +59,9 @@ function DepositoEfectivo() {
 
 
       const cambio_pest = () => {
-        navigate(`/deposito/resumen-deposito/${idUserModel}/${CCI}/${moneda}`)
+        const response_ruta = `/deposito/resumen-deposito/${idUserModel}/${CCI}/${moneda}`;
+        navigate(`/deposito1_intermedia`, { state: { response_ruta } });
+        //navigate(`/deposito/resumen-deposito/${idUserModel}/${CCI}/${moneda}`)
       };
     
 
