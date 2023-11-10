@@ -74,11 +74,11 @@ function MenuATM() {
     };
 
     // Para el cambio del tamaño del texto
-    const [selectedOption2, setSelectedOption2] = useState('');
+    const [tamtexto, setTamtexto] = useState('');
 
     const handleOptionChange2 = (event) => {
         const newValue = event.target.value;
-        setSelectedOption2(newValue);
+        setTamtexto(newValue);
 
         // Puedes agregar lógica adicional aquí según la opción seleccionada
         // Por ahora, solo imprimo el valor seleccionado en la consola
@@ -258,6 +258,7 @@ function MenuATM() {
     const actualiza_op_personalizables = async(response_user_model) =>{
 
         // IF PARA LA PRIMERA OPERACION RAPIDA
+        console.log("aaaa");
         if(response_user_model.opRapida1 !== null){
             setIdOperacionOpRap1(response_user_model.opRapida1);
             const response = await getOperationModel(response_user_model.opRapida1);
@@ -352,6 +353,7 @@ function MenuATM() {
 
 
     useEffect(() => {
+
         // Llama a la función que realiza la solicitud de la API
         getPerfilByIdUserModel(idUserModel)
           .then(response => {
@@ -378,6 +380,9 @@ function MenuATM() {
             // Actualiza el estado con los datos del perfil
             console.log("response usermodel", response_user_model);
 
+            if(response_user_model.tamFuente === null){
+                setTamtexto(13);
+            }
 
             // Funcion que trae las opciones personalizables
             actualiza_op_personalizables(response_user_model);
@@ -409,6 +414,7 @@ function MenuATM() {
 
 
 
+
     return (
         <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>
             <Card style={{ width: 800, height: 550, background: 'white' }} className="p-1">
@@ -417,8 +423,8 @@ function MenuATM() {
                 {/*AQUI VA EL NOMBRE Y SI CAMBIA EL IDIOMA O NO AQUI*/}
                 <Row className="justify-content-center align-items-center my-2">
                 <Col xs={9} >
-                    <h4>¡Hola, {nombre}!</h4>
-                    <h5>¿Qué quieres hacer hoy?</h5>
+                    <h4 style={{ fontSize: tamtexto*1.75 }}>¡Hola, {nombre}!</h4>
+                    <h5 style={{ fontSize: tamtexto*1.5 }}>¿Qué quieres hacer hoy?</h5>
                 </Col>
                 <Col xs={3} className="text-center">
 
@@ -450,7 +456,7 @@ function MenuATM() {
                     <Card onClick={handleCardClickP1} className="text-center p-2" style={{ width: '230px', height: '100px', cursor: 'pointer' }}>
                         <Card.Img variant="top" src={retiro} style={{ maxWidth: '22%', margin: '0 auto', marginBottom: '-10px' }} />
                         <Card.Body>
-                            <p style={{ fontWeight: 'bold' }}>Retiro de efectivo</p>
+                            <p style={{ fontWeight: 'bold', fontSize: tamtexto*1.05 }}>Retiro de efectivo</p>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -458,7 +464,7 @@ function MenuATM() {
                     <Card onClick={handleCardClickP2} className="text-center p-2" style={{ width: '230px', height: '100px', cursor: 'pointer' }}>
                         <Card.Img variant="top" src={consulta} style={{ maxWidth: '22%', margin: '0 auto', marginBottom: '-10px' }} />
                         <Card.Body>
-                            <p style={{ fontWeight: 'bold' }}>Consulta de saldo</p>
+                            <p style={{ fontWeight: 'bold', fontSize: tamtexto*1.05 }}>Consulta de saldo</p>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -466,7 +472,7 @@ function MenuATM() {
                     <Card onClick={handleCardClickP3} className="text-center p-2" style={{ width: '230px', height: '100px', cursor: 'pointer' }}>
                         <Card.Img variant="top" src={deposito} style={{ maxWidth: '22%', margin: '0 auto', marginBottom: '-10px' }} />
                         <Card.Body>
-                            <p style={{ fontWeight: 'bold' }}>Deposito de efectivo</p>
+                            <p style={{ fontWeight: 'bold', fontSize: tamtexto*1.05 }}>Deposito de efectivo</p>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -477,7 +483,7 @@ function MenuATM() {
                 
                     <div className="d-flex align-items-center">
                         <Image src={fast_operation} alt="Descripción" width={32} height={32} rounded style={{ marginRight: '8px' }} />
-                        <h6>{t('operaciones_rapidas')}</h6>
+                        <h6 style={{ fontSize: tamtexto*1.2 }}>{t('operaciones_rapidas')}</h6>
                     </div>
 
                     {/*AQUI VAN LAS OPCIONES*/}
@@ -499,7 +505,7 @@ function MenuATM() {
                                         </Col>
                                         <Col xs="auto">
                                             <Row>
-                                                <h7 className="m-0">Disponible pronto</h7>
+                                                <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>Disponible pronto</h7>
                                             </Row>
                                         </Col>
                                     </Row>
@@ -520,10 +526,10 @@ function MenuATM() {
                                         </Col>
                                         <Col xs="auto">
                                             <Row>
-                                                <h7 className="m-0">{nombreOpRap1} Rapido        {termOpRap1}{montoOpRap1}</h7>
+                                                <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>{nombreOpRap1} Rapido        {termOpRap1}{montoOpRap1}</h7>
                                             </Row>
                                             <Row>
-                                                <h7 className="m-0">{cuentaOpRap1}</h7>
+                                                <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>{cuentaOpRap1}</h7>
                                             </Row>
                                         </Col>
                                     </Row>
@@ -549,7 +555,7 @@ function MenuATM() {
                                         </Col>
                                         <Col xs="auto">
                                             <Row>
-                                                <h7 className="m-0">Otras operaciones</h7>
+                                                <h7 className="m-0"  style={{ fontSize: tamtexto*1.15 }}>Otras operaciones</h7>
                                             </Row>
                                         </Col>
                                     </Row>
@@ -571,7 +577,7 @@ function MenuATM() {
                                         </Col>
                                         <Col xs="auto">
                                             <Row>
-                                                <h7 className="m-0">Disponible pronto</h7>
+                                                <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>Disponible pronto</h7>
                                             </Row>
                                         </Col>
                                     </Row>
@@ -592,10 +598,10 @@ function MenuATM() {
                                     </Col>
                                     <Col xs="auto">
                                         <Row>
-                                            <h7 className="m-0">{nombreOpRap2} Rapido        {termOpRap2}{montoOpRap2}</h7>
+                                            <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>{nombreOpRap2} Rapido        {termOpRap2}{montoOpRap2}</h7>
                                         </Row>
                                         <Row>
-                                            <h7 className="m-0">{cuentaOpRap2}</h7>
+                                            <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>{cuentaOpRap2}</h7>
                                         </Row>
                                     </Col>
                                 </Row>
@@ -624,19 +630,19 @@ function MenuATM() {
                 {perfil_usuario === 'frecuente' ? (
                     <div className="d-flex align-items-center">
                         <Image src={last_operation} alt="Descripción" width={32} height={32} rounded style={{ marginRight: '8px' }} />
-                        <h6>Repetir mi ultima operacion</h6>
+                        <h6 style={{ fontSize: tamtexto*1.2 }}>Repetir mi ultima operacion</h6>
                     </div>
 
                 ): perfil_usuario === 'ocasional' ?(
                     <div className="d-flex align-items-center">
                         <Image src={fast_operation_icon_ocasional} alt="Descripción" width={32} height={32} rounded style={{ marginRight: '8px' }} />
-                        <h6>{t('retiro_personalizado')}</h6>
+                        <h6 style={{ fontSize: tamtexto*1.2 }}>{t('retiro_personalizado')}</h6>
                     </div>
 
                 ): perfil_usuario === 'senior' ?(
                     <div className="d-flex align-items-center">
                         <Image src={help_icon} alt="Descripción" width={32} height={32} rounded style={{ marginRight: '8px' }} /> 
-                        <h6>Accesibilidad</h6>
+                        <h6 style={{ fontSize: tamtexto*1.2 }}>Accesibilidad</h6>
                     </div>
                 ):(    
                     <p></p>
@@ -677,7 +683,7 @@ function MenuATM() {
                                         </Col>
                                         <Col xs="auto">
                                             <Row>
-                                                <h7 className="m-0">Disponible pronto</h7>
+                                                <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>Disponible pronto</h7>
                                             </Row>
                                         </Col>
                                     </Row>
@@ -698,10 +704,10 @@ function MenuATM() {
                                 </Col>
                                 <Col xs="auto">
                                     <Row>
-                                        <h7 className="m-0">{nombreRetRap} Personalizado       {termRetRap}{montoRetRap}</h7>
+                                        <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>{nombreRetRap} Personalizado       {termRetRap}{montoRetRap}</h7>
                                     </Row>
                                     <Row>
-                                        <h7 className="m-0">{cuentaRetRap}</h7>
+                                        <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>{cuentaRetRap}</h7>
                                     </Row>
                                 </Col>
                             </Row>
@@ -726,7 +732,7 @@ function MenuATM() {
                                         </Col>
                                         <Col xs="auto">
                                             <Row>
-                                                <h7 className="m-0">Disponible pronto</h7>
+                                                <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>Disponible pronto</h7>
                                             </Row>
                                         </Col>
                                     </Row>
@@ -747,10 +753,10 @@ function MenuATM() {
                                     </Col>
                                     <Col xs="auto">
                                         <Row>
-                                            <h7 className="m-0">{nombreUltOP}        {termUltOP}{montoUltOP}</h7>
+                                            <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>{nombreUltOP}        {termUltOP}{montoUltOP}</h7>
                                         </Row>
                                         <Row>
-                                            <h7 className="m-0">{cuentaUltOP}</h7>
+                                            <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>{cuentaUltOP}</h7>
                                         </Row>
                                     </Col>
                                 </Row>
@@ -790,12 +796,12 @@ function MenuATM() {
                                 <Form.Control
                                     as="select"
                                     onChange={handleOptionChange2}
-                                    value={selectedOption2}
+                                    value={tamtexto}
                                     className="text-right form-control-sm"
                                 >
                                     <option value="">Cambiar de tamaño de letra</option>
-                                    <option value="md">Mediano</option>
-                                    <option value="gr">Grande</option>
+                                    <option value="13">Mediano</option>
+                                    <option value="15">Grande</option>
                                     {/* Agrega más opciones de idioma según sea necesario */}
                                 </Form.Control>
                             </Form.Group>
@@ -828,7 +834,7 @@ function MenuATM() {
                                         </Col>
                                         <Col xs="auto">
                                             <Row>
-                                                <h7 className="m-0">Otras operaciones</h7>
+                                                <h7 className="m-0"  style={{ fontSize: tamtexto*1.15 }}>Otras operaciones</h7>
                                             </Row>
                                         </Col>
                                     </Row>
@@ -838,9 +844,6 @@ function MenuATM() {
                     ):(    
                             <p></p>
                     )}
-
-
-
 
 
                 </Col>
