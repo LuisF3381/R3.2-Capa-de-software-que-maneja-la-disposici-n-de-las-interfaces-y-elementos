@@ -156,6 +156,18 @@ export const getOperationModel = (idOperationModel) => {
   });
 };
 
+export const actualizar_user_model = (idUserModel) => {
+  return axios.post(`${apiUrlPers}/actualizar_user_model/${idUserModel}`)
+  .then(response => response.data)
+  .catch(error => {
+    // Manejo de errores, por ejemplo, imprimir en la consola
+    console.error('Error al actualizar el user model:', error);
+    throw error; // Puedes manejar el error de otras formas según tus necesidades
+  });
+};
+
+
+
 
 // APIS PARA OBTENER RUTAS
 export const getObtenerRutaPostLogin = (userModelId) => {
@@ -168,5 +180,12 @@ export const getObtenerRutaPostLogin = (userModelId) => {
       });
   };
 
-
-
+export const getRouteOperacion = async (idOperationModel, idUsuario) => {
+    return axios.get(`${apiUrlPers}/obtener-ruta/operacion/?idOperationModel=${idOperationModel}&idUsuario=${idUsuario}`)
+      .then(response => response.data)
+      .catch(error => {
+        // Manejo de errores, por ejemplo, imprimir en la consola
+        console.error('Error al obtener la ruta para el idOperacion:', error);
+        throw error; // Puedes manejar el error de otras formas según tus necesidades
+      });
+  };

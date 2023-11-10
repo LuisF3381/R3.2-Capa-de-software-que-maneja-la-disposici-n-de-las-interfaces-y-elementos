@@ -24,6 +24,7 @@ import retiro_personal from '../../images/imagenes_perfil/ocasional/retiro_perso
 // Para las operaciones rapidas
 import fast_retiro from '../../images/operaciones/fast/fast_retiro.png'
 import fast_deposito from '../../images/operaciones/fast/fast_deposito.png'
+import fast_consulta from '../../images/operaciones/fast/fast_consulta.png'
 
 // Importamos card
 import CustomCardMenu from '../components/generals/messageCarMenu';
@@ -41,6 +42,12 @@ import { getOperationModel, getPerfilByIdUserModel } from '../../api/axios_api';
 import { get_user_model } from '../../api/axios_api';
 import { getUsuarioById } from '../../api/axios_api';
 import { listarCuentas } from '../../api/axios_api';
+
+import { getRouteOperacion } from '../../api/axios_api';
+
+// Logo de reloj de arena
+import reloj_arena from '../../images/reloj_arena.png'
+
 
 function MenuATM() {
     const { idUsuario, idUserModel } = useParams();
@@ -110,7 +117,7 @@ function MenuATM() {
             }
         
         } catch (error) {
-                    console.error('Error al obtener las cuentas del usuario:', error);
+            console.error('Error al obtener las cuentas del usuario:', error);
         }
 
         //navigate(`/retiro/seleccion-cuenta/${idUserModel}`);
@@ -169,6 +176,39 @@ function MenuATM() {
 
 
 
+    // Fucniones para las opciones de la subseccion
+    const handleCardClick_sub1_1 = async(idOperacionOpRap1) => {
+        // Llamamos al api que obtiene la ruta y comenzamos
+        //getRouteOperacion
+        console.log("idOperacionOpRap1", idOperacionOpRap1);
+        try {
+            const response = await getRouteOperacion( idOperacionOpRap1, idUsuario);
+            navigate(response);
+            console.log("response_op", response);
+        } catch (error) {
+            console.error('Error al obtener la ruta siguiente:', error);
+        }
+
+      };
+
+
+          // Fucniones para las opciones de la subseccion
+    const handleCardClick_sub2_1 = async(idOperacionrRetRap) => {
+        // Llamamos al api que obtiene la ruta y comenzamos
+        //getRouteOperacion
+        console.log("idOperacionOpRap1", idOperacionrRetRap);
+        try {
+            const response = await getRouteOperacion( idOperacionrRetRap, idUsuario);
+            navigate(response);
+            console.log("response_op", response);
+        } catch (error) {
+            console.error('Error al obtener la ruta siguiente:', error);
+        }
+
+    };
+
+
+
 
     // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
     const handleCancel = () => {
@@ -183,24 +223,43 @@ function MenuATM() {
     // Variables para setear las acciones personalizables
 
     //OP1
+    const [idOperacionOpRap1, setIdOperacionOpRap1] = useState (-1);
     const [nombreOpRap1, setNombreOpRap1] = useState('');
     const [montoOpRap1, setMontoOpRap1] = useState('');
     const [termOpRap1, setTermOpRap1] = useState('');
     const [cuentaOpRap1, setCuentaOpRap1] = useState('');
     const [imgOpRap1, setImgOpRap1] = useState(null);
 
+
+    //OP2
+    const [idOperacionOpRap2, setIdOperacionOpRap2] = useState (-1);
+    const [nombreOpRap2, setNombreOpRap2] = useState('');
+    const [montoOpRap2, setMontoOpRap2] = useState('');
+    const [termOpRap2, setTermOpRap2] = useState('');
+    const [cuentaOpRap2, setCuentaOpRap2] = useState('');
+    const [imgOpRap2, setImgOpRap2] = useState(null);
+
     //RetOP
+    const [idOperacionRetRap, setIdOperacionRetRap] = useState (-1);
     const [nombreRetRap, setNombreRetRap] = useState('');
     const [montoRetRap, setMontoRetRap] = useState('');
     const [termRetRap, setTermRetRap] = useState('');
     const [cuentaRetRap, setCuentaRetRap] = useState('');
     const [imgRetRap, setImgRetRap] = useState(null);
 
+    //UltOP
+    const [idOperacionUltOP, setIdOperacionUltOP] = useState (-1);
+    const [nombreUltOP, setNombreUltOP] = useState('');
+    const [montoUltOP, setMontoUltOP] = useState('');
+    const [termUltOP, setTermUltOP] = useState('');
+    const [cuentaUltOP, setCuentaUltOP] = useState('');
+    const [imgUltOP, setImgUltOP] = useState(null);
 
     const actualiza_op_personalizables = async(response_user_model) =>{
 
-        // IF PARA LA PRIMERA OPERACION
+        // IF PARA LA PRIMERA OPERACION RAPIDA
         if(response_user_model.opRapida1 !== null){
+            setIdOperacionOpRap1(response_user_model.opRapida1);
             const response = await getOperationModel(response_user_model.opRapida1);
             console.log("op1", response);
             setNombreOpRap1(response.tipoOperacion);
@@ -217,13 +276,69 @@ function MenuATM() {
                 setImgOpRap1(fast_deposito);
             if(response.tipoOperacion === "Retiro")
                 setImgOpRap1(fast_retiro);
+            if(response.tipoOperacion === "Consulta")
+                setImgOpRap1(fast_consulta);
+        }
+
+        // IF PARA LA SEGUNDA OPERACION RAPIDA
+        if(response_user_model.opRapida2 !== null){
+            setIdOperacionOpRap2(response_user_model.opRapida2);
+            const response = await getOperationModel(response_user_model.opRapida2);
+            console.log("op2", response);
+            setNombreOpRap2(response.tipoOperacion);
+            if(response.moneda === "S"){
+                setTermOpRap2("S/");
+            }
+            if(response.moneda === "D"){
+                setTermOpRap2("US$");
+            }
+            setMontoOpRap2(response.montOperacion);
+            setCuentaOpRap2(response.cuentaDestino);
+
+            if(response.tipoOperacion === "Deposito")
+                setImgOpRap2(fast_deposito);
+            if(response.tipoOperacion === "Retiro")
+                setImgOpRap2(fast_retiro);
+            if(response.tipoOperacion === "Consulta")
+                setImgOpRap2(fast_consulta);
         }
 
 
         //IF PARA EL RETIRO RAPIDO
         if(response_user_model.opRetRapido !== null){
+            setIdOperacionRetRap(response_user_model.opRetRapido);
             const response = await getOperationModel(response_user_model.opRetRapido);
             setNombreRetRap(response.tipoOperacion);
+            if(response.moneda === "S"){
+                setTermRetRap("S/");
+            }
+            if(response.moneda === "D"){
+                setTermRetRap("US$");
+            }
+            setMontoRetRap(response.montOperacion);
+            setCuentaRetRap(response.cuentaDestino);
+        }
+
+        // Para la ultima operacion
+        if(response_user_model.ultOp !== null){
+            setIdOperacionUltOP(response_user_model.ultOp);
+            const response = await getOperationModel(response_user_model.ultOp);
+            setNombreUltOP(response.tipoOperacion);
+            if(response.moneda === "S"){
+                setTermUltOP("S/");
+            }
+            if(response.moneda === "D"){
+                setTermUltOP("US$");
+            }
+            setMontoUltOP(response.montOperacion);
+            setCuentaUltOP(response.cuentaDestino);
+
+            if(response.tipoOperacion === "Deposito")
+                setImgUltOP(deposito);
+            if(response.tipoOperacion === "Retiro")
+                setImgUltOP(retiro);
+            if(response.tipoOperacion === "Consulta")
+                setImgUltOP(consulta);
 
         }
 
@@ -370,27 +485,53 @@ function MenuATM() {
                     <div style={{ height: '6px' }} />
                     {/*AQUI VA LA PRIMERA QUE ES UNA OPCION RAPIDA*/}
                     <Row>
-                        <Card
-                            onClick={handleCardClick3}
-                            className="d-flex align-items-center"
-                            style={{ width: '320px', height: '60px', cursor: 'pointer' }}
-                        >                        
-                            <Card.Body className="m-0 p-1">
-                                <Row className="align-items-center">
-                                    <Col xs="auto">
-                                        <Image src={imgOpRap1} alt="Descripción" width={40} height={40} />
-                                    </Col>
-                                    <Col xs="auto">
-                                        <Row>
-                                            <h7 className="m-0">{nombreOpRap1} Rapido        {termOpRap1}{montoOpRap1}</h7>
-                                        </Row>
-                                        <Row>
-                                            <h7 className="m-0">{cuentaOpRap1}</h7>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                            </Card.Body>
-                        </Card>
+                        {/* IF por si no tiene aun operaciones */}
+                        {idOperacionOpRap1 === -1 ? (
+                            <>
+                            <Card
+                                className="d-flex align-items-center"
+                                style={{ width: '320px', height: '60px'}}
+                                >
+                                <Card.Body className="m-0 p-1">
+                                    <Row className="align-items-center">
+                                        <Col xs="auto">
+                                            <Image src={reloj_arena} alt="Descripción" width={40} height={40} />
+                                        </Col>
+                                        <Col xs="auto">
+                                            <Row>
+                                                <h7 className="m-0">Disponible pronto</h7>
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                </Card.Body>                              
+                            </Card> 
+                            </>   
+                        ):(
+                        <>
+                            <Card
+                            onClick={() => handleCardClick_sub1_1(idOperacionOpRap1)}
+                                className="d-flex align-items-center"
+                                style={{ width: '320px', height: '60px', cursor: 'pointer' }}
+                                >                        
+                                <Card.Body className="m-0 p-1">
+                                    <Row className="align-items-center">
+                                        <Col xs="auto">
+                                            <Image src={imgOpRap1} alt="Descripción" width={40} height={40} />
+                                        </Col>
+                                        <Col xs="auto">
+                                            <Row>
+                                                <h7 className="m-0">{nombreOpRap1} Rapido        {termOpRap1}{montoOpRap1}</h7>
+                                            </Row>
+                                            <Row>
+                                                <h7 className="m-0">{cuentaOpRap1}</h7>
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                </Card.Body>
+                            </Card>
+                            </>
+                            )}
+
                     </Row>
                     <div style={{ height: '8px' }} />
                     {/*AQUI VA LA SEGUNDA*/}
@@ -398,9 +539,8 @@ function MenuATM() {
                     {perfil_usuario === 'ocasional' || perfil_usuario === 'senior' ? (
                         <Row>
                             <Card
-                                onClick={handleCardClick3}
                                 className="d-flex align-items-center"
-                                style={{ width: '320px', height: '60px', cursor: 'pointer' }}
+                                style={{ width: '320px', height: '60px' }}
                             >                        
                             <Card.Body className="m-0 p-1">
                                     <Row className="align-items-center">
@@ -418,27 +558,52 @@ function MenuATM() {
                         </Row>
                     ):(        
                     <Row>
+                        {idOperacionOpRap2 === -1 ? (
+                            <>
+                            <Card
+                                className="d-flex align-items-center"
+                                style={{ width: '320px', height: '60px'}}
+                                >
+                                <Card.Body className="m-0 p-1">
+                                    <Row className="align-items-center">
+                                        <Col xs="auto">
+                                            <Image src={reloj_arena} alt="Descripción" width={40} height={40} />
+                                        </Col>
+                                        <Col xs="auto">
+                                            <Row>
+                                                <h7 className="m-0">Disponible pronto</h7>
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                </Card.Body>                              
+                            </Card> 
+                            </>   
+                        ):(
+                            <>
                         <Card
-                            onClick={handleCardOP2}
-                            className="d-flex align-items-center"
+                           onClick={() => handleCardClick_sub1_1(idOperacionOpRap2)}
+                           className="d-flex align-items-center"
                             style={{ width: '320px', height: '60px', cursor: 'pointer' }}
                         >                        
                             <Card.Body className="m-0 p-1">
                                 <Row className="align-items-center">
                                     <Col xs="auto">
-                                        <Image src={fast_deposito} alt="Descripción" width={40} height={40} />
+                                        <Image src={imgOpRap2} alt="Descripción" width={40} height={40} />
                                     </Col>
                                     <Col xs="auto">
                                         <Row>
-                                            <h7 className="m-0">Deposito rapido        Soles</h7>
+                                            <h7 className="m-0">{nombreOpRap2} Rapido        {termOpRap2}{montoOpRap2}</h7>
                                         </Row>
                                         <Row>
-                                            <h7 className="m-0">Cuenta de ahorro - 324</h7>
+                                            <h7 className="m-0">{cuentaOpRap2}</h7>
                                         </Row>
                                     </Col>
                                 </Row>
                             </Card.Body>
                         </Card>
+                        </>
+                        )}
+
                     </Row>
                     )}
 
@@ -454,6 +619,7 @@ function MenuATM() {
                 <Col xs={1}></Col>
                 <Col xs="auto">
 
+                {/* SEGUNDA COLUMNA DE OPCIONES */}
                 {/*AQUI VARIA EL ENCABEZADO SEGUN EL USUARIO*/}
                 {perfil_usuario === 'frecuente' ? (
                     <div className="d-flex align-items-center">
@@ -498,8 +664,30 @@ function MenuATM() {
 
                 ): perfil_usuario === 'ocasional' ?(
                 <Row>
+                {idOperacionRetRap === -1 ? (
+                            <>
+                            <Card
+                                className="d-flex align-items-center"
+                                style={{ width: '320px', height: '60px'}}
+                                >
+                                <Card.Body className="m-0 p-1">
+                                    <Row className="align-items-center">
+                                        <Col xs="auto">
+                                            <Image src={reloj_arena} alt="Descripción" width={40} height={40} />
+                                        </Col>
+                                        <Col xs="auto">
+                                            <Row>
+                                                <h7 className="m-0">Disponible pronto</h7>
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                </Card.Body>                              
+                            </Card> 
+                            </>   
+                ):(
+                    <>
                     <Card
-                        onClick={handleCardClick3}
+                        onClick={() => handleCardClick_sub2_1(idOperacionRetRap)}
                         className="d-flex align-items-center"
                         style={{ width: '320px', height: '60px', cursor: 'pointer' }}
                     >                        
@@ -510,40 +698,66 @@ function MenuATM() {
                                 </Col>
                                 <Col xs="auto">
                                     <Row>
-                                        <h7 className="m-0">{nombreRetRap}       US$20</h7>
+                                        <h7 className="m-0">{nombreRetRap} Personalizado       {termRetRap}{montoRetRap}</h7>
                                     </Row>
                                     <Row>
-                                        <h7 className="m-0">Cuenta de ahorro - 324</h7>
+                                        <h7 className="m-0">{cuentaRetRap}</h7>
                                     </Row>
                                 </Col>
                             </Row>
                         </Card.Body>
                     </Card>
+                    </>
+                    )}
                 </Row>
 
                 ): perfil_usuario === 'frecuente' ?(
                     <Row>
+                    {idOperacionUltOP === -1 ? (
+                            <>
+                            <Card
+                                className="d-flex align-items-center"
+                                style={{ width: '320px', height: '60px'}}
+                                >
+                                <Card.Body className="m-0 p-1">
+                                    <Row className="align-items-center">
+                                        <Col xs="auto">
+                                            <Image src={reloj_arena} alt="Descripción" width={40} height={40} />
+                                        </Col>
+                                        <Col xs="auto">
+                                            <Row>
+                                                <h7 className="m-0">Disponible pronto</h7>
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                </Card.Body>                              
+                            </Card> 
+                            </>   
+                    ):(
+                        <>
                         <Card
-                            onClick={handleCardClick3}
+                            onClick={() => handleCardClick_sub2_1(idOperacionUltOP)}
                             className="d-flex align-items-center"
                             style={{ width: '320px', height: '60px', cursor: 'pointer' }}
                         >                        
                             <Card.Body className="m-0 p-1">
                                 <Row className="align-items-center">
                                     <Col xs="auto">
-                                        <Image src={retiro} alt="Descripción" width={40} height={40} />
+                                        <Image src={imgUltOP} alt="Descripción" width={40} height={40} />
                                     </Col>
                                     <Col xs="auto">
                                         <Row>
-                                            <h7 className="m-0">Retiro        US$20</h7>
+                                            <h7 className="m-0">{nombreUltOP}        {termUltOP}{montoUltOP}</h7>
                                         </Row>
                                         <Row>
-                                            <h7 className="m-0">Cuenta de ahorro - 324</h7>
+                                            <h7 className="m-0">{cuentaUltOP}</h7>
                                         </Row>
                                     </Col>
                                 </Row>
                             </Card.Body>
                         </Card>
+                        </>
+                        )}
                     </Row>
                 ):(    
                     <p></p>
@@ -604,9 +818,8 @@ function MenuATM() {
                     ): perfil_usuario === 'frecuente' ?(
                         <Row>
                             <Card
-                                onClick={handleCardClick3}
                                 className="d-flex align-items-center"
-                                style={{ width: '320px', height: '60px', cursor: 'pointer' }}
+                                style={{ width: '320px', height: '60px'}}
                             >                        
                                 <Card.Body className="m-0 p-1">
                                     <Row className="align-items-center">

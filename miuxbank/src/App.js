@@ -54,24 +54,24 @@ function App() {
         {/*Retiro de efectivo*/}
         <Route path="/retiro/seleccion-cuenta/:idUsuario/:idUserModel" element={<SeleccionCuenta/>}/>
         <Route path="/retiro/seleccion-moneda/:idUsuario/:idUserModel/:CCI" element={<SeleccionMoneda/>}/>
-        <Route path="/retiro/seleccion-monto/:idUserModel/:CCI/:moneda" element={<SeleccionMonto/>}/>
-        <Route path="/retiro/finalizado/:idUserModel/:idTransaccion" element={<FinRetiro/>}/>
+        <Route path="/retiro/seleccion-monto/:idUserModel/:CCI/:moneda/:idOperation?" element={<SeleccionMonto/>}/>
+        <Route path="/retiro/finalizado/:idUserModel/:idTransaccion/:idOperation?" element={<FinRetiro/>}/>
 
         {/*Deposito de efectivo*/}
         <Route path="/deposito/seleccion-cuenta/:idUsuario/:idUserModel" element={<SeleccionCuentaDeposito/>}/>
         <Route path="/deposito/seleccion-moneda/:idUsuario/:idUserModel/:CCI" element={<SeleccionMonedaDeposito/>}/>
-        <Route path="/deposito/ingreso-billetes/:idUserModel/:CCI/:moneda" element={<DepositoEfectivo/>}/>
-        <Route path="/deposito/resumen-deposito/:idUserModel/:CCI/:moneda" element={<ResumenDeposito/>}/>
-        <Route path="/deposito/finalizado/:idUserModel/:idTransaccion" element={<FinDeposito/>}/>
+        <Route path="/deposito/ingreso-billetes/:idUserModel/:CCI/:moneda/:idOperation?" element={<DepositoEfectivo/>}/>
+        <Route path="/deposito/resumen-deposito/:idUserModel/:CCI/:moneda/:idOperation?" element={<ResumenDeposito/>}/>
+        <Route path="/deposito/finalizado/:idUserModel/:idTransaccion/:idOperation?" element={<FinDeposito/>}/>
 
 
         {/*Consulta de saldo*/}
-        <Route path="/consulta/seleccion-cuenta/:idUsuario/:idUserModel" element={<SeleccionCuentaSaldo/>}/>
+        <Route path="/consulta/seleccion-cuenta/:idUsuario/:idUserModel/:idOperation?" element={<SeleccionCuentaSaldo/>}/>
         <Route path="/consulta/finalizado/:idUserModel/:idTransaccion" element={<FinConsulta/>}/>
 
 
         {/*Fin de sesion*/}
-        <Route path="/fin-sesion/:idTransaccion" element={<FinSesion/>}/>
+        <Route path="/fin-sesion/:idTransaccion/:idUserModel" element={<FinSesion/>}/>
 
         {/*Pantallas intermedias*/}
         <Route path="/login_intermedia" element={<PantallaIntermedia/>}/> 

@@ -6,18 +6,23 @@ import CustomAlert from '../components/generals/alertaVerde';
 import CustomCardRecibo from '../components/generals/recibo';
 import { useNavigate } from 'react-router-dom';
 
+// APIS
+
 import { listarOperacion } from '../../api/axios_api';
 import { infoCuenta } from '../../api/axios_api';
 import { getIdsuarioByIdUserModel } from '../../api/axios_api';
 import { obtenerTarjeta } from '../../api/axios_api';
 import { constanciaOperacion } from '../../api/axios_api';
+import { getOperationModel } from '../../api/axios_api';
+
+import { actualizar_user_model } from '../../api/axios_api';
 
 
 import { useParams } from 'react-router-dom';
 
 
 function FinRetiro() {
-    let { idUserModel, idTransaccion, } = useParams();
+    let { idUserModel, idTransaccion, idOperation} = useParams();
     const navigate = useNavigate();
 
     // Variables sobre la operacion realizada
@@ -56,7 +61,8 @@ function FinRetiro() {
             const response = await constanciaOperacion(idTransaccion, constancia);
             console.log("constancia", response);
 
-            navigate(`/fin-sesion/${idTransaccion}`);
+            // Aqui actualizamos el user model
+            navigate(`/fin-sesion/${idTransaccion}/${idUserModel}`);
         } catch (error) {
             console.error('Error al obtener el perfil actualizado:', error);
         }
@@ -67,8 +73,32 @@ function FinRetiro() {
         setSelectedOption(!selectedOption);
     };
 
+
+    // Para el tema de cargar el operational model
+    const cargaOperationModel = async(idOperation) => {
+        const response = await getOperationModel(idOperation);
+        console.log("Response operational", response);
+
+        // Vemos la preferencia de la constancia 
+        if(response.constOperacion === "pantalla"){
+            setSelectedOption(false);
+        }else{
+            setSelectedOption(true);
+        }
+
+    };
+
+
    // Use Effect para traer la informacion de la operacion
    useEffect(() => {
+
+    // Para el idOperation
+    console.log("idOperation", idOperation);
+
+    if( idOperation !== undefined){
+        cargaOperationModel(idOperation);
+    }
+
     listarOperacion(idTransaccion)
     .then(response => {
       console.log("response", response);
@@ -136,6 +166,10 @@ function FinRetiro() {
 
    }, []);  //
 
+
+   useEffect(() => {
+    console.log("selectedoption", selectedOption);
+   }, [selectedOption]);  //
 
     return (
         <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>
@@ -214,14 +248,14 @@ function FinRetiro() {
                             type="checkbox" 
                             label="IMPRIMIR VOUCHER"
                             onChange={handleCheckboxChange}
-                            defaultChecked={selectedOption}
+                            checked={selectedOption}
                         />
                     </Form.Group>
                 </Col>
                 <Col xs={4}></Col>
                 <Col xs="auto">
                     <Button variant="primary" style={{ width: '180px', backgroundColor: '#47818D' }} onClick={handleContinue}>
-                        RETIRAR EFECTIVO
+                        SALIR
                     </Button>
                 </Col>
             </Row>

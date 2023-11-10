@@ -15,7 +15,7 @@ import { infoCuenta } from '../../api/axios_api';
 import { insertarOperacion } from '../../api/axios_api';
 
 function ResumenDeposito() {
-    let { idUserModel, CCI, moneda } = useParams();
+    let { idUserModel, CCI, moneda, idOperation} = useParams();
 
     const navigate = useNavigate();
 
@@ -42,9 +42,16 @@ function ResumenDeposito() {
               console.log("Response", response);
               idOperacion = response.idOperacion;
               
-              //navigate(`/deposito/finalizado/${idUserModel}/${idOperacion}`);    
-              const response_ruta = `/deposito/finalizado/${idUserModel}/${idOperacion}`;
-              navigate(`/deposito2_intermedia`, { state: { response_ruta } });
+              //navigate(`/deposito/finalizado/${idUserModel}/${idOperacion}`);  
+              if( idOperation !== undefined){
+                const response_ruta = `/deposito/finalizado/${idUserModel}/${idOperacion}/${idOperation}?`;
+                navigate(`/deposito2_intermedia`, { state: { response_ruta } });
+              }
+              else{
+                const response_ruta = `/deposito/finalizado/${idUserModel}/${idOperacion}`;
+                navigate(`/deposito2_intermedia`, { state: { response_ruta } });
+              }  
+
               
         } catch (error) {
             console.error('Error al insertar la operacion:', error);

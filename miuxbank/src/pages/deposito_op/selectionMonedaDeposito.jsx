@@ -34,7 +34,8 @@ function SeleccionMonedaDeposito() {
     // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
     const handleCancel = () => {
         // Lógica para el botón de cancelar
-        navigate(`/deposito/seleccion-cuenta/${idUserModel}`);
+        //navigate(`/deposito/seleccion-cuenta/${idUserModel}`);
+        navigate(-1);
     };
 
     

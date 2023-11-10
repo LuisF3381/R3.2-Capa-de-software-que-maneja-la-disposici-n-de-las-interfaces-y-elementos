@@ -36,7 +36,8 @@ function SeleccionMoneda() {
     // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
     const handleCancel = () => {
         // Lógica para el botón de cancelar
-        navigate(`/retiro/seleccion-cuenta/${idUserModel}`);
+        //navigate(`/retiro/seleccion-cuenta/${idUserModel}`);
+        navigate(-1);
     };
         
     return (

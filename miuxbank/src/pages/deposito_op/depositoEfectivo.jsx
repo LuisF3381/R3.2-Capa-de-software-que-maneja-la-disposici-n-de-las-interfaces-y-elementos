@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { infoCuenta } from '../../api/axios_api';
 
 function DepositoEfectivo() {
-    let { idUserModel, CCI, moneda } = useParams();
+    let { idUserModel, CCI, moneda, idOperation } = useParams();
     const navigate = useNavigate();
 
     // VARIABLES PARA CUENTA
@@ -40,6 +40,7 @@ function DepositoEfectivo() {
           // Manejo de errores, por ejemplo, imprimir en la consola
           console.error('Error al obtener lista de cuentas:', error);
         });
+
     }, [navigate]);  //
 
 
@@ -59,8 +60,14 @@ function DepositoEfectivo() {
 
 
       const cambio_pest = () => {
-        const response_ruta = `/deposito/resumen-deposito/${idUserModel}/${CCI}/${moneda}`;
-        navigate(`/deposito1_intermedia`, { state: { response_ruta } });
+        if( idOperation !== undefined){
+            const response_ruta = `/deposito/resumen-deposito/${idUserModel}/${CCI}/${moneda}/${idOperation}?`;
+            navigate(`/deposito1_intermedia`, { state: { response_ruta } });
+        }else{
+            const response_ruta = `/deposito/resumen-deposito/${idUserModel}/${CCI}/${moneda}`;
+            navigate(`/deposito1_intermedia`, { state: { response_ruta } });
+        }
+
         //navigate(`/deposito/resumen-deposito/${idUserModel}/${CCI}/${moneda}`)
       };
     

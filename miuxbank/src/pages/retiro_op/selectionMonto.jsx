@@ -11,9 +11,11 @@ import { useParams } from 'react-router-dom';
 
 import { insertarOperacion } from '../../api/axios_api';
 import { infoCuenta } from '../../api/axios_api';
+import { getOperationModel } from '../../api/axios_api';
+
 
 function SeleccionMonto() {
-    let { idUserModel, idCuenta, CCI, moneda } = useParams();
+    let { idUserModel, idCuenta, CCI, moneda, idOperation } = useParams();
     const navigate = useNavigate();
     var [monto, setMonto] = useState(''); // Aquí se guarda el valor
     var [monto2, setMonto2] = useState(''); // Aquí se guarda el valor
@@ -23,7 +25,8 @@ function SeleccionMonto() {
     // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
     const handleCancel = () => {
         // Lógica para el botón de cancelar
-        navigate(`/retiro/seleccion-moneda/${idUserModel}/${idCuenta}`);
+        //navigate(`/retiro/seleccion-moneda/${idUserModel}/${idCuenta}`);
+        navigate(-1);
     };
     
     const handleContinue = async() => {
@@ -57,8 +60,15 @@ function SeleccionMonto() {
             console.log("Response", response);
             idOperacion = response.idOperacion;
 
-            const response_ruta = `/retiro/finalizado/${idUserModel}/${idOperacion}`;
-            navigate(`/retiro_intermedia`, { state: { response_ruta } });
+            if(idOperation === undefined){
+                const response_ruta = `/retiro/finalizado/${idUserModel}/${idOperacion}`;
+                navigate(`/retiro_intermedia`, { state: { response_ruta } });
+            }else{
+                const response_ruta = `/retiro/finalizado/${idUserModel}/${idOperacion}/${idOperation}?`;
+                navigate(`/retiro_intermedia`, { state: { response_ruta } });
+            }
+            
+            
             //navigate(`/retiro/finalizado/${idUserModel}/${idOperacion}`);
         } catch (error) {
             console.error('Error al obtener el User Model:', error);
@@ -165,10 +175,40 @@ function SeleccionMonto() {
     const [terminologia2, setTerminologia2] = useState('');
 
 
+    const cargaOperationModel = async(idOperation) => {
+        const response = await getOperationModel(idOperation);
+        console.log("Response", response);
 
+        if(response.montOperacion === 20 || response.montOperacion ===  50 || response.montOperacion === 100 || response.montOperacion === 150){
+            console.log("a")
+            setMonto(String(response.montOperacion));
+            if(response.montOperacion === 20){
+                setIsPressedA1(true);
+            }
+            if(response.montOperacion === 50){
+                setIsPressedB1(true);
+            }
+            if(response.montOperacion === 100){
+                setIsPressedA2(true);
+            }
+            if(response.montOperacion === 150){
+                setIsPressedB2(true);
+            }
+        }else{
+            setMonto2(String(response.montOperacion));
+        }
+
+    };
 
     // Use Effect para traer la informacion de la cuenta
     useEffect(() => {
+
+        console.log("idoperacion", idOperation)
+
+        if( idOperation !== undefined){
+            cargaOperationModel(idOperation);
+        }
+
         infoCuenta(CCI)
           .then(response => {
             // Actualiza el estado con los datos del perfil

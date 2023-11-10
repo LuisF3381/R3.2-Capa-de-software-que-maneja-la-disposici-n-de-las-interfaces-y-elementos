@@ -30,7 +30,8 @@ function SeleccionCuenta() {
     // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
      const handleCancel = () => {
 
-        navigate(`/principal/${idUserModel}`);
+        //navigate(`/principal/${idUserModel}`);
+        navigate(-1);
     };
 
     

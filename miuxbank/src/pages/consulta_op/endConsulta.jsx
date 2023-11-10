@@ -22,7 +22,7 @@ function FinConsulta() {
 
     const handleContinue = () => {
         // Lógica para el botón de continuar
-        navigate(`/fin-sesion/${idTransaccion}`);
+        navigate(`/fin-sesion/${idTransaccion}/${idUserModel}`);
     };
 
     const [cci, setcci] = useState('');

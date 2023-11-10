@@ -9,13 +9,16 @@ import { listarOperacion } from '../../api/axios_api';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 
+// APIS
 import { infoCuenta } from '../../api/axios_api';
 import { getIdsuarioByIdUserModel } from '../../api/axios_api';
 import { obtenerTarjeta } from '../../api/axios_api';
 import { constanciaOperacion } from '../../api/axios_api';
+import { getOperationModel } from '../../api/axios_api';
+import { actualizar_user_model } from '../../api/axios_api';
 
 function FinDeposito() {
-    let { idUserModel, idTransaccion, } = useParams();
+    let { idUserModel, idTransaccion, idOperation} = useParams();
 
     const navigate = useNavigate();
 
@@ -31,11 +34,11 @@ function FinDeposito() {
                 constancia = "voucher";
             else
                 constancia = "pantalla";
-
+            console.log("constancia mandada", constancia);
             const response = await constanciaOperacion(idTransaccion, constancia);
             console.log("constancia", response);
 
-            navigate(`/fin-sesion/${idTransaccion}`);
+            navigate(`/fin-sesion/${idTransaccion}/${idUserModel}`);
         } catch (error) {
             console.error('Error al obtener el perfil actualizado:', error);
         }
@@ -60,7 +63,31 @@ function FinDeposito() {
     const [n_tarjeta, setN_tarjeta] = useState('');
 
 
+    // Para el tema de la constancia
+    const cargaOperationModel = async(idOperation) => {
+        const response = await getOperationModel(idOperation);
+        console.log("Response operational", response);
+
+        // Vemos la preferencia de la constancia 
+        if(response.constOperacion === "pantalla"){
+            setSelectedOption(false);
+        }else{
+            setSelectedOption(true);
+        }
+
+    };
+
+
     useEffect(() => {
+
+    // Para el idOperation
+    console.log("idOperation", idOperation);
+
+        if( idOperation !== undefined){
+            cargaOperationModel(idOperation);
+        }
+
+
         listarOperacion(idTransaccion)
         .then(response => {
             console.log("response", response);
@@ -204,7 +231,7 @@ function FinDeposito() {
                             type="checkbox" 
                             label="IMPRIMIR VOUCHER"
                             onChange={handleCheckboxChange}
-                            defaultChecked={selectedOption}
+                            checked={selectedOption}
                         />
                     </Form.Group>
                 </Col>

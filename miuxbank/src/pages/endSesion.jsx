@@ -15,8 +15,10 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { actualizar_user_model } from '../api/axios_api';
+
 function FinSesion() {
-    let { idTransaccion, } = useParams();
+    let { idTransaccion, idUserModel} = useParams();
     const navigate = useNavigate();
 
     // Variables para las animaciones
@@ -30,15 +32,18 @@ function FinSesion() {
     // Funcion para las animaciones
     const iniciarAnimaciones = async () => {
 
-            await new Promise(resolve => {
-                // Inicia la primera animación
-                setStep1Visible(true);
-                setTimeout(() => {
-                  setStep1Visible(false);
-                  resolve();
-                }, 4500); // Por ejemplo, 3 segundos después de la primera animación
-              });
         
+        await new Promise(async (resolve) => {
+            // Inicia la primera animación
+            setStep1Visible(true);
+            // Aquí actualizamos el user model
+            const response2 = await actualizar_user_model(idUserModel);
+            setTimeout(() => {
+              setStep1Visible(false);
+              resolve();
+            }, 40); // Por ejemplo, 3 segundos después de la primera animación
+          });
+
 
         if(operacion === "Retiro"){
             await new Promise(resolve => {

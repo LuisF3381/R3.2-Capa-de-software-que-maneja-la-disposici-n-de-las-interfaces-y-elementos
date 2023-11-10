@@ -11,9 +11,11 @@ import { useParams } from 'react-router-dom';
 // Apis
 import { listarCuentas } from '../../api/axios_api';
 import { insertarOperacion } from '../../api/axios_api';
+import { getOperationModel } from '../../api/axios_api';
+import { actualizar_user_model } from '../../api/axios_api';
 
 function SeleccionCuentaSaldo() {
-    const { idUsuario, idUserModel } = useParams();
+    const { idUsuario, idUserModel, idOperation } = useParams();
     const navigate = useNavigate();
 
     const [isPressed, setIsPressed] = useState(false);
@@ -83,7 +85,8 @@ function SeleccionCuentaSaldo() {
     //AQUI DEBEMOS VER EL SALIR Y EL CONTINUAR
     const handleCancel = () => {
         // Lógica para el botón de continuar
-        navigate(`/principal/${idUserModel}`);
+        //navigate(`/principal/${idUserModel}`);
+        navigate(-1);
     };
     
 
@@ -106,7 +109,8 @@ function SeleccionCuentaSaldo() {
             idOperacion = response.idOperacion;
             
             if(constancia_cons === "voucher"){
-                const response_ruta = `/fin-sesion/${idOperacion}`;
+                //navigate(`/fin-sesion/${idTransaccion}/${idUserModel}`);
+                const response_ruta = `/fin-sesion/${idOperacion}/${idUserModel}`;
                 navigate(`/consulta_intermedia`, { state: { response_ruta } });
             }else{
                 const response_ruta = `/consulta/finalizado/${idUserModel}/${idOperacion}`;
@@ -131,7 +135,44 @@ function SeleccionCuentaSaldo() {
     const [tipoC2, setTipoC2] = useState('');
     const [tipoC2Name, setTipoC2Name] = useState('');
 
+
+    // Para la carga del operation model
+    const cargaOperationModel = async(idOperation) => {
+        const response = await getOperationModel(idOperation);
+        console.log("Response operation model", response);
+
+        // Primero las constancias
+        if(response.constOperacion === "pantalla"){
+            setConstancia_cons("pantalla");
+            setIsPressedB1(true);
+        }else{
+            setConstancia_cons("voucher");
+            setIsPressedA1(true);
+        }
+
+        // Luego las cuentas
+        if(response.cuentaDestino === String(CC1) && response.cuentaDestino !== undefined){
+            console.log("Si cumple gaaaaaaaaa")
+            setCuenta_destino(String(CC1));
+            setIsPressedA(true);
+        }else{
+            if(response.cuentaDestino === String(CC2) && response.cuentaDestino !== undefined){
+                console.log("Si cumple version 2")
+                setCuenta_destino(String(CC2));
+                setIsPressed(true);
+            }
+        }
+
+    };
+
+
+
     useEffect(() => {
+
+        // Traemos el id operation en caso se haya incluido en el url
+        console.log("idOperation", idOperation);
+
+
         // Llama a la función que realiza la solicitud de la API
         listarCuentas(idUsuario)
           .then(response => {
@@ -141,6 +182,7 @@ function SeleccionCuentaSaldo() {
             // Guardamos la primera cuenta bancaria
             setNombreCuenta1(response.cuentaBancaria1);
             setCC1(response.CCI1);
+            console.log("CCI1",response.CCI1);
             setTipoC1(response.tipoC1);
 
             if(response.tipoC1 === "S"){
@@ -160,14 +202,20 @@ function SeleccionCuentaSaldo() {
             if(response.tipoC2 === "D"){
                 setTipoC2Name("Dolares");
             }
-
           })
           .catch(error => {
             // Manejo de errores, por ejemplo, imprimir en la consola
             console.error('Error al obtener lista de cuentas:', error);
           });
+
       }, []); 
 
+
+      useEffect(() => {
+        if( idOperation !== undefined){
+            cargaOperationModel(idOperation);
+        }
+        }, [CC1,CC2]); 
 
     return (
         <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>
