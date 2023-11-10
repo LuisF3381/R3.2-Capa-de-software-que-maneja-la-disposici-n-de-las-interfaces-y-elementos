@@ -19,7 +19,7 @@ import { actualizar_user_model } from '../../api/axios_api';
 
 
 import { useParams } from 'react-router-dom';
-
+import { get_user_model } from '../../api/axios_api';
 
 function FinRetiro() {
     let { idUserModel, idTransaccion, idOperation} = useParams();
@@ -88,9 +88,30 @@ function FinRetiro() {
 
     };
 
+    // Para el tamaño de los textos
+    const [tamtexto, setTamtexto] = useState('');
 
    // Use Effect para traer la informacion de la operacion
    useEffect(() => {
+
+    get_user_model(idUserModel)
+    .then(response_user_model => {
+        console.log("aaa, ",response_user_model);
+        if(response_user_model.tamFuente === null){
+            setTamtexto(13);
+        }else{
+            //setTamtexto(response_user_model.tamFuente);
+            setTamtexto(response_user_model.tamFuente);
+
+        }
+
+    })
+    .catch(error => {
+      // Manejo de errores, por ejemplo, imprimir en la consola
+      console.error('Error al obtener el userModel:', error);
+    });
+
+
 
     // Para el idOperation
     console.log("idOperation", idOperation);

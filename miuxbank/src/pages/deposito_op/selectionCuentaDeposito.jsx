@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { listarCuentas } from '../../api/axios_api';
 
+import { get_user_model } from '../../api/axios_api';
+
 
 function SeleccionCuentaDeposito() {
     const { idUserModel, idUsuario } = useParams();
@@ -57,10 +59,33 @@ function SeleccionCuentaDeposito() {
     const [tipoC2, setTipoC2] = useState('');
     const [tipoC2Name, setTipoC2Name] = useState('');
     
+    // Para el tamaño de los textos
+    const [tamtexto, setTamtexto] = useState('');
 
 
 
     useEffect(() => {
+
+        // Obtenemos el tamaño de letra
+        get_user_model(idUserModel)
+        .then(response_user_model => {
+            console.log("aaa, ",response_user_model);
+            if(response_user_model.tamFuente === null){
+                setTamtexto(13);
+            }else{
+                //setTamtexto(response_user_model.tamFuente);
+                setTamtexto(response_user_model.tamFuente);
+
+            }
+
+        })
+        .catch(error => {
+          // Manejo de errores, por ejemplo, imprimir en la consola
+          console.error('Error al obtener el userModel:', error);
+        });
+
+
+
         // Listamos las cuentas del usuario
         listarCuentas(idUsuario)
         .then(response => {
@@ -111,8 +136,8 @@ function SeleccionCuentaDeposito() {
             <div style={{ height: '8px' }} />
             <Row className="align-items-center justify-content-between no-gutters">
                 <Col md={7}>
-                    <h3>Selecciona una de tus cuentas</h3>
-                    <h5>y comienza a depositar</h5>
+                    <h3 style={{ fontSize: tamtexto*1.75 }}>Selecciona una de tus cuentas</h3>
+                    <h5 style={{ fontSize: tamtexto*1.5 }}>y comienza a depositar</h5>
                 </Col>
 
                 <Col md={5} className="d-flex align-items-center">
@@ -143,13 +168,13 @@ function SeleccionCuentaDeposito() {
                                 </Col>
                                 <Col xs="auto">
                                 <Row>
-                                    <h7 className="m-0">{nombreCuenta1}</h7>
+                                    <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>{nombreCuenta1}</h7>
                                 </Row>
                                 <Row>
-                                    <h7 className="m-0">{CC1}</h7>
+                                    <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>{CC1}</h7>
                                 </Row>
                                 <Row>
-                                    <h7 className="m-0">Moneda: {tipoC1Name}</h7>
+                                    <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>Moneda: {tipoC1Name}</h7>
                                 </Row>
                                 </Col>
                             </Row>
@@ -176,13 +201,13 @@ function SeleccionCuentaDeposito() {
                                 </Col>
                                 <Col xs="auto">
                                 <Row>
-                                    <h7 className="m-0">{nombreCuenta2}</h7>
+                                    <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>{nombreCuenta2}</h7>
                                 </Row>
                                 <Row>
-                                    <h7 className="m-0">{CC2}</h7>
+                                    <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>{CC2}</h7>
                                 </Row>
                                 <Row>
-                                    <h7 className="m-0">Moneda: {tipoC2Name}</h7>
+                                    <h7 className="m-0" style={{ fontSize: tamtexto*1.15 }}>Moneda: {tipoC2Name}</h7>
                                 </Row>
                                 </Col>
                             </Row>

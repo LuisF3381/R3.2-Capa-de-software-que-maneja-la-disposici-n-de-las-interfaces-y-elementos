@@ -44,9 +44,12 @@ import { getUsuarioById } from '../../api/axios_api';
 import { listarCuentas } from '../../api/axios_api';
 
 import { getRouteOperacion } from '../../api/axios_api';
+import { actualizar_user_model_texto } from '../../api/axios_api';
+
 
 // Logo de reloj de arena
 import reloj_arena from '../../images/reloj_arena.png'
+
 
 
 function MenuATM() {
@@ -79,6 +82,8 @@ function MenuATM() {
     const handleOptionChange2 = (event) => {
         const newValue = event.target.value;
         setTamtexto(newValue);
+
+        actualizar_user_model_texto(idUserModel, newValue);
 
         // Puedes agregar lógica adicional aquí según la opción seleccionada
         // Por ahora, solo imprimo el valor seleccionado en la consola
@@ -382,6 +387,8 @@ function MenuATM() {
 
             if(response_user_model.tamFuente === null){
                 setTamtexto(13);
+            }else{
+                setTamtexto(response_user_model.tamFuente);
             }
 
             // Funcion que trae las opciones personalizables

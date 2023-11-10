@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import { insertarOperacion } from '../../api/axios_api';
 import { infoCuenta } from '../../api/axios_api';
 import { getOperationModel } from '../../api/axios_api';
+import { get_user_model } from '../../api/axios_api';
 
 
 function SeleccionMonto() {
@@ -200,8 +201,33 @@ function SeleccionMonto() {
 
     };
 
+
+    // Para el tamaño de los textos
+    const [tamtexto, setTamtexto] = useState('');
+
+
     // Use Effect para traer la informacion de la cuenta
     useEffect(() => {
+
+        get_user_model(idUserModel)
+        .then(response_user_model => {
+            console.log("aaa, ",response_user_model);
+            if(response_user_model.tamFuente === null){
+                setTamtexto(13);
+            }else{
+                //setTamtexto(response_user_model.tamFuente);
+                setTamtexto(response_user_model.tamFuente);
+
+            }
+
+        })
+        .catch(error => {
+          // Manejo de errores, por ejemplo, imprimir en la consola
+          console.error('Error al obtener el userModel:', error);
+        });
+
+
+
 
         console.log("idoperacion", idOperation)
 
@@ -253,9 +279,9 @@ function SeleccionMonto() {
 
             <Row className="align-items-center justify-content-between no-gutters">
                 <Col md={7}>
-                    <h3>Selecciona el monto a retirar</h3>
-                    <h5>Cuenta de cargo:  {nombreCuenta1}</h5>
-                    <h5>Saldo: {terminologia}{saldoCuenta}</h5>
+                    <h3 style={{ fontSize: tamtexto*1.75 }}>Selecciona el monto a retirar</h3>
+                    <h5 style={{ fontSize: tamtexto*1.5 }}>Cuenta de cargo:  {nombreCuenta1}</h5>
+                    <h5 style={{ fontSize: tamtexto*1.5 }}>Saldo: {terminologia}{saldoCuenta}</h5>
                 </Col>
 
                 <Col md={5} className="d-flex align-items-center">
@@ -270,10 +296,10 @@ function SeleccionMonto() {
                                     </Col>
                                     <Col xs="auto">
                                         <Row>
-                                            <h9 >Billetes Disponibles</h9>
+                                            <h9 style={{ fontSize: tamtexto*1.3 }}>Billetes Disponibles</h9>
                                         </Row>
                                         <Row>
-                                            <h11>{terminologia2}20 {terminologia2}50 {terminologia2}100</h11>
+                                            <h11 style={{ fontSize: tamtexto*1.3 }}>{terminologia2}20 {terminologia2}50 {terminologia2}100</h11>
                                         </Row>
                                     </Col>
                                 </Row>
@@ -289,7 +315,7 @@ function SeleccionMonto() {
             <Row className="justify-content-center">
                 <Col xs={5} >
                     {/*COL PARA LOS 4 BOTONES A PRESIONAR */}
-                    <h5>Selecciona algun monto:</h5>
+                    <h5 style={{ fontSize: tamtexto*1.5 }}>Selecciona algun monto:</h5>
                     <div style={{ height: '15px' }} />
                     <Row>
                         <Col xs={5} >
@@ -397,7 +423,7 @@ function SeleccionMonto() {
                 
                 <Col xs="auto"></Col>
                 <Col xs={5}>
-                    <h5>O digita otro monto:</h5>
+                    <h5 style={{ fontSize: tamtexto*1.5 }}>O digita otro monto:</h5>
                     <div style={{ height: '15px' }} />
                     {/*INGRESAR MONTO A RETIRAR*/}
                     <Row className="justify-content-center">
@@ -428,10 +454,10 @@ function SeleccionMonto() {
                                     </Col>
                                     <Col xs="auto">
                                         <Row>
-                                            <h9>Cobro de operación</h9>
+                                            <h9 style={{ fontSize: tamtexto*1.15 }}>Cobro de operación</h9>
                                         </Row>
                                         <Row>
-                                            <h11>Se realizara el cobro de S/0.20</h11>
+                                            <h11 style={{ fontSize: tamtexto*1.15 }}>Se realizara el cobro de S/0.20</h11>
                                         </Row>
                                     </Col>
                                 </Row>

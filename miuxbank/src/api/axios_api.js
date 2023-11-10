@@ -167,6 +167,18 @@ export const actualizar_user_model = (idUserModel) => {
 };
 
 
+export const actualizar_user_model_texto = (idUserModel, tam_letra) => {
+  return axios.put(`${apiUrlPers}/user-model/update-tipografia?user_model_id=${idUserModel}&tam_letra=${tam_letra}`)
+    .then(response => response.data)
+    .catch(error => {
+      // Manejo de errores, por ejemplo, imprimir en la consola
+      console.error('Error al actualizar el user model:', error);
+      throw error; // Puedes manejar el error de otras formas según tus necesidades
+    });
+};
+
+
+
 
 
 // APIS PARA OBTENER RUTAS
