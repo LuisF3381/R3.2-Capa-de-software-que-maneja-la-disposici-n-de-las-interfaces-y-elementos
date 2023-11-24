@@ -16,6 +16,7 @@ import { obtenerTarjeta } from '../../api/axios_api';
 import { constanciaOperacion } from '../../api/axios_api';
 import { getOperationModel } from '../../api/axios_api';
 import { actualizar_user_model } from '../../api/axios_api';
+import { get_user_model } from '../../api/axios_api';
 
 function FinDeposito() {
     let { idUserModel, idTransaccion, idOperation} = useParams();
@@ -79,6 +80,26 @@ function FinDeposito() {
 
 
     useEffect(() => {
+
+    get_user_model(idUserModel)
+    .then(response_user_model => {
+        console.log("aaa, ",response_user_model);
+        if(response_user_model.tamFuente === null){
+            setTamtexto(13);
+        }else{
+            //setTamtexto(response_user_model.tamFuente);
+            setTamtexto(response_user_model.tamFuente);
+
+        }
+
+    })
+    .catch(error => {
+      // Manejo de errores, por ejemplo, imprimir en la consola
+      console.error('Error al obtener el userModel:', error);
+    });
+
+
+
 
     // Para el idOperation
     console.log("idOperation", idOperation);
@@ -156,6 +177,9 @@ function FinDeposito() {
 
     }, []);  //
 
+    // Para el tamaño de los textos
+    const [tamtexto, setTamtexto] = useState('');
+
 
     return (
         <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>
@@ -178,46 +202,46 @@ function FinDeposito() {
             <Row className="align-items-center justify-content-center">
                 <CustomCardRecibo width="500px" height="220px" bordered={false} color="#FFF6A7">
                     <Row className="justify-content-center">
-                        <h5 className="text-center font-weight-bold">{nombre_cuenta}</h5>
+                        <h5 style={{ fontSize: tamtexto*1.5 }} className="text-center font-weight-bold">{nombre_cuenta}</h5>
                     </Row>
                     <Row>
                         <Col xs={5}>
-                            <h5 className="font-weight-bold">Fecha y hora:</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5 }}  className="font-weight-bold">Fecha y hora:</h5>
                         </Col>
                         <Col xs={7}>
-                            <h5 style={{ textAlign: 'right'}}>{fecha_transaccion}</h5>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={5}>
-                            <h5 className="font-weight-bold">Nro de tarjeta:</h5>
-                        </Col>
-                        <Col xs={7}>
-                            <h5 style={{ textAlign: 'right'}}>{n_tarjeta}</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{fecha_transaccion}</h5>
                         </Col>
                     </Row>
                     <Row>
                         <Col xs={5}>
-                            <h5 className="font-weight-bold">Nro de cuenta:</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5 }} className="font-weight-bold">Nro de tarjeta:</h5>
                         </Col>
                         <Col xs={7}>
-                            <h5 style={{ textAlign: 'right'}}>{cci}</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{n_tarjeta}</h5>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={5}>
+                            <h5 style={{ fontSize: tamtexto*1.5 }} className="font-weight-bold">Nro de cuenta:</h5>
+                        </Col>
+                        <Col xs={7}>
+                            <h5 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{cci}</h5>
                         </Col>
                     </Row>
                     <Row>
                         <Col xs={6}>
-                            <h5 className="font-weight-bold">Monto depositado:</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5 }}  className="font-weight-bold">Monto depositado:</h5>
                         </Col>
                         <Col xs={6}>
-                            <h5 style={{ textAlign: 'right'}}>{terminologia}{monto_operacion}</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{terminologia}{monto_operacion}</h5>
                         </Col>
                     </Row>
                     <Row>
                         <Col xs={5}>
-                            <h5 className="font-weight-bold">Saldo disponible:</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5 }} className="font-weight-bold">Saldo disponible:</h5>
                         </Col>
                         <Col xs={7}>
-                            <h5 style={{ textAlign: 'right'}}>{terminologia2}{saldo}</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{terminologia2}{saldo}</h5>
                         </Col>
                     </Row>
                 </CustomCardRecibo>

@@ -70,6 +70,9 @@ function DepositoEfectivo() {
 
         //navigate(`/deposito/resumen-deposito/${idUserModel}/${CCI}/${moneda}`)
       };
+
+    // Para el tamaño de los textos
+    const [tamtexto, setTamtexto] = useState('');
     
 
     return (

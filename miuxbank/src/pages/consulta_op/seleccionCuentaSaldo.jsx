@@ -13,6 +13,7 @@ import { listarCuentas } from '../../api/axios_api';
 import { insertarOperacion } from '../../api/axios_api';
 import { getOperationModel } from '../../api/axios_api';
 import { actualizar_user_model } from '../../api/axios_api';
+import { get_user_model } from '../../api/axios_api';
 
 function SeleccionCuentaSaldo() {
     const { idUsuario, idUserModel, idOperation } = useParams();
@@ -169,6 +170,25 @@ function SeleccionCuentaSaldo() {
 
     useEffect(() => {
 
+        // Traemos el user model para el manejo del texto
+        get_user_model(idUserModel)
+        .then(response_user_model => {
+            console.log("aaa, ",response_user_model);
+            if(response_user_model.tamFuente === null){
+                setTamtexto(13);
+            }else{
+                //setTamtexto(response_user_model.tamFuente);
+                setTamtexto(response_user_model.tamFuente);
+    
+            }
+    
+        })
+        .catch(error => {
+          // Manejo de errores, por ejemplo, imprimir en la consola
+          console.error('Error al obtener el userModel:', error);
+        });
+
+
         // Traemos el id operation en caso se haya incluido en el url
         console.log("idOperation", idOperation);
 
@@ -216,6 +236,10 @@ function SeleccionCuentaSaldo() {
             cargaOperationModel(idOperation);
         }
         }, [CC1,CC2]); 
+
+            // Para el tamaño de los textos
+    const [tamtexto, setTamtexto] = useState('');
+
 
     return (
         <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>

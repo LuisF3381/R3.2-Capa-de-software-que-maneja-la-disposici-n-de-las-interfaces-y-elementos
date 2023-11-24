@@ -217,46 +217,46 @@ function FinRetiro() {
                     </Row>
                     <Row>
                         <Col xs={5}>
-                            <h5 className="font-weight-bold">Fecha y hora:</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5 }} className="font-weight-bold">Fecha y hora:</h5>
                         </Col>
                         <Col xs={7}>
-                            <h5 style={{ textAlign: 'right'}}>{fecha_transaccion}</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{fecha_transaccion}</h5>
                         </Col>
                     </Row>
 
                     <Row>
                         <Col xs={5}>
-                            <h5 className="font-weight-bold">Nro de tarjeta:</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5 }} className="font-weight-bold">Nro de tarjeta:</h5>
                         </Col>
                         <Col xs={7}>
-                            <h5 style={{ textAlign: 'right'}}>{n_tarjeta}</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{n_tarjeta}</h5>
                         </Col>
                     </Row>
 
                     <Row>
                         <Col xs={5}>
-                            <h5 className="font-weight-bold">Nro de cuenta:</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5 }} className="font-weight-bold">Nro de cuenta:</h5>
                         </Col>
                         <Col xs={7}>
-                            <h5 style={{ textAlign: 'right'}}>{cci}</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{cci}</h5>
                         </Col>
                     </Row>
 
                     <Row>
                         <Col xs={5}>
-                            <h5 className="font-weight-bold">Monto retirado:</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5 }} className="font-weight-bold">Monto retirado:</h5>
                         </Col>
                         <Col xs={7}>
-                            <h5 style={{ textAlign: 'right'}}>{terminologia}{monto_operacion}</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{terminologia}{monto_operacion}</h5>
                         </Col>
                     </Row>
 
                     <Row>
                         <Col xs={5}>
-                            <h5 className="font-weight-bold">Saldo disponible:</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5 }} className="font-weight-bold">Saldo disponible:</h5>
                         </Col>
                         <Col xs={7}>
-                            <h5 style={{ textAlign: 'right'}}>{terminologia2}{saldo}</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{terminologia2}{saldo}</h5>
                         </Col>
                     </Row>
                 </CustomCardRecibo>

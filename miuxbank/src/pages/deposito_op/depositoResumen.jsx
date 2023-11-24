@@ -13,6 +13,7 @@ import { useState } from 'react';
 // Api para listar info
 import { infoCuenta } from '../../api/axios_api';
 import { insertarOperacion } from '../../api/axios_api';
+import { get_user_model } from '../../api/axios_api';
 
 function ResumenDeposito() {
     let { idUserModel, CCI, moneda, idOperation} = useParams();
@@ -73,6 +74,25 @@ function ResumenDeposito() {
 
     // Para obtener la informacion de la cuenta
     useEffect(() => {
+
+        get_user_model(idUserModel)
+        .then(response_user_model => {
+            console.log("aaa, ",response_user_model);
+            if(response_user_model.tamFuente === null){
+                setTamtexto(13);
+            }else{
+                console.log("gaaaaa");
+                //setTamtexto(response_user_model.tamFuente);
+                setTamtexto(response_user_model.tamFuente);
+    
+            }
+        })
+        .catch(error => {
+          // Manejo de errores, por ejemplo, imprimir en la consola
+          console.error('Error al obtener el userModel:', error);
+        });
+
+
         infoCuenta(CCI)
         .then(response => {
             console.log("response", response);
@@ -91,6 +111,11 @@ function ResumenDeposito() {
     
     }, [navigate]);  //
 
+
+        // Para el tamaño de los textos
+        const [tamtexto, setTamtexto] = useState('');
+
+
     return (
         <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>
             <Card style={{ width: 800, height: 550, background: 'white' }} className="p-1">
@@ -99,7 +124,7 @@ function ResumenDeposito() {
                 <div style={{ height: '20px' }} />
                 <Row className="justify-content-center">
                     <Col xs="auto">
-                        <h3>Resumen de la operación</h3>
+                        <h3 style={{ fontSize: tamtexto*1.75 }}>Resumen de la operación</h3>
                     </Col>
                 </Row>
 
@@ -109,28 +134,28 @@ function ResumenDeposito() {
                     <CustomCardRecibo width="500px" height="190px" bordered={false} color="#FFF6A7">
                         <Row>
                             <Col xs={5}>
-                                <h5 className="font-weight-bold">Cuenta destino:</h5>
+                                <h5 style={{ fontSize: tamtexto*1.5 }} className="font-weight-bold">Cuenta destino:</h5>
                             </Col>
                             <Col xs={7}>
-                                <h5 style={{ textAlign: 'right'}}>{nombreCuenta1}</h5>
-                                <h5 style={{ textAlign: 'right'}}>{CC1}</h5>
+                                <h5 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{nombreCuenta1}</h5>
+                                <h5 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{CC1}</h5>
                             </Col>
                         </Row>
 
                         <Row>
                             <Col xs={7}>
-                                <h5 className="font-weight-bold">Monto que se depositara:</h5>
+                                <h5 style={{ fontSize: tamtexto*1.55 }} className="font-weight-bold">Monto que se depositara:</h5>
                             </Col>
                             <Col xs={5}>
-                                <h4 style={{ textAlign: 'right'}}>{tipoC1}50</h4>
+                                <h4 style={{ fontSize: tamtexto*1.68, textAlign: 'right'}}>{tipoC1}50</h4>
                             </Col>
                         </Row>
 
                         <Row>
-                            <h5>Se ha ingresado:</h5>
+                            <h5 style={{ fontSize: tamtexto*1.55 }}>Se ha ingresado:</h5>
                         </Row>
                         <Row>
-                            <h5>1 billete de 50 soles</h5>
+                            <h5 style={{ fontSize: tamtexto*1.55 }}>1 billete de 50 soles</h5>
                         </Row>
 
                     </CustomCardRecibo>

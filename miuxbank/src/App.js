@@ -49,20 +49,20 @@ function App() {
         <Route path="/bienvenido/:idUsuario/:idUserModel" element={<PerfilPage/>}/>
 
         {/*Menu principal del ATM*/}
-        <Route path="/principal/:idUsuario/:idUserModel" element={<MenuATM/>}/>
+        <Route path="/principal/:idUsuario/:idUserModel" element={<MenuATM/>}/> {/*Listo*/}
 
         {/*Retiro de efectivo*/}
-        <Route path="/retiro/seleccion-cuenta/:idUsuario/:idUserModel" element={<SeleccionCuenta/>}/>
-        <Route path="/retiro/seleccion-moneda/:idUsuario/:idUserModel/:CCI" element={<SeleccionMoneda/>}/>
-        <Route path="/retiro/seleccion-monto/:idUserModel/:CCI/:moneda/:idOperation?" element={<SeleccionMonto/>}/>
-        <Route path="/retiro/finalizado/:idUserModel/:idTransaccion/:idOperation?" element={<FinRetiro/>}/>
+{/*Listo*/}        <Route path="/retiro/seleccion-cuenta/:idUsuario/:idUserModel" element={<SeleccionCuenta/>}/> 
+{/*Listo*/}        <Route path="/retiro/seleccion-moneda/:idUsuario/:idUserModel/:CCI" element={<SeleccionMoneda/>}/>
+{/*Listo*/}        <Route path="/retiro/seleccion-monto/:idUserModel/:CCI/:moneda/:idOperation?" element={<SeleccionMonto/>}/>
+{/*Listo*/}        <Route path="/retiro/finalizado/:idUserModel/:idTransaccion/:idOperation?" element={<FinRetiro/>}/>
 
         {/*Deposito de efectivo*/}
-        <Route path="/deposito/seleccion-cuenta/:idUsuario/:idUserModel" element={<SeleccionCuentaDeposito/>}/>
-        <Route path="/deposito/seleccion-moneda/:idUsuario/:idUserModel/:CCI" element={<SeleccionMonedaDeposito/>}/>
-        <Route path="/deposito/ingreso-billetes/:idUserModel/:CCI/:moneda/:idOperation?" element={<DepositoEfectivo/>}/>
-        <Route path="/deposito/resumen-deposito/:idUserModel/:CCI/:moneda/:idOperation?" element={<ResumenDeposito/>}/>
-        <Route path="/deposito/finalizado/:idUserModel/:idTransaccion/:idOperation?" element={<FinDeposito/>}/>
+{/*Listo*/}          <Route path="/deposito/seleccion-cuenta/:idUsuario/:idUserModel" element={<SeleccionCuentaDeposito/>}/>
+{/*Listo*/}          <Route path="/deposito/seleccion-moneda/:idUsuario/:idUserModel/:CCI" element={<SeleccionMonedaDeposito/>}/>
+{/*Evaluar si esta listo*/}        <Route path="/deposito/ingreso-billetes/:idUserModel/:CCI/:moneda/:idOperation?" element={<DepositoEfectivo/>}/>
+{/*Listo*/}       <Route path="/deposito/resumen-deposito/:idUserModel/:CCI/:moneda/:idOperation?" element={<ResumenDeposito/>}/>
+{/*Listo*/}          <Route path="/deposito/finalizado/:idUserModel/:idTransaccion/:idOperation?" element={<FinDeposito/>}/>
 
 
         {/*Consulta de saldo*/}

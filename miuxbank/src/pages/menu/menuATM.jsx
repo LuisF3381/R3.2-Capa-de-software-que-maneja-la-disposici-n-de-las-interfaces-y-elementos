@@ -388,6 +388,7 @@ function MenuATM() {
             if(response_user_model.tamFuente === null){
                 setTamtexto(13);
             }else{
+                console.log("Tamaño de la fuente", response_user_model.tamFuente);
                 setTamtexto(response_user_model.tamFuente);
             }
 
@@ -434,8 +435,8 @@ function MenuATM() {
                     <h5 style={{ fontSize: tamtexto*1.5 }}>¿Qué quieres hacer hoy?</h5>
                 </Col>
                 <Col xs={3} className="text-center">
+                <h4 style={{ fontSize: tamtexto*0.9 }}>Cambiar idioma</h4>
 
-                {perfil_usuario === 'frecuente' ||  perfil_usuario === 'ocasional' ? (
                     <Form.Group>
                         <Form.Control
                             as="select"
@@ -449,9 +450,6 @@ function MenuATM() {
                             {/* Agrega más opciones de idioma según sea necesario */}
                         </Form.Control>
                     </Form.Group>
-                ):(    
-                    <p></p>
-                )}
 
                 </Col>
             </Row>
@@ -780,24 +778,8 @@ function MenuATM() {
             {/*AQUI VA LA SEGUNDA OPCION QUE VARIA POR PERFIL*/}
                     {perfil_usuario === 'senior' ? (
                      <>  
-                        <div style={{ height: '8px' }} />   
-                        <Row>
-                            <Form.Group>
-                                <Form.Control
-                                    as="select"
-                                    onChange={handleOptionChange}
-                                    value={selectedOption}
-                                    className="text-right form-control-sm"
-                                >
-                                    <option value="">Cambiar idioma</option>
-                                    <option value="es">Español</option>
-                                    <option value="qu">Quechua</option>
-                                    {/* Agrega más opciones de idioma según sea necesario */}
-                                </Form.Control>
-                            </Form.Group>
-                        </Row>
-
                         <div style={{ height: '10px' }} />   
+                        <h4 style={{ fontSize: tamtexto*0.9 }}>Tamaño del texto</h4>
                         <Row>
                             <Form.Group>
                                 <Form.Control
