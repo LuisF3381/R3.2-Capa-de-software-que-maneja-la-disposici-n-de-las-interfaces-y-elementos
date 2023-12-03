@@ -46,25 +46,20 @@ function SeleccionMoneda() {
     const [tamtexto, setTamtexto] = useState('');
 
     useEffect(() => {
-        // Obtenemos el tamaño de letra
-        get_user_model(idUserModel)
-        .then(response_user_model => {
-            console.log("aaa, ",response_user_model);
-            if(response_user_model.tamFuente === null){
-                setTamtexto(13);
-            }else{
-                //setTamtexto(response_user_model.tamFuente);
-                setTamtexto(response_user_model.tamFuente);
-
+        setTamtexto(13);
+        const fetchUserModel = async () => {
+            try {
+                const response_user_model = await get_user_model(idUserModel);
+                const tamFuente = response_user_model.tamFuente ?? 13;
+                setTamtexto(tamFuente);
+            } catch (error) {
+                console.error('Error al obtener el userModel:', error);
             }
-
-        })
-        .catch(error => {
-          // Manejo de errores, por ejemplo, imprimir en la consola
-          console.error('Error al obtener el userModel:', error);
-        });
-
-    }, []);  //
+        };
+    
+        fetchUserModel();
+    }, [idUserModel]);
+    
         
     return (
         <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>
@@ -76,8 +71,8 @@ function SeleccionMoneda() {
 
             <Row className="align-items-center justify-content-between no-gutters">
                 <Col md={7}>
-                    <h3 style={{ fontSize: tamtexto*1.75 }}>Retiro de efectivo</h3>
-                    <h5 style={{ fontSize: tamtexto*1.5 }}>selecciona la moneda a retirar</h5>
+                    <h3 style={{ fontSize: tamtexto*1.75 }}>{t('retiro')}</h3>
+                    <h5 style={{ fontSize: tamtexto*1.5 }}>{t('seleccion_moneda_retiro')}</h5>
                 </Col>
 
                 <Col md={5} className="d-flex align-items-center">
@@ -92,7 +87,7 @@ function SeleccionMoneda() {
                                     </Col>
                                     <Col xs="auto">
                                         <Row>
-                                            <h9 style={{ fontSize: tamtexto*1.11 }}>Tipo de cambio</h9>
+                                            <h9 style={{ fontSize: tamtexto*1.11 }}>{t('tipo_cambio')}</h9>
                                         </Row>
                                         <Row>
                                             <h11 style={{ fontSize: tamtexto*1.11 }}>Dolar a sol: S/3.72</h11>
@@ -141,7 +136,7 @@ function SeleccionMoneda() {
             <Row className="d-flex justify-content-center mt-4">
                 <Col xs="auto">
                 <Button variant="primary" style={{ width: '150px', marginRight: '500px', backgroundColor: '#B5ADAE'  }} onClick={handleCancel}>
-                    REGRESAR
+                    {t('regresar')}
                     </Button>
                 </Col>
             </Row>

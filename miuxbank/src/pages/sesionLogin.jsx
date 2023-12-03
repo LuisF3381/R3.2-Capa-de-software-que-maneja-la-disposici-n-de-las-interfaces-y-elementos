@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
@@ -65,6 +65,10 @@ function LoginPage() {
       }
     };
 
+  useEffect(() => {
+    CambiarIdioma("es");
+  }, []);
+
 
   return (
     <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>
@@ -78,9 +82,10 @@ function LoginPage() {
                 as="select"
                 onChange={handleOptionChange}
                 value={selectedOption}
+                defaultValue="es"
                 className="text-right form-control-sm"
               >
-                <option value="">Cambiar idioma</option>
+                <option value="es" >Cambiar idioma</option>
                 <option value="es">Español</option>
                 <option value="qu">Quechua</option>
                 {/* Agrega más opciones de idioma según sea necesario */}

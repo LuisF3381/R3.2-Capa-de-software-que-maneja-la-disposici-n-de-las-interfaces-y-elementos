@@ -75,25 +75,31 @@ function PerfilPage() {
 
     useEffect(() => {
         setSelectedOption(true);
+    
         // Llama a la función que realiza la solicitud de la API
         getPerfilByIdUserModel(idUserModel)
           .then(response => {
             // Actualiza el estado con los datos del perfil
             console.log("response", response);
-                if (response.descripcion.includes('Senior')) {
-                    setPerfil('senior'); 
-                } else if (response.descripcion.includes('Frecuente')) {
-                    setPerfil('frecuente'); 
-                } else if (response.descripcion.includes('Ocasional')) {
-                    setPerfil('ocasional'); 
-                } 
+    
+            const perfilMap = {
+              'Senior': 'senior',
+              'Frecuente': 'frecuente',
+              'Ocasional': 'ocasional',
+            };
+    
+            const perfil = Object.keys(perfilMap).find(key => response.descripcion.includes(key));
+    
+            if (perfil) {
+              setPerfil(perfilMap[perfil]);
+            }
           })
           .catch(error => {
             // Manejo de errores, por ejemplo, imprimir en la consola
             console.error('Error al obtener el perfil:', error);
           });
-      }, []);  // El segundo parámetro del useEffect es un array de dependencias, pasamos un array vacío par
-
+    }, []); 
+    
 
 
 

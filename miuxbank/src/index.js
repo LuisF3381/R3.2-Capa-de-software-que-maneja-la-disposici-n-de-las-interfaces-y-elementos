@@ -33,6 +33,28 @@ i18n.use(initReactI18next).init({
         cerrar_sesion: 'LLUQSIY',
         operaciones_rapidas: 'Utqaylla llamkay',
         retiro_personalizado: 'Usqhayta qullqi',
+        otras_operaciones: 'Huk operacionkuna',
+
+        // Sobre presentacion
+        que_quieres_hoy: '¿Imatataq kunan punchaw ruwayta munanki?',
+        hola: 'Allinllachu',
+        retiro: 'Qullqi hurquy',
+        consulta: 'Qhaway kashaq qolqeta',
+        deposito: 'Qullqi churay',
+
+        // Mensajes agradecimiento
+        mensaje_gra1: '¡ Kusikuy chay experiencia personalizada nisqawan!',
+
+        // Flujo de retiro
+        seleccion_cuentas_1: 'Huknin cuentaykita akllay',
+        seleccion_cuentas_2: 'hinaspa lluqsiyta qallariy',
+        regresar: 'KUTIY',
+        billetes_disponibles: 'Boletos Disponibles nisqa',
+        seleccion_moneda_retiro: 'hurqunapaq qullqita akllay',
+        tipo_cambio: 'Tasa de cambio nisqa',
+        retiro_soles: 'Qullqita suelakunapi',
+
+
       },
     },
     es: {
@@ -60,6 +82,28 @@ i18n.use(initReactI18next).init({
         // Para operaciones del perfil ocasional,
         operaciones_rapidas: 'Operaciones rapidas',
         retiro_personalizado: 'Retiro Personalizado',
+
+        otras_operaciones: 'Otras operaciones',
+        que_quieres_hoy: '¿Qué quieres hacer hoy?',
+        hola: 'Hola',
+        retiro: 'Retiro de efectivo',
+        consulta: 'Consulta de saldo',
+        deposito: 'Deposito de efectivo',
+
+        mensaje_gra1: '¡ Gracias por usar el cajero, disfruta la experiencia personalizable !',
+
+        // Flujo de retiro 
+        //y comienza a retirar
+        seleccion_cuentas_1: 'Selecciona una de tus cuentas',
+        seleccion_cuentas_2: 'y comienza a retirar',
+
+        regresar: 'REGRESAR',
+        billetes_disponibles: 'Billetes Disponibles',
+
+        seleccion_moneda_retiro: 'selecciona la moneda a retirar',
+        tipo_cambio: 'Tipo de cambio',
+        retiro_soles: 'Retiro soles',
+
       },
     },
 

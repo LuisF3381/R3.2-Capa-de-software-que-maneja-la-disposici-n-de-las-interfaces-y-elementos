@@ -5,6 +5,8 @@ export const listar_usuarios = () =>{
 }
 
 const apiUrlUsr = 'http://127.0.0.1:8000';  // Reemplaza con la URL de tu servidor FastAPI
+//Para el despligue
+//const apiUrlUsr = 'http://127.0.0.1:8000';  // Reemplaza con la URL de tu servidor FastAPI
 
 
 export const getUsuarioById = (idUsuario) => {
@@ -52,8 +54,10 @@ export const obtenerTarjeta = (idUsuario) => {
 
 
 
-
+//Para el despligue
 const apiUrlPers = 'http://127.0.0.1:8002';
+//const apiUrlPers = 'http://127.0.0.1:8002';
+
 
 // APIS DE USER MODEL
 export const getUserModelIdByIdUsuario = (idUsuario) => {
@@ -177,7 +181,16 @@ export const actualizar_user_model_texto = (idUserModel, tam_letra) => {
     });
 };
 
-
+// Actualizar el idioma del user model
+export const actualizar_idioma_preferido = (user_model_id, idiomaPreferido) => {
+  return axios.put(`${apiUrlPers}/user-model/${user_model_id}/update-idioma`, { idiomaPreferido })
+    .then(response => response.data)
+    .catch(error => {
+      // Manejo de errores, por ejemplo, imprimir en la consola
+      console.error('Error al actualizar el idioma preferido:', error);
+      throw error;
+    });
+};
 
 
 

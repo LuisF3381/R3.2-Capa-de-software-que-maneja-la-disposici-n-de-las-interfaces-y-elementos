@@ -45,7 +45,7 @@ import { listarCuentas } from '../../api/axios_api';
 
 import { getRouteOperacion } from '../../api/axios_api';
 import { actualizar_user_model_texto } from '../../api/axios_api';
-
+import { actualizar_idioma_preferido } from '../../api/axios_api';
 
 // Logo de reloj de arena
 import reloj_arena from '../../images/reloj_arena.png'
@@ -58,22 +58,31 @@ function MenuATM() {
       // Para el traductor de texto
     const { t, i18n } = useTranslation();
 
-    var idCuenta = 2;
 
     // Para el cambio de idioma
     const [selectedOption, setSelectedOption] = useState('');
 
-      // Función para cambiar el idioma
-      const CambiarIdioma = (nuevoIdioma) => {
+    // Función para cambiar el idioma
+    const CambiarIdioma = (nuevoIdioma) => {
         i18n.changeLanguage(nuevoIdioma);
     };
 
 
-    const handleOptionChange = (event) => {
+    const handleOptionChange = async(event) => {
         const selectedLang = event.target.value;
         setSelectedOption(selectedLang);
         CambiarIdioma(selectedLang);
         // Aquí puedes agregar cualquier otra lógica que desees ejecutar cuando el idioma cambie
+        console.log("Aqui hago un axios para actualizar el idioma del user model");
+
+        try {
+            const response = await actualizar_idioma_preferido(idUserModel, selectedLang);
+            console.log("Respuesta del api", response);
+
+        } catch (error) {
+            console.error('Error al obtener las cuentas del usuario:', error);
+        }
+
     };
 
     // Para el cambio del tamaño del texto
@@ -169,16 +178,6 @@ function MenuATM() {
         
       };
     
-      const handleCardClick3 = () => {
-        // Esta función se llamará cuando se haga clic en la tarjeta
-        // Puedes realizar las acciones necesarias aquí
-        navigate(`/deposito/seleccion-cuenta/${idUserModel}`);
-      };
-
-    const handleCardOP2 = () =>{
-        navigate(`/deposito/ingreso-billetes/${idUserModel}/${idCuenta}`);
-    };
-
 
 
     // Fucniones para las opciones de la subseccion
@@ -260,95 +259,40 @@ function MenuATM() {
     const [cuentaUltOP, setCuentaUltOP] = useState('');
     const [imgUltOP, setImgUltOP] = useState(null);
 
-    const actualiza_op_personalizables = async(response_user_model) =>{
-
-        // IF PARA LA PRIMERA OPERACION RAPIDA
-        console.log("aaaa");
-        if(response_user_model.opRapida1 !== null){
-            setIdOperacionOpRap1(response_user_model.opRapida1);
-            const response = await getOperationModel(response_user_model.opRapida1);
-            console.log("op1", response);
-            setNombreOpRap1(response.tipoOperacion);
-            if(response.moneda === "S"){
-                setTermOpRap1("S/");
+    const actualizarOperacionesPersonalizables = async (response_user_model) => {
+        const actualizarOperacion = async (op, setID, setNombre, setTerm, setMonto, setCuenta, setImg) => {
+            if (op !== null) {
+                const response = await getOperationModel(op);
+                setID(op);
+                setNombre(response.tipoOperacion);
+    
+                if (response.moneda === "S") {
+                    setTerm("S/");
+                } else if (response.moneda === "D") {
+                    setTerm("US$");
+                }
+    
+                setMonto(response.montOperacion);
+                setCuenta(response.cuentaDestino);
+    
+                if (setImg) {
+                    if (response.tipoOperacion === "Deposito") {
+                        setImg(deposito);
+                    } else if (response.tipoOperacion === "Retiro") {
+                        setImg(retiro);
+                    } else if (response.tipoOperacion === "Consulta") {
+                        setImg(consulta);
+                    }
+                }
             }
-            if(response.moneda === "D"){
-                setTermOpRap1("US$");
-            }
-            setMontoOpRap1(response.montOperacion);
-            setCuentaOpRap1(response.cuentaDestino);
-
-            if(response.tipoOperacion === "Deposito")
-                setImgOpRap1(fast_deposito);
-            if(response.tipoOperacion === "Retiro")
-                setImgOpRap1(fast_retiro);
-            if(response.tipoOperacion === "Consulta")
-                setImgOpRap1(fast_consulta);
-        }
-
-        // IF PARA LA SEGUNDA OPERACION RAPIDA
-        if(response_user_model.opRapida2 !== null){
-            setIdOperacionOpRap2(response_user_model.opRapida2);
-            const response = await getOperationModel(response_user_model.opRapida2);
-            console.log("op2", response);
-            setNombreOpRap2(response.tipoOperacion);
-            if(response.moneda === "S"){
-                setTermOpRap2("S/");
-            }
-            if(response.moneda === "D"){
-                setTermOpRap2("US$");
-            }
-            setMontoOpRap2(response.montOperacion);
-            setCuentaOpRap2(response.cuentaDestino);
-
-            if(response.tipoOperacion === "Deposito")
-                setImgOpRap2(fast_deposito);
-            if(response.tipoOperacion === "Retiro")
-                setImgOpRap2(fast_retiro);
-            if(response.tipoOperacion === "Consulta")
-                setImgOpRap2(fast_consulta);
-        }
-
-
-        //IF PARA EL RETIRO RAPIDO
-        if(response_user_model.opRetRapido !== null){
-            setIdOperacionRetRap(response_user_model.opRetRapido);
-            const response = await getOperationModel(response_user_model.opRetRapido);
-            setNombreRetRap(response.tipoOperacion);
-            if(response.moneda === "S"){
-                setTermRetRap("S/");
-            }
-            if(response.moneda === "D"){
-                setTermRetRap("US$");
-            }
-            setMontoRetRap(response.montOperacion);
-            setCuentaRetRap(response.cuentaDestino);
-        }
-
-        // Para la ultima operacion
-        if(response_user_model.ultOp !== null){
-            setIdOperacionUltOP(response_user_model.ultOp);
-            const response = await getOperationModel(response_user_model.ultOp);
-            setNombreUltOP(response.tipoOperacion);
-            if(response.moneda === "S"){
-                setTermUltOP("S/");
-            }
-            if(response.moneda === "D"){
-                setTermUltOP("US$");
-            }
-            setMontoUltOP(response.montOperacion);
-            setCuentaUltOP(response.cuentaDestino);
-
-            if(response.tipoOperacion === "Deposito")
-                setImgUltOP(deposito);
-            if(response.tipoOperacion === "Retiro")
-                setImgUltOP(retiro);
-            if(response.tipoOperacion === "Consulta")
-                setImgUltOP(consulta);
-
-        }
-
+        };
+    
+        actualizarOperacion(response_user_model.opRapida1, setIdOperacionOpRap1, setNombreOpRap1, setTermOpRap1, setMontoOpRap1, setCuentaOpRap1, setImgOpRap1);
+        actualizarOperacion(response_user_model.opRapida2, setIdOperacionOpRap2, setNombreOpRap2, setTermOpRap2, setMontoOpRap2, setCuentaOpRap2, setImgOpRap2);
+        actualizarOperacion(response_user_model.opRetRapido, setIdOperacionRetRap, setNombreRetRap, setTermRetRap, setMontoRetRap, setCuentaRetRap);
+        actualizarOperacion(response_user_model.ultOp, setIdOperacionUltOP, setNombreUltOP, setTermUltOP, setMontoUltOP, setCuentaUltOP, setImgUltOP);
     };
+    
 
 
     // Aqui hacemos el llamado al api de obtener perfil 
@@ -356,72 +300,37 @@ function MenuATM() {
     const [perfil_usuario, setPerfil] = useState(null);
     const [nombre, setNombre] = useState('');
 
+useEffect(() => {
+  Promise.all([
+    getPerfilByIdUserModel(idUserModel),
+    get_user_model(idUserModel)
+  ])
+    .then(([response, response_user_model]) => {
+      console.log("response", response);
+      console.log("response usermodel", response_user_model);
 
-    useEffect(() => {
+      // Procesa la respuesta del perfil
+      if (response.descripcion.includes('Senior')) setPerfil('senior');
+      else if (response.descripcion.includes('Frecuente')) setPerfil('frecuente');
+      else if (response.descripcion.includes('Ocasional')) setPerfil('ocasional');
 
-        // Llama a la función que realiza la solicitud de la API
-        getPerfilByIdUserModel(idUserModel)
-          .then(response => {
-            // Actualiza el estado con los datos del perfil
-            console.log("response", response);
-                if (response.descripcion.includes('Senior')) {
-                    setPerfil('senior'); 
-                } else if (response.descripcion.includes('Frecuente')) {
-                    setPerfil('frecuente'); 
-                } else if (response.descripcion.includes('Ocasional')) {
-                    setPerfil('ocasional'); 
-                } 
-          })
-          .catch(error => {
-            // Manejo de errores, por ejemplo, imprimir en la consola
-            console.error('Error al obtener el perfil:', error);
-          });
+      // Procesa la respuesta del userModel
+      setTamtexto(response_user_model.tamFuente || 13);
+      actualizarOperacionesPersonalizables(response_user_model);
+      setSelectedOption(response_user_model.idiomaPreferido);
+      CambiarIdioma(response_user_model.idiomaPreferido);
 
-
-
-        //Ahora obtenemos el userModel y luego los nombres del usuario
-        get_user_model(idUserModel)
-        .then(response_user_model => {
-            // Actualiza el estado con los datos del perfil
-            console.log("response usermodel", response_user_model);
-
-            if(response_user_model.tamFuente === null){
-                setTamtexto(13);
-            }else{
-                console.log("Tamaño de la fuente", response_user_model.tamFuente);
-                setTamtexto(response_user_model.tamFuente);
-            }
-
-            // Funcion que trae las opciones personalizables
-            actualiza_op_personalizables(response_user_model);
-
-            //Actualizamos el idioma preferido
-            setSelectedOption(response_user_model.idiomaPreferido);
-            CambiarIdioma(response_user_model.idiomaPreferido);
-
-            // obtenemos ahora finalmente el nombre y apellido del usuario
-            getUsuarioById(response_user_model.idUsuario)
-            .then(response_usuario_data => {
-                // Actualiza el estado con los datos del perfil
-                console.log("response_usuario_data", response_usuario_data);
-                setNombre(response_usuario_data.nombreCompleto);
-              })
-              .catch(error => {
-                // Manejo de errores, por ejemplo, imprimir en la consola
-                console.error('Error al obtener los nombres y apellidos del usuario:', error);
-              });
-
-          })
-          .catch(error => {
-            // Manejo de errores, por ejemplo, imprimir en la consola
-            console.error('Error al obtener el userModel:', error);
-          });
-        
-
-      }, []);  // El segundo parámetro del useEffect es un array de dependencias, pasamos un array vacío par
-
-
-
+      // Obtiene el nombre del usuario
+      return getUsuarioById(response_user_model.idUsuario);
+    })
+    .then(response_usuario_data => {
+      console.log("response_usuario_data", response_usuario_data);
+      setNombre(response_usuario_data.nombreCompleto);
+    })
+    .catch(error => {
+      console.error('Error en la solicitud:', error);
+    });
+}, []); // El segundo parámetro del useEffect es un array de dependencias, pasamos un array vacío par
 
     return (
         <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>
@@ -431,8 +340,8 @@ function MenuATM() {
                 {/*AQUI VA EL NOMBRE Y SI CAMBIA EL IDIOMA O NO AQUI*/}
                 <Row className="justify-content-center align-items-center my-2">
                 <Col xs={9} >
-                    <h4 style={{ fontSize: tamtexto*1.75 }}>¡Hola, {nombre}!</h4>
-                    <h5 style={{ fontSize: tamtexto*1.5 }}>¿Qué quieres hacer hoy?</h5>
+                    <h4 style={{ fontSize: tamtexto*1.75 }}>¡{t('hola')}, {nombre}!</h4>
+                    <h5 style={{ fontSize: tamtexto*1.5 }}>{t('que_quieres_hoy')}</h5>
                 </Col>
                 <Col xs={3} className="text-center">
                 <h4 style={{ fontSize: tamtexto*0.9 }}>Cambiar idioma</h4>
@@ -461,7 +370,7 @@ function MenuATM() {
                     <Card onClick={handleCardClickP1} className="text-center p-2" style={{ width: '230px', height: '100px', cursor: 'pointer' }}>
                         <Card.Img variant="top" src={retiro} style={{ maxWidth: '22%', margin: '0 auto', marginBottom: '-10px' }} />
                         <Card.Body>
-                            <p style={{ fontWeight: 'bold', fontSize: tamtexto*1.05 }}>Retiro de efectivo</p>
+                            <p style={{ fontWeight: 'bold', fontSize: tamtexto*1.05 }}>{t('retiro')}</p>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -469,7 +378,7 @@ function MenuATM() {
                     <Card onClick={handleCardClickP2} className="text-center p-2" style={{ width: '230px', height: '100px', cursor: 'pointer' }}>
                         <Card.Img variant="top" src={consulta} style={{ maxWidth: '22%', margin: '0 auto', marginBottom: '-10px' }} />
                         <Card.Body>
-                            <p style={{ fontWeight: 'bold', fontSize: tamtexto*1.05 }}>Consulta de saldo</p>
+                            <p style={{ fontWeight: 'bold', fontSize: tamtexto*1.05 }}>{t('consulta')}</p>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -477,7 +386,7 @@ function MenuATM() {
                     <Card onClick={handleCardClickP3} className="text-center p-2" style={{ width: '230px', height: '100px', cursor: 'pointer' }}>
                         <Card.Img variant="top" src={deposito} style={{ maxWidth: '22%', margin: '0 auto', marginBottom: '-10px' }} />
                         <Card.Body>
-                            <p style={{ fontWeight: 'bold', fontSize: tamtexto*1.05 }}>Deposito de efectivo</p>
+                            <p style={{ fontWeight: 'bold', fontSize: tamtexto*1.05 }}>{t('deposito')}</p>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -560,7 +469,7 @@ function MenuATM() {
                                         </Col>
                                         <Col xs="auto">
                                             <Row>
-                                                <h7 className="m-0"  style={{ fontSize: tamtexto*1.15 }}>Otras operaciones</h7>
+                                                <h7 className="m-0"  style={{ fontSize: tamtexto*1.15 }}>{t('otras_operaciones')}</h7>
                                             </Row>
                                         </Col>
                                     </Row>
@@ -807,7 +716,7 @@ function MenuATM() {
                             fontSize="14px"
                             marginLeft="0px"
                             idioma="es"
-                            customText="¡ Gracias por usar el cajero, disfruta la experiencia personalizable ! "
+                            customText={t('mensaje_gra1')}
                         />
 
                     ): perfil_usuario === 'frecuente' ?(
@@ -823,7 +732,7 @@ function MenuATM() {
                                         </Col>
                                         <Col xs="auto">
                                             <Row>
-                                                <h7 className="m-0"  style={{ fontSize: tamtexto*1.15 }}>Otras operaciones</h7>
+                                                <h7 className="m-0"  style={{ fontSize: tamtexto*1.15 }}>{t('otras_operaciones')}</h7>
                                             </Row>
                                         </Col>
                                     </Row>

@@ -93,6 +93,7 @@ function FinRetiro() {
 
    // Use Effect para traer la informacion de la operacion
    useEffect(() => {
+    setTamtexto(13);
 
     get_user_model(idUserModel)
     .then(response_user_model => {
@@ -211,7 +212,7 @@ function FinRetiro() {
             <div style={{ height: '20px' }} />
             {/*RECIBO DEL RETIRO REALIZADO*/}
             <Row className="align-items-center justify-content-center">
-                <CustomCardRecibo width="500px" height="220px" bordered={false} color="#FFF6A7">
+                <CustomCardRecibo width="500px" height="250px" bordered={false} color="#FFF6A7">
                     <Row className="justify-content-center">
                         <h5 className="text-center font-weight-bold">{nombre_cuenta}</h5>
                     </Row>

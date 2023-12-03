@@ -209,6 +209,8 @@ function SeleccionMonto() {
     // Use Effect para traer la informacion de la cuenta
     useEffect(() => {
 
+        setTamtexto(13);
+
         get_user_model(idUserModel)
         .then(response_user_model => {
             console.log("aaa, ",response_user_model);

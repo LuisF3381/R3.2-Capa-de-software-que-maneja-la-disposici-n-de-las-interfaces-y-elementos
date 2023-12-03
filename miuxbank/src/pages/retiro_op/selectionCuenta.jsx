@@ -15,6 +15,8 @@ import { useParams } from 'react-router-dom';
 import { listarCuentas } from '../../api/axios_api';
 import { get_user_model } from '../../api/axios_api';
 
+
+
 function SeleccionCuenta() {
     const { idUsuario, idUserModel } = useParams();
     const navigate = useNavigate();
@@ -65,6 +67,20 @@ function SeleccionCuenta() {
 
 
     useEffect(() => {
+        //i18n.changeLanguage(nuevoIdioma);
+        setTamtexto(13);
+        // Llamamos al userModel
+        get_user_model(idUserModel)
+        .then(response_user_model => {
+            //console.log("Console log:", response_user_model.idiomaPreferido);
+            i18n.changeLanguage(response_user_model.idiomaPreferido);
+
+        })
+        .catch(error => {
+          // Manejo de errores, por ejemplo, imprimir en la consola
+          console.error('Error al obtener el userModel:', error);
+        });
+
 
         // Obtenemos el tamaño de letra
         get_user_model(idUserModel)
@@ -133,8 +149,8 @@ function SeleccionCuenta() {
             <div style={{ height: '8px' }} />
             <Row className="align-items-center justify-content-between no-gutters">
                 <Col md={7}>
-                    <h3 style={{ fontSize: tamtexto*1.75 }}>Selecciona una de tus cuentas</h3>
-                    <h5 style={{ fontSize: tamtexto*1.5 }}>y comienza a retirar</h5>
+                    <h3 style={{ fontSize: tamtexto*1.75 }}>{t('seleccion_cuentas_1')}</h3>
+                    <h5 style={{ fontSize: tamtexto*1.5 }}>{t('seleccion_cuentas_2')}</h5>
                 </Col>
 
                 <Col md={5} className="d-flex align-items-center">
@@ -247,7 +263,7 @@ function SeleccionCuenta() {
             <Row className="d-flex justify-content-center mt-4">
                 <Col xs="auto">
                     <Button variant="primary" style={{ width: '150px', marginRight: '500px', backgroundColor: '#B5ADAE'  }} onClick={handleCancel}>
-                    REGRESAR
+                    {t('regresar')}
                     </Button>
                 </Col>
             </Row>
