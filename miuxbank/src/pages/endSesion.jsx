@@ -41,7 +41,7 @@ function FinSesion() {
             setTimeout(() => {
               setStep1Visible(false);
               resolve();
-            }, 40); // Por ejemplo, 3 segundos después de la primera animación
+            }, 4000); // Por ejemplo, 3 segundos después de la primera animación
           });
 
 
