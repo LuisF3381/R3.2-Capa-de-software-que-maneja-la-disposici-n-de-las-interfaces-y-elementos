@@ -2,9 +2,9 @@ import axios from 'axios';
 
 
 
-const apiUrlUsr = 'http://127.0.0.1:8000';  // Reemplaza con la URL de tu servidor FastAPI
+//const apiUrlUsr = 'http://127.0.0.1:8000';  // Reemplaza con la URL de tu servidor FastAPI
 //Para el despligue
-//const apiUrlUsr = 'http://35.173.254.67:8000';  // Reemplaza con la URL de tu servidor FastAPI
+const apiUrlUsr = 'http://18.232.165.217:8000';  // Reemplaza con la URL de tu servidor FastAPI
 
 export const listar_usuarios = () =>{
   return axios.get(`${apiUrlUsr}/listar_usuarios`);
@@ -57,8 +57,8 @@ export const obtenerTarjeta = (idUsuario) => {
 
 
 //Para el despligue
-const apiUrlPers = 'http://127.0.0.1:8002';
-//const apiUrlPers = 'http://35.173.254.67:8002';
+//const apiUrlPers = 'http://127.0.0.1:8002';
+const apiUrlPers = 'http://18.232.165.217:8002';
 
 
 
