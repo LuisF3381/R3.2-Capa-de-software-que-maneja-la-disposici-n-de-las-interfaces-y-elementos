@@ -14,6 +14,7 @@ import { insertarOperacion } from '../../api/axios_api';
 import { getOperationModel } from '../../api/axios_api';
 import { actualizar_user_model } from '../../api/axios_api';
 import { get_user_model } from '../../api/axios_api';
+import { insertarMetrica } from '../../api/axios_api';
 
 function SeleccionCuentaSaldo() {
     const { idUsuario, idUserModel, idOperation } = useParams();
@@ -29,6 +30,7 @@ function SeleccionCuentaSaldo() {
     const [cuenta_destino, setCuenta_destino] = useState(false);
     const [constancia_cons, setConstancia_cons] = useState(false);
 
+    const [tiempoInicio, setTiempoInicio] = useState(null);
 
         // Para la primera opcion mas usada
     const handleCardClick1 = () => {
@@ -92,6 +94,28 @@ function SeleccionCuentaSaldo() {
     
 
     const handleContinue = async() => {
+         // Crear un objeto de fecha con la zona horaria de Perú (UTC-5)
+         const fechaActual = new Date().toLocaleString("en-US", { timeZone: "America/Lima" });
+
+         // Restar 5 horas al objeto de fecha
+         const fechaAtrasada = new Date(new Date(fechaActual).getTime() - 5 * 60 * 60 * 1000);
+
+         // Formatear la fecha y hora en formato ISO
+         const fechaISOAtrasada = fechaAtrasada.toISOString();
+
+         console.log(fechaISOAtrasada);
+
+         const tiempoTranscurrido = Math.floor((Date.now() - tiempoInicio) / 1000);
+         // Para las metricas
+     const metricaData = {
+         descripcion: 'Pantalla Seleccion de cuenta saldo',
+         tiempoUsoPantalla: tiempoTranscurrido,
+         fechaMetrica: fechaISOAtrasada,
+         user_model_id: idUserModel,
+       };
+
+     const response = await insertarMetrica(metricaData);
+     console.log("Response", response);
         //Nos dirigimos a la pantalla de resumen
         try {
             let idOperacion;
@@ -180,7 +204,7 @@ function SeleccionCuentaSaldo() {
 
 
     useEffect(() => {
-
+        setTiempoInicio(Date.now());
         // Traemos el user model para el manejo del texto
         get_user_model(idUserModel)
         .then(response_user_model => {

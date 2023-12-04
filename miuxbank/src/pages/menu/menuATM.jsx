@@ -46,6 +46,7 @@ import { listarCuentas } from '../../api/axios_api';
 import { getRouteOperacion } from '../../api/axios_api';
 import { actualizar_user_model_texto } from '../../api/axios_api';
 import { actualizar_idioma_preferido } from '../../api/axios_api';
+import { insertarMetrica } from '../../api/axios_api';
 
 // Logo de reloj de arena
 import reloj_arena from '../../images/reloj_arena.png'
@@ -58,6 +59,7 @@ function MenuATM() {
       // Para el traductor de texto
     const { t, i18n } = useTranslation();
 
+    const [tiempoInicio, setTiempoInicio] = useState(null);
 
     // Para el cambio de idioma
     const [selectedOption, setSelectedOption] = useState('');
@@ -105,7 +107,31 @@ function MenuATM() {
     // OPCIONES PRINCIPALES
     // Para la primera opcion mas usada
     // Por ahora asumimos es el retiro de efectivo
-    const handleCardClickP1 = async () => {        
+    const handleCardClickP1 = async () => {   
+            // Crear un objeto de fecha con la zona horaria de Perú (UTC-5)
+            const fechaActual = new Date().toLocaleString("en-US", { timeZone: "America/Lima" });
+
+            // Restar 5 horas al objeto de fecha
+            const fechaAtrasada = new Date(new Date(fechaActual).getTime() - 5 * 60 * 60 * 1000);
+
+            // Formatear la fecha y hora en formato ISO
+            const fechaISOAtrasada = fechaAtrasada.toISOString();
+
+            console.log(fechaISOAtrasada);
+
+            const tiempoTranscurrido = Math.floor((Date.now() - tiempoInicio) / 1000);
+            // Para las metricas
+        const metricaData = {
+            descripcion: 'Pantalla Menu Principal',
+            tiempoUsoPantalla: tiempoTranscurrido,
+            fechaMetrica: fechaISOAtrasada,
+            user_model_id: idUserModel,
+          };
+
+        const response = await insertarMetrica(metricaData);
+        console.log("Response", response);
+
+
         // Le damos a obtener ruta, para ello necesitamos saber cuantas cuentas tiene
         try {
             const response = await listarCuentas(idUsuario);
@@ -301,6 +327,7 @@ function MenuATM() {
     const [nombre, setNombre] = useState('');
 
 useEffect(() => {
+    setTiempoInicio(Date.now());
   Promise.all([
     getPerfilByIdUserModel(idUserModel),
     get_user_model(idUserModel)

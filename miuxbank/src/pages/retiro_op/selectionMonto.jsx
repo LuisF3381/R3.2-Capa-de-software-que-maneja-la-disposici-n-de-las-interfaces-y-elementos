@@ -13,6 +13,7 @@ import { insertarOperacion } from '../../api/axios_api';
 import { infoCuenta } from '../../api/axios_api';
 import { getOperationModel } from '../../api/axios_api';
 import { get_user_model } from '../../api/axios_api';
+import { insertarMetrica } from '../../api/axios_api';
 
 
 function SeleccionMonto() {
@@ -21,6 +22,7 @@ function SeleccionMonto() {
     var [monto, setMonto] = useState(''); // Aquí se guarda el valor
     var [monto2, setMonto2] = useState(''); // Aquí se guarda el valor
 
+    const [tiempoInicio, setTiempoInicio] = useState(null);
 
 
     // Aquí puedes agregar el manejo de eventos o cualquier lógica adicional
@@ -33,6 +35,29 @@ function SeleccionMonto() {
     const handleContinue = async() => {
         // Lógica para el botón de continuar
         // Aqui deberia hacerse un api para poder 
+
+                    // Crear un objeto de fecha con la zona horaria de Perú (UTC-5)
+                    const fechaActual = new Date().toLocaleString("en-US", { timeZone: "America/Lima" });
+
+                    // Restar 5 horas al objeto de fecha
+                    const fechaAtrasada = new Date(new Date(fechaActual).getTime() - 5 * 60 * 60 * 1000);
+        
+                    // Formatear la fecha y hora en formato ISO
+                    const fechaISOAtrasada = fechaAtrasada.toISOString();
+        
+                    console.log(fechaISOAtrasada);
+        
+                    const tiempoTranscurrido = Math.floor((Date.now() - tiempoInicio) / 1000);
+                    // Para las metricas
+                const metricaData = {
+                    descripcion: 'Pantalla Seleccion de monto',
+                    tiempoUsoPantalla: tiempoTranscurrido,
+                    fechaMetrica: fechaISOAtrasada,
+                    user_model_id: idUserModel,
+                  };
+        
+                const response = await insertarMetrica(metricaData);
+                console.log("Response", response);
 
         // Llamamos al 
         try {
@@ -218,6 +243,7 @@ function SeleccionMonto() {
 
     // Use Effect para traer la informacion de la cuenta
     useEffect(() => {
+        setTiempoInicio(Date.now());
 
         setTamtexto(13);
 
