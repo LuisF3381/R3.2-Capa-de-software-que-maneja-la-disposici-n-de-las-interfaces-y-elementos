@@ -45,7 +45,7 @@ function SeleccionMonto() {
                 monto_request = monto;
             }
 
-            const fechaActual = new Date().toISOString();
+            const fechaActual = new Date().toLocaleString('es-PE', { timeZone: 'America/Lima' });
             const operacionData = {
                 tipoOperacion: 'Retiro',
                 montOperacion: monto_request,
