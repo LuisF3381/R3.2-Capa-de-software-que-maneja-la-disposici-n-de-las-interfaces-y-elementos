@@ -27,11 +27,22 @@ function ResumenDeposito() {
         try {
             let idOperacion;
 
-            const fechaActual = new Date().toISOString();
+
+            // Crear un objeto de fecha con la zona horaria de Perú (UTC-5)
+            const fechaActual = new Date().toLocaleString("en-US", { timeZone: "America/Lima" });
+
+            // Restar 5 horas al objeto de fecha
+            const fechaAtrasada = new Date(new Date(fechaActual).getTime() - 5 * 60 * 60 * 1000);
+
+            // Formatear la fecha y hora en formato ISO
+            const fechaISOAtrasada = fechaAtrasada.toISOString();
+
+            console.log(fechaISOAtrasada);
+
             const operacionData = {
                 tipoOperacion: 'Deposito',
                 montOperacion: 50,
-                fechaOperacion: fechaActual,  // Ajusta el formato según tu necesidad
+                fechaOperacion: fechaISOAtrasada,  // Ajusta el formato según tu necesidad
                 constOperacion: '',
                 cuentaDestino: CCI,
                 moneda: moneda,
@@ -131,7 +142,7 @@ function ResumenDeposito() {
                 <div style={{ height: '20px' }} />
 
                 <Row className="align-items-center justify-content-center">
-                    <CustomCardRecibo width="500px" height="190px" bordered={false} color="#FFF6A7">
+                    <CustomCardRecibo width="500px" height="220px" bordered={false} color="#FFF6A7">
                         <Row>
                             <Col xs={5}>
                                 <h5 style={{ fontSize: tamtexto*1.5 }} className="font-weight-bold">Cuenta destino:</h5>
@@ -144,18 +155,18 @@ function ResumenDeposito() {
 
                         <Row>
                             <Col xs={7}>
-                                <h5 style={{ fontSize: tamtexto*1.55 }} className="font-weight-bold">Monto que se depositara:</h5>
+                                <h5 style={{ fontSize: tamtexto*1.5 }} className="font-weight-bold">Monto que se depositara:</h5>
                             </Col>
                             <Col xs={5}>
-                                <h4 style={{ fontSize: tamtexto*1.68, textAlign: 'right'}}>{tipoC1}50</h4>
+                                <h4 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{tipoC1}50</h4>
                             </Col>
                         </Row>
 
                         <Row>
-                            <h5 style={{ fontSize: tamtexto*1.55 }}>Se ha ingresado:</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5 }}>Se ha ingresado:</h5>
                         </Row>
                         <Row>
-                            <h5 style={{ fontSize: tamtexto*1.55 }}>1 billete de 50 soles</h5>
+                            <h5 style={{ fontSize: tamtexto*1.5 }}>1 billete de 50 soles</h5>
                         </Row>
 
                     </CustomCardRecibo>

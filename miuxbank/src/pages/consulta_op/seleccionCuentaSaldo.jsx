@@ -96,10 +96,21 @@ function SeleccionCuentaSaldo() {
         try {
             let idOperacion;
 
-            const fechaActual = new Date().toISOString();
+            // Crear un objeto de fecha con la zona horaria de Perú (UTC-5)
+            const fechaActual = new Date().toLocaleString("en-US", { timeZone: "America/Lima" });
+
+            // Restar 5 horas al objeto de fecha
+            const fechaAtrasada = new Date(new Date(fechaActual).getTime() - 5 * 60 * 60 * 1000);
+
+            // Formatear la fecha y hora en formato ISO
+            const fechaISOAtrasada = fechaAtrasada.toISOString();
+
+            console.log(fechaISOAtrasada);
+
+
             const operacionData = {
                 tipoOperacion: 'Consulta',
-                fechaOperacion: fechaActual,  // Ajusta el formato según tu necesidad
+                fechaOperacion: fechaISOAtrasada,  // Ajusta el formato según tu necesidad
                 constOperacion: constancia_cons,
                 cuentaDestino: cuenta_destino, // Aqui ponemos las cuentas a consultar
                 user_model_id: idUserModel,

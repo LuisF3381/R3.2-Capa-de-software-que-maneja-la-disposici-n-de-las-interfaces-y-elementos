@@ -200,7 +200,7 @@ function FinDeposito() {
             <div style={{ height: '20px' }} />
             {/*RECIBO DEL RETIRO REALIZADO*/}
             <Row className="align-items-center justify-content-center">
-                <CustomCardRecibo width="500px" height="220px" bordered={false} color="#FFF6A7">
+                <CustomCardRecibo width="500px" height="230px" bordered={false} color="#FFF6A7">
                     <Row className="justify-content-center">
                         <h5 style={{ fontSize: tamtexto*1.5 }} className="text-center font-weight-bold">{nombre_cuenta}</h5>
                     </Row>
@@ -238,10 +238,10 @@ function FinDeposito() {
                     </Row>
                     <Row>
                         <Col xs={5}>
-                            <h5 style={{ fontSize: tamtexto*1.5 }} className="font-weight-bold">Saldo disponible:</h5>
+                            <h5 style={{ fontSize: tamtexto*1.4 }} className="font-weight-bold">Saldo disponible:</h5>
                         </Col>
                         <Col xs={7}>
-                            <h5 style={{ fontSize: tamtexto*1.5, textAlign: 'right'}}>{terminologia2}{saldo}</h5>
+                            <h5 style={{ fontSize: tamtexto*1.4, textAlign: 'right'}}>{terminologia2}{saldo}</h5>
                         </Col>
                     </Row>
                 </CustomCardRecibo>

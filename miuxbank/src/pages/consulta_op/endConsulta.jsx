@@ -35,64 +35,46 @@ function FinConsulta() {
     const [n_tarjeta, setN_tarjeta] = useState('');
 
     useEffect(() => {
-        listarOperacion(idTransaccion)
-        .then(response => {
+        const fetchData = async () => {
+          try {
+            const response = await listarOperacion(idTransaccion);
             console.log("Response", response);
+      
             setcci(response.cuentaDestino);
-            // Seteamos la fecha de la transaccion
+      
+            // Formatear la fecha de la transacción
             const fecha = new Date(response.fechaOperacion);
             const formatoDeseado = `${fecha.getDate().toString().padStart(2, '0')}/${(fecha.getMonth() + 1).toString().padStart(2, '0')}/${fecha.getFullYear()} ${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}`;
             setFecha_transaccion(formatoDeseado);
-
-
-            infoCuenta(response.cuentaDestino)
-            .then(response2 => {
-                console.log("response2", response2);
-                setNombre_cuenta(response2.cuentaBancaria);
-                const numeroFormateado = parseFloat(response2.saldoCuenta).toFixed(2);
-                setSaldo(numeroFormateado);
-
-                if(response2.tipoCuenta === "S"){
-                    setTerminologia2("S/")
-                }else{
-                    setTerminologia2("US$")   
-                }
-
-                // Ahora obtenemos el id del usuario 
-            // Ahora obtenemos el id del usuario 
-            getIdsuarioByIdUserModel(response.user_model_id)
-            .then(response3 => {
-                console.log("response3", response3.idUsuario);
-
-                //Finalmente obtenemos la informacion de la tarjeta
-                obtenerTarjeta(response3.idUsuario)
-                .then(response4 => {
-                    console.log("response4", response4);
-                    setN_tarjeta(response4.tarjeta);
-                })
-                .catch(error => {
-                // Manejo de errores, por ejemplo, imprimir en la consola
-                console.error('Error al obtener informacion de la cuenta:', error);
-                });
-
-            })
-            .catch(error => {
-            // Manejo de errores, por ejemplo, imprimir en la consola
-            console.error('Error al obtener informacion de la cuenta:', error);
-            });
-
-            })
-            .catch(error => {
-            // Manejo de errores, por ejemplo, imprimir en la consola
-            console.error('Error al obtener informacion de la cuenta:', error);
-            });
-        })
-        .catch(error => {
-        // Manejo de errores, por ejemplo, imprimir en la consola
-        console.error('Error al listar la operacion:', error);
-        });
-
-    }, []);  //
+      
+            const response2 = await infoCuenta(response.cuentaDestino);
+            console.log("response2", response2);
+      
+            setNombre_cuenta(response2.cuentaBancaria);
+            const numeroFormateado = parseFloat(response2.saldoCuenta).toFixed(2);
+            setSaldo(numeroFormateado);
+      
+            if (response2.tipoCuenta === "S") {
+              setTerminologia2("S/");
+            } else {
+              setTerminologia2("US$");
+            }
+      
+            const response3 = await getIdsuarioByIdUserModel(response.user_model_id);
+            console.log("response3", response3.idUsuario);
+      
+            const response4 = await obtenerTarjeta(response3.idUsuario);
+            console.log("response4", response4);
+            setN_tarjeta(response4.tarjeta);
+          } catch (error) {
+            console.error('Error al obtener información:', error);
+          }
+        };
+      
+        fetchData();
+      
+      }, [idTransaccion]);
+      
 
     return (
         <Container fluid className="vh-100 d-flex justify-content-center align-items-center" style={{ background: '#f7f7f7' }}>
